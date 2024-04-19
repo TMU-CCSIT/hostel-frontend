@@ -63,10 +63,10 @@ const Page = () => {
 
               <div className=" relative flex flex-col gap-1">
 
-                <div className={`text-2xl text-black`}>{data.label}</div>
+                <div className={`text-2xl text-black text-xs font-extrabold`}>{data.label}</div>
 
                 <input
-                  className={`p-3 relative w-[${data.name ==="leaveReason" ? "700px" : "500px"}] rounded-lg text-slate-800`}
+                  className={`p-3 relative ${data.name ==="leaveReason" ? "w-[750px] h-[100px]" : "w-[500px]"} rounded-lg text-slate-800`}
                   type={data?.type}
                   placeholder={data.placeholder}
                   value={formData[data.name]}
