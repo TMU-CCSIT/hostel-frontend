@@ -13,7 +13,10 @@
     "next": "14.2.2",
     "react": "^18",
     "react-dom": "^18",
+<<<<<<< HEAD
     "react-icons": "^5.1.0",
+=======
+>>>>>>> f7b790b109a784f1c7cbed46dfe5ab73ae79eb27
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
