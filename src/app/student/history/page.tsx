@@ -9,7 +9,6 @@ const Page = () => {
 
       <h1 className="text-black text-3xl font-semibold pt"> Your Histroy </h1>
 
-
       <div className="realtive w-ull h-full bg-[#EDF6FF] rounded-md shadow-md p-3">
 
         <div className="flex justify-between">
@@ -41,7 +40,6 @@ const Page = () => {
 
             <p className="text-black">20/1/2024</p>
 
-
             <p className="text-black">Approved</p>
 
 
@@ -49,12 +47,35 @@ const Page = () => {
 
           <div className="flex gap-3">
 
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
+            <div className="flex items-center justify-center">
 
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+
+                <p className="text-xs text-white">1</p>
+
+              </div>
+
+            </div>
+
 
           </div>
 
@@ -93,7 +114,6 @@ const Page = () => {
 
             <p className="text-black">20/1/2024</p>
 
-
             <p className="text-black">Approved</p>
 
 
@@ -101,12 +121,35 @@ const Page = () => {
 
           <div className="flex gap-3">
 
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
+            <div className="flex items-center justify-center">
 
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
-            <div className="bg-black rounded-full w-[30px] h-[30px]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+                <p className="text-xs text-white">1</p>
+              </div>
+
+              <div className="h-[0.5px] w-[30px] bg-[#6DAFFE]"></div>
+
+              <div className="flex h-[30px] w-[30px] items-center justify-center rounded-full border bg-blue-400">
+
+                <p className="text-xs text-white">1</p>
+
+              </div>
+
+            </div>
+
 
           </div>
 
