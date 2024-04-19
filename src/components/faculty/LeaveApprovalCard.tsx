@@ -1,8 +1,10 @@
 "use client";
+
 import React from "react";
 import CTCButton from "../common/CTCButton";
 import Image from "next/image";
 import Link from "next/link";
+import { dateIntoReadableFormat } from "@/helper/date";
 
 const LeaveApprovalCard = ({ userInfo }: any) => {
   const url =
@@ -48,12 +50,12 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
         <div className="w-full flex justify-between">
           {/* date-from */}
           <div>
-            <span> {userInfo.dateFrom || "24/03"}</span>
+            <span> {dateIntoReadableFormat(userInfo.dateFrom) || "24/03"}</span>
           </div>
 
           {/* date-to */}
           <div>
-            <span> {userInfo.dateTo || "24/03"}</span>
+            <span> {dateIntoReadableFormat(userInfo.dateTo) || "24/03"}</span>
           </div>
 
           {/* button for approval */}
