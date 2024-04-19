@@ -12,9 +12,9 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
 
   return (
     <>
-      <div className="w-full font-medium px-5 flex  text-black py-3 gap-40 bg-[#EDF6FF]">
+      <div className="w-full font-medium px-5 flex lg:flex-row flex-col  text-black py-3 gap-2 lg:gap-40 bg-[#EDF6FF]">
         {/* for user details */}
-        <div className="flex w-full justify-between">
+        <div className="flex w-full items-center justify-between gap-10">
           {/* profileImage | username */}
           <div className="flex justify-start items-center gap-5">
             {/* profileImage */}
@@ -47,19 +47,24 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
         </div>
 
         {/* leave details */}
-        <div className="w-full flex justify-between">
-          {/* date-from */}
-          <div>
-            <span> {dateIntoReadableFormat(userInfo.dateFrom) || "24/03"}</span>
-          </div>
+        <div className="w-full flex xs:flex-row flex-col pb-5 xs:mt-2 items-center justify-between gap-5 xs:gap-10">
+          <div className="w-full flex justify-between">
+            {/* date-from */}
+            <div>
+              <span>
+                {" "}
+                {dateIntoReadableFormat(userInfo.dateFrom) || "24/03"}
+              </span>
+            </div>
 
-          {/* date-to */}
-          <div>
-            <span> {dateIntoReadableFormat(userInfo.dateTo) || "24/03"}</span>
+            {/* date-to */}
+            <div>
+              <span> {dateIntoReadableFormat(userInfo.dateTo) || "24/03"}</span>
+            </div>
           </div>
 
           {/* button for approval */}
-          <div className="flex mt-2 gap-5">
+          <div className="flex w-full justify-center gap-10">
             {/* yes */}
             <div>
               <CTCButton
