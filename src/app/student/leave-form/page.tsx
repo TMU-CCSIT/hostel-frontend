@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
 import InputField from "@/components/auth/InputField";
@@ -6,7 +6,6 @@ import InputField from "@/components/auth/InputField";
 import UserFieldData from "@/constants/UserProfileFields";
 
 const Page = () => {
-
   const [formData, setFromData] = useState({
     enrollmentNumber: "",
     name: "",
@@ -15,47 +14,40 @@ const Page = () => {
     roomNumber: "",
     fingerNumber: "",
     fatherName: "",
-    FatherNumber:"",
+    FatherNumber: "",
     leaveFrom: "",
     leaveTime: "",
-    leaveTo:"",
+    leaveTo: "",
     leaveReason: "",
     numberOfDays: "",
     addressDuringLeave: "",
-
-  })
+  });
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-
     const { name, value } = event.target;
     setFromData((prev) => ({ ...prev, [name]: value }));
-
   };
 
   const submitHandler = async (e: FormEvent) => {
-
     e.preventDefault();
 
-    console.log("form data is ",formData);
-
+    console.log("form data is ", formData);
   };
 
-  return <div className="min-h-screen w-full">
+  return (
+    <div className="min-h-screen w-full">
+      <div className="flex flex-col justify-center items-center">
+        <h1 className="text-white text-start font-medium text-3xl">
+          Apply for Hostel leave{" "}
+        </h1>
 
-    <div className="flex flex-col justify-center items-center">
-
-      <h1 className="text-white text-start font-medium text-3xl">Apply for Hostel leave </h1>
-
-      <form onSubmit={submitHandler} className=" flex flex-col justify-center items-center">
-
-        <div>
-
-          {
-
-            UserFieldData.map((data: any) => (
-
+        <form
+          onSubmit={submitHandler}
+          className=" flex flex-col justify-center items-center"
+        >
+          <div>
+            {UserFieldData.map((data: any) => (
               <InputField
-
                 label={data?.label}
                 type={data?.type}
                 placeholder={data.placeholder}
@@ -64,30 +56,19 @@ const Page = () => {
                 min={data?.min}
                 readOnly={Boolean(data?.readOnly)} // Corrected attribute name to readOnly
                 onChange={handleChange}
+              ></InputField>
+            ))}
+          </div>
 
-              >
-              </InputField>
-
-            ))
-
-          }
-
-        </div>
-
-        <div>
-
-          <button type="submit" className="border">Submit Form </button>
-
-        </div>
-
-      </form>
-
+          <div>
+            <button type="submit" className="border">
+              Submit Form{" "}
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
-
-  </div>;
-
+  );
 };
 
 export default Page;
-
-
