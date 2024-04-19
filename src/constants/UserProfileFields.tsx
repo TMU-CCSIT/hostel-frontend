@@ -1,79 +1,113 @@
 import React from "react";
 
 const FieldData = [
+
     {
-        label: "enrollmentNumber",
+        label: "Enrollment Number :",
         placeholder: "Enter your enrollment Number",
         type: "text",
+        name: "enrollmentNumber",
+        readOnly:"true",
+
     },
     {
-        label: "name",
+        label: "Name :",
         placeholder: "Enter Your Name",
         type: "text",
+        name: "name",
+        readOnly:"true",
     },
 
+    // leaveTo
     {
-        label: "phoneNumber",
+        label: "Phone Number :",
         placeholder: "Enter your phone Number",
-        type: "Number",
+        type: "tel",
+        name: "phoneNumber",
+        readOnly:"true",
     },
     {
-        label: "course",
+        label: "Course :",
         placeholder: "Enter your course",
         type: "text",
+        name: "course",
+        readOnly:"true",
     },
     {
-        label: "roomNumber",
+        label: "Room Number :",
         placeholder: "Enter your room Number",
         type: "text",
+        name: "roomNumber",
+        readOnly:"true",
     },
     {
-        label: "fingerNumber",
+        label: "Finger Number :",
         placeholder: "Enter your finger Number",
-        type: "text",
+        type: "Number",
+        name: "fingerNumber",
+        readOnly:"true",
     },
     {
-        label: "fatherName",
+        label: "Father Name :",
         placeholder: "Enter your father's Name",
         type: "text",
+        name: "fatherName",
+        readOnly:"true",
     },
     {
-        label: "leaveDate",
+
+        label: "Father Mobile Number :",
+        placeholder: "Enter your father Mobile Number",
+        type: "tel",
+        name: "FatherNumber",
+        readOnly:"true",
+
+    },
+    {
+        label: "Leave From:",
         placeholder: "Enter your leave Date",
         type: "date",
+        name: "leaveFrom",
     },
     {
-        label: "leaveTime",
+        label: "Leave To:",
         placeholder: "Enter your leave Time",
-        type: "time",
-
+        type: "date",
+        name: "leaveTo",
+        required: "true",
+    },
+    {
+        label: "Leave Time :",
+        placeholder: "Enter your leave Time",
+        type: "Time",
+        name: "leaveTime",
+        required: "true",
     },
 
     {
-
-        label: "leaveStatus",
-        placeholder: "Enter your leave Status",
-        type: "text"
-
-    },
-    {
-        label: "numberOfDays",
+        label: "Number Of Days",
         placeholder: "Enter the number of days",
-        type: "Number"
+        type: "number",
+        name: "numberOfDays",
+        min:"1",
+        required: "true",
     },
     {
-        label: "Reason for Leave",
+        label: "Reason For Leave",
         placeholder: "Enter the reason for Leave",
-        type: "text"
+        type: "textArea",
+        name: "leaveReason",
+        required: "true",
     },
     {
         label: "Address During Leave",
         placeholder: "Enter your address During Leave",
-        type: "text"
+        type: "text",
+        name: "addressDuringLeave",
+        required: "true",
 
     },
 ];
-
 
 export default FieldData;
 

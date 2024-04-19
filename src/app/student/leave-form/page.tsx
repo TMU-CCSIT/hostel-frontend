@@ -1,4 +1,4 @@
-
+"use client"
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
 import InputField from "@/components/auth/InputField";
@@ -7,7 +7,7 @@ import UserFieldData from "@/constants/UserProfileFields";
 
 const Page = () => {
 
-  const [formaData, setFromData] = useState({
+  const [formData, setFromData] = useState({
     enrollmentNumber: "",
     name: "",
     phoneNumber: "",
@@ -15,12 +15,12 @@ const Page = () => {
     roomNumber: "",
     fingerNumber: "",
     fatherName: "",
-    leaveDate: "",
+    FatherNumber:"",
+    leaveFrom: "",
     leaveTime: "",
+    leaveTo:"",
     leaveReason: "",
-    leaveStatus: "",
     numberOfDays: "",
-    ReasonForLeave: "",
     addressDuringLeave: "",
 
   })
@@ -36,44 +36,58 @@ const Page = () => {
 
     e.preventDefault();
 
-    console.log("form data is ",)
+    console.log("form data is ",formData);
 
   };
 
-  return <div>
+  return <div className="min-h-screen w-full">
 
-    <div>
+    <div className="flex flex-col justify-center items-center">
 
-      <h1>Apply for Hostel leave </h1>
+      <h1 className="text-white text-start font-medium text-3xl">Apply for Hostel leave </h1>
 
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} className=" flex flex-col justify-center items-center">
 
+        <div>
 
-        {
+          {
 
+            UserFieldData.map((data: any) => (
 
-            <InputField
+              <InputField
 
-              label="Enrollment Number"
-              type="text"
-              placeholder="Enter your Enrollment Number"
-              value={form}
-              onChange={handleChange}
+                label={data?.label}
+                type={data?.type}
+                placeholder={data.placeholder}
+                value={formData[data.name]}
+                name={data?.name}
+                min={data?.min}
+                readOnly={Boolean(data?.readOnly)} // Corrected attribute name to readOnly
+                onChange={handleChange}
 
-            >
-            </InputField>
+              >
+              </InputField>
 
-        }
+            ))
 
+          }
 
+        </div>
+
+        <div>
+
+          <button type="submit" className="border">Submit Form </button>
+
+        </div>
 
       </form>
 
     </div>
-
 
   </div>;
 
 };
 
 export default Page;
+
+
