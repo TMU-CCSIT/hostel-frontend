@@ -8,21 +8,20 @@ import UserFieldData from "@/constants/UserProfileFields";
 const Page = () => {
 
   const [formaData, setFromData] = useState({
-
-    EnrollMentNumber: "",
+    enrollmentNumber: "",
     name: "",
     phoneNumber: "",
-    Course: "",
-    RoomNumber: "",
-    FingerNumber: "",
-    FatherName: "",
-    LeaveDate: "",
-    LeaveTime: "",
-    LeaveReason: "",
-    LeaveStatus: "",
-    Number_of_days: "",
+    course: "",
+    roomNumber: "",
+    fingerNumber: "",
+    fatherName: "",
+    leaveDate: "",
+    leaveTime: "",
+    leaveReason: "",
+    leaveStatus: "",
+    numberOfDays: "",
     ReasonForLeave: "",
-    AddressDuringLeave: "",
+    addressDuringLeave: "",
 
   })
 
@@ -30,14 +29,14 @@ const Page = () => {
 
     const { name, value } = event.target;
     setFromData((prev) => ({ ...prev, [name]: value }));
-    
+
   };
 
   const submitHandler = async (e: FormEvent) => {
 
     e.preventDefault();
 
-
+    console.log("form data is ",)
 
   };
 
@@ -52,22 +51,17 @@ const Page = () => {
 
         {
 
-          UserFieldData.map((data: any) => (
 
             <InputField
 
-              label={data?.label}
-              type={data?.type}
-              placeholder={data?.placeholder}
-              value={data?.label}
+              label="Enrollment Number"
+              type="text"
+              placeholder="Enter your Enrollment Number"
+              value={form}
               onChange={handleChange}
 
             >
             </InputField>
-
-
-          ))
-
 
         }
 
