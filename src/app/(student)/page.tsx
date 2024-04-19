@@ -5,7 +5,8 @@ const StudentPage = () => {
 
   return <div>
 
-
+    
+  
   </div>;
 
 };

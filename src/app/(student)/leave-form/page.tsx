@@ -7,7 +7,6 @@ const Page = () => {
     <form>
 
         
-
     </form>
     
   </div>;
