@@ -2,42 +2,48 @@ import React from "react";
 
 const FieldData = [
     {
-        label: "Enrollment Number",
+        label: "enrollmentNumber",
         placeholder: "Enter your enrollment Number",
         type: "text",
     },
     {
-        label: "Phone Number",
+        label: "name",
+        placeholder: "Enter Your Name",
+        type: "text",
+    },
+
+    {
+        label: "phoneNumber",
         placeholder: "Enter your phone Number",
-        type:"Number",
+        type: "Number",
     },
     {
-        label: "Course",
+        label: "course",
         placeholder: "Enter your course",
         type: "text",
     },
     {
-        label: "Room Number",
+        label: "roomNumber",
         placeholder: "Enter your room Number",
         type: "text",
     },
     {
-        label: "Finger Number",
+        label: "fingerNumber",
         placeholder: "Enter your finger Number",
         type: "text",
     },
     {
-        label: "Father's Name",
+        label: "fatherName",
         placeholder: "Enter your father's Name",
         type: "text",
     },
     {
-        label: "Leave Date",
+        label: "leaveDate",
         placeholder: "Enter your leave Date",
         type: "date",
     },
     {
-        label: "Leave Time",
+        label: "leaveTime",
         placeholder: "Enter your leave Time",
         type: "time",
 
@@ -45,26 +51,26 @@ const FieldData = [
 
     {
 
-        label: "Leave Status",
+        label: "leaveStatus",
         placeholder: "Enter your leave Status",
-        type:"text"
+        type: "text"
 
     },
     {
-        label: "Number of days",
+        label: "numberOfDays",
         placeholder: "Enter the number of days",
-        type:"Number"
+        type: "Number"
     },
     {
         label: "Reason for Leave",
         placeholder: "Enter the reason for Leave",
-        type:"text"
+        type: "text"
     },
     {
         label: "Address During Leave",
         placeholder: "Enter your address During Leave",
-        type:"text"
-        
+        type: "text"
+
     },
 ];
 
