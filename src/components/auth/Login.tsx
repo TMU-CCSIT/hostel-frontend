@@ -65,7 +65,7 @@ const LoginPage = () => {
           Don't have an account?{" "}
           <div
             onClick={() => {
-              router.push("/signup");
+              router.push("/auth/signup");
             }}
             className="underline text-blue-500"
           >
