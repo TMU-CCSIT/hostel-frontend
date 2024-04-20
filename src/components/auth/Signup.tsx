@@ -40,11 +40,18 @@ const Signup = () => {
   });
 
   const handleChange = (e: any) => {
+
+
     setData({ ...data, [e.target.name]: e.target.value });
+
   };
 
-  const submitHandler = () =>{
+  const submitHandler = (e:any) =>{
+
+    e.preventDefault();
+
     console.log(data);
+    
   }
 
   return (
