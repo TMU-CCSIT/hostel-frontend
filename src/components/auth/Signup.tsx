@@ -44,35 +44,17 @@ const Signup = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  async function addDataToStore() {
-    try {
-      console.log("hello, data is ", data);
-
-      // Add document to Firestore
-      const docRef = await addDoc(collection(db, "User"), {
-        data,
-      });
-
-      console.log(docRef);
-
-      // Check if document reference exists
-      if (docRef.id) {
-        console.log("Document successfully added with ID: ", docRef.id);
-        // Entry was successful
-      } else {
-        console.log("Error: Document reference not returned");
-        // Entry was not successful
-      }
-    } catch (error) {
-      console.log("Error adding document: ", error);
-      // Entry was not successful
-    }
-  }
 
   // dummy function to pass
   const submitHandler = async (e: any) => {
     e.preventDefault();
+
+    console.log(process.env.NEXT_PUBLIC_authDomain);
+
     await addDataToStore();
+
+
+  }
   };
 
   return (
