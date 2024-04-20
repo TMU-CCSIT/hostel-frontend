@@ -3,7 +3,7 @@
 // importing necessities
 import React, { useState } from "react";
 import InputField from "./InputField";
-import { SignupFields } from "@/constants/SignupData";
+import { SignupFields } from "@/constants/fields";
 import CTCButton from "../common/CTCButton";
 
 interface FormData {

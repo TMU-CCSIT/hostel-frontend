@@ -3,7 +3,7 @@ import React, { useState, ChangeEvent, FormEvent } from "react";
 
 import InputField from "@/components/auth/InputField";
 
-import { leaveFormFields } from "@/constants/UserProfileFields";
+import { leaveFormFields } from "@/constants/fields";
 
 const Page = () => {
   const [formData, setFromData] = useState({
