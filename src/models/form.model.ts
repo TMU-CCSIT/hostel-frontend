@@ -1,45 +1,61 @@
 import mongoose, { Document } from 'mongoose';
-import  {User}  from '@/models/User.model'; 
+import { STATUS } from "@/constants/constant";
+import { IStudent } from '@/models/Student.model';
 
 export interface IForm extends Document {
-    user: mongoose.Types.ObjectId | User;
-    from: Date;
-    to: Date;
-    reason: string;
+    user: IStudent;
+    dateFrom: Date;
+    dateTo: Date;
+    reasonForLeave: string;
     addressDuringLeave: string;
-    status: number;
+    status: {
+        coordinator: STATUS;
+        hostelWarden: STATUS;
+    };
 }
 
-const formSchema = new mongoose.Schema(
+
+const leaveFormSchema = new mongoose.Schema(
     {
-        user:{
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"User"
+        student: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Student"
         },
-        from:{
-            type:Date,
-            required:true
+        dateFrom: {
+            type: Date,
+            required: true
         },
-        to:{
-            type:Date,
-            required:true
+        dateTo: {
+            type: Date,
+            required: true
         },
-        reason:{
-            type:String,
-            required:true
+        reasonForLeave: {
+            type: String,
+            required: true
         },
-        addressDuringLeave:{
-            type:String,
-            required:true
+        addressDuringLeave: {
+            type: String,
+            required: true
         },
-        status:{
-            type:Number,
-            required:true,
-            default:0
+        status: {
+            coordinator: {
+                type: String,
+                enum: Object.values(STATUS),
+                default: STATUS.PENDING
+            },
+            hostelWarden: {
+                type: String,
+                enum: Object.values(STATUS),
+                default: STATUS.PENDING
+            }
         }
+    },
+    {
+        timestamps: true
     }
-)
+);
 
-const Form = mongoose.model<IForm>("Form", formSchema);
 
-export default Form;
+const LeaveForm = mongoose.model<IForm>("LeaveForm", leaveFormSchema);
+export default LeaveForm;
+

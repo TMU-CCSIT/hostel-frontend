@@ -1,57 +1,53 @@
 import mongoose, { Document } from 'mongoose';
+import { ROLE } from '@/constants/constant';
 
 export interface User extends Document {
     fullName: string;
     email: string;
     password: string;
     contactNumber: number;
-    role?: "Admin" | "Principal" | "Coordinator" | "Warden" | "Gatekeeper";
+    role: ROLE;
     isVerified: boolean;
-    otp?: string;
-    otpExpiry?: Date;
-    resetPasswordToken?: string;
-    resetPasswordTokenExpiry?: Date;
+    token?: string;
+    tokenExpiry?: Date;
 }
+
 
 const userSchema = new mongoose.Schema(
     {
-        fullName:{
-            type:String,
-            required:true,
-            trim:true
+        fullName: {
+            type: String,
+            required: true,
+            trim: true
         },
-        email:{
-            type:String,
-            required:true
+        email: {
+            type: String,
+            required: true,
+            unique: true,
         },
-        password:{
-            type:String,
-            required:true
+        password: {
+            type: String,
+            required: true
         },
-        contactNumber:{
-            type:Number,
-            required:true,
+        contactNumber: {
+            type: Number,
+            required: true,
         },
-        role:{
-            type:String,
-            enum:["Admin", "Principal", "Cordinator", "Warden", "Gatekeeper"]
+        role: {
+            type: String,
+            enum: Object.values(ROLE),
+            required: true,
         },
-        isVerified:{
-            type:Boolean,
-            default:false
+        isVerified: {
+            type: Boolean,
+            default: false
         },
-        otp:{
-            type:String,
+        token: {
+            type: String
         },
-        otpExpiry:{
-            type:Date,
+        tokenExpiry: {
+            type: Date
         },
-        resetPasswordToken:{
-            type:String
-        },
-        resetPasswordTokenExpiry:{
-            type:Date
-        }
     }
 )
 
