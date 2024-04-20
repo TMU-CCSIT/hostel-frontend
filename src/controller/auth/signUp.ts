@@ -30,7 +30,7 @@ const signupSchema = z.object({
 dbConnection();
 
 
-export async function Signup(req:NextRequest, res:NextApiResponse) {
+export async function userSignup(req:NextRequest, res:NextApiResponse) {
 
     try {
 
@@ -139,5 +139,19 @@ export async function Signup(req:NextRequest, res:NextApiResponse) {
     }
 }
 
+
+
+export async function studentSignup(req:NextRequest, res:NextApiResponse){
+
+    try{
+
+
+
+
+    }catch(error:any){
+
+
+    }
+}
 
 
