@@ -1,7 +1,7 @@
 
 import { z } from "zod";
 
-import { dbConnection } from "@/app/config/dbConfig";
+import { dbConnection } from "@/config/dbConfig";
 
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
 

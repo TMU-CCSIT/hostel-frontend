@@ -3,7 +3,7 @@ import { z } from 'zod';
 import Student from '@/models/student.model';
 import LeaveForm from '@/models/form.model';
 import { NextRequest, NextResponse } from 'next/server';
-import { dbConnection } from '@/app/config/dbConfig';
+import { dbConnection } from '@/config/dbConfig';
 
 dbConnection();
 
