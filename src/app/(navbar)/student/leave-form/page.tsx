@@ -50,9 +50,9 @@ const Page = () => {
     console.log("Data is sending---");
 
     const objData = {
-      leaveFrom: "894534",
-      leaveTo: "98348573485",
-      leaveReason: "gknijgrb",
+      dateFrom: new Date("2026-04-25"),
+      dateTo: new Date("2025-04-22"),
+      reasonForLeave: "gknijgrb",
       addressDuringLeave: "vinevbrnrjbvinri",
     };
 
@@ -66,13 +66,7 @@ const Page = () => {
         <h1 className="text-black text-start font-medium text-3xl">
           Apply for Hostel leave
         </h1>
-        <div className="w-[100px] h-[100px] rounded-full bg-yellow-300">
-          {/* <img
-            src="https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVucyUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D"
-            alt=""
-            className="w-full h-full bg-cover rounded-full"
-          /> */}
-        </div>
+
         <form
           onSubmit={submitHandler}
           className="w-full h-full relative gap-5 flex flex-col justify-center items-center"
