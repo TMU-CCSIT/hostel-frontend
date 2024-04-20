@@ -50,12 +50,8 @@ const Signup = () => {
 
 
   // dummy function to pass
+
   const submitHandler = () =>{
-
-  const submitHandler = (e:any) =>{
-
-    e.preventDefault();
-
 
     console.log(data);
     
