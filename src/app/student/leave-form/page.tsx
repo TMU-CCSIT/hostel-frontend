@@ -5,9 +5,28 @@ import InputField from "@/components/auth/InputField";
 
 import UserFieldData from "@/constants/UserProfileFields";
 
+
+
+interface leaveFormData  {
+  enrollmentNumber:string,
+  name:string,
+  phoneNumber: string,
+  course: string,
+  roomNumber: string,
+  fingerNumber: string,
+  fatherName: string,
+  FatherNumber:string,
+  leaveFrom: string,
+  leaveTime: string,
+  leaveTo:string,
+  leaveReason: string,
+  numberOfDays: string,
+  addressDuringLeave: string,
+}
+
 const Page = () => {
 
-  const [formData, setFromData] = useState({
+  const [formData, setFromData] = useState<leaveFormData>({
     enrollmentNumber: "",
     name: "",
     phoneNumber: "",
@@ -65,6 +84,16 @@ const Page = () => {
 
                 <div className={`text-2xl text-black text-xs font-extrabold`}>{data.label}</div>
 
+
+                label={data?.label}
+                type={data?.type}
+                placeholder={data.placeholder}
+                value={formData[data.name as keyof leaveFormData]}
+                name={data?.name}
+                min={data?.min}
+                readOnly={Boolean(data?.readOnly)} // Corrected attribute name to readOnly
+                onChange={handleChange}
+
                 <input
                   className={`p-3 relative ${data.name ==="leaveReason" ? "w-[750px] h-[100px]" : "w-[500px]"} rounded-lg text-slate-800`}
                   type={data?.type}
@@ -79,6 +108,7 @@ const Page = () => {
                 </input>
 
               </div>
+
 
 
             ))

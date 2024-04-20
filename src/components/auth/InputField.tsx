@@ -27,7 +27,7 @@ const InputField = (props: InputFieldProps) => {
         name={props.name}
         min={props.min}
         readOnly={props.readOnly}
-        className="shadow border rounded py-2 px-3 text-gray-700  focus:outline-none focus:shadow-outline sm:w-[15rem] md:w-[22rem] lg:[33rem]"
+        className="shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline w-[15rem] sm:w-[30rem] lg:w-[45rem]"
       />
     </div>
   );
