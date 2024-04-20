@@ -1,7 +1,7 @@
 
 import User from "@/models/user.model"
 
-import { dbConnection } from "@/app/config/dbConfig";
+import { dbConnection } from "@/config/dbConfig";
 
 dbConnection();
 

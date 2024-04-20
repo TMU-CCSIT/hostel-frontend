@@ -7,7 +7,7 @@ import DropDown from "./DropDown";
 import { colleges } from "@/constants/constant";
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
-import { db } from "@/app/config/dbConfig";
+import { db } from "@/config/dbConfig";
 import { collection, addDoc } from "firebase/firestore";
 
 // interface
