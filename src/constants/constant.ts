@@ -11,19 +11,24 @@ export enum CCSIT {
     BSc,
 }
 
-export enum roles {
-    Student,
-    Cordinator,
-    HOD,
-    Warden,
-    GateKeeper
+export enum ROLE {
+    "Admin",
+    "Principal",
+    "Cordinator",
+    "Warden",
+    "Gatekeeper"
+}
+
+export enum STATUS {
+    "ACCEPTED",
+    "REJECTED",
+    "PENDING"
 }
 
 
-export enum filter{
+export enum filter {
     latest,
     oldest,
     AtoZ,
     ZtoA,
-
 }

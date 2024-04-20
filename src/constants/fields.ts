@@ -1,13 +1,76 @@
-import React from "react";
 
-const FieldData = [
+export const SignupFields = [
+    {
+        label: "Name :",
+        placeholder: "Enter Your Name",
+        type: "text",
+        name: "name",
+        readOnly: "false",
+    },
+    {
+        label: "Phone Number :",
+        placeholder: "Enter your phone Number",
+        type: "tel",
+        name: "contact",
+        readOnly: "false",
+    },
+    {
+        label: "Enrollment Number :",
+        placeholder: "Enter your enrollment Number",
+        type: "text",
+        name: "enrolNumber",
+        readOnly: "false",
+
+    },
+    {
+        label: "Course :",
+        placeholder: "Enter your course",
+        type: "text",
+        name: "course",
+        readOnly: "true",
+    },
+    {
+        label: "Room Number :",
+        placeholder: "Enter your room Number",
+        type: "text",
+        name: "roomNumber",
+        readOnly: "true",
+    },
+    {
+        label: "Finger Number :",
+        placeholder: "Enter your finger Number",
+        type: "Number",
+        name: "fingerNumber",
+        readOnly: "true",
+    },
+    {
+        label: "Father Name :",
+        placeholder: "Enter your father's Name",
+        type: "text",
+        name: "fatherName",
+        readOnly: "true",
+    },
+    {
+
+        label: "Father Mobile Number :",
+        placeholder: "Enter your father Mobile Number",
+        type: "tel",
+        name: "fatherContact",
+        readOnly: "true",
+
+    },
+
+];
+
+
+export const leaveFormFields = [
 
     {
         label: "Enrollment Number :",
         placeholder: "Enter your enrollment Number",
         type: "text",
         name: "enrollmentNumber",
-        readOnly:"true",
+        readOnly: "true",
 
     },
     {
@@ -15,44 +78,44 @@ const FieldData = [
         placeholder: "Enter Your Name",
         type: "text",
         name: "name",
-        readOnly:"true",
+        readOnly: "true",
     },
 
     // leaveTo
     {
         label: "Phone Number :",
         placeholder: "Enter your phone Number",
-        type: "tel",
+        type: "text",
         name: "phoneNumber",
-        readOnly:"true",
+        readOnly: "true",
     },
     {
         label: "Course :",
         placeholder: "Enter your course",
         type: "text",
         name: "course",
-        readOnly:"true",
+        readOnly: "true",
     },
     {
         label: "Room Number :",
         placeholder: "Enter your room Number",
         type: "text",
         name: "roomNumber",
-        readOnly:"true",
+        readOnly: "true",
     },
     {
         label: "Finger Number :",
         placeholder: "Enter your finger Number",
         type: "Number",
         name: "fingerNumber",
-        readOnly:"true",
+        readOnly: "true",
     },
     {
         label: "Father Name :",
         placeholder: "Enter your father's Name",
         type: "text",
         name: "fatherName",
-        readOnly:"true",
+        readOnly: "true",
     },
     {
 
@@ -60,7 +123,7 @@ const FieldData = [
         placeholder: "Enter your father Mobile Number",
         type: "tel",
         name: "FatherNumber",
-        readOnly:"true",
+        readOnly: "true",
 
     },
     {
@@ -89,14 +152,7 @@ const FieldData = [
         placeholder: "Enter the number of days",
         type: "number",
         name: "numberOfDays",
-        min:"1",
-        required: "true",
-    },
-    {
-        label: "Reason For Leave",
-        placeholder: "Enter the reason for Leave",
-        type: "textArea",
-        name: "leaveReason",
+        min: "1",
         required: "true",
     },
     {
@@ -107,8 +163,16 @@ const FieldData = [
         required: "true",
 
     },
+    {
+        label: "Reason For Leave",
+        placeholder: "Enter the reason for Leave",
+        type: "textArea",
+        name: "leaveReason",
+        required: "true",
+    },
 ];
 
-export default FieldData;
+
+
 
 
