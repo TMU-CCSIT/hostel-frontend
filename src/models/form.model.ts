@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, IfAny } from 'mongoose';
 import { STATUS } from "@/constants/constant";
 import { IStudent } from '@/models/student.model';
 
@@ -56,6 +56,7 @@ const leaveFormSchema = new mongoose.Schema(
 );
 
 
-const LeaveForm = mongoose.model<IForm>("LeaveForm", leaveFormSchema);
+const LeaveForm = mongoose.models.LeaveForm<IForm> || mongoose.model('LeaveForm', leaveFormSchema);
+
 export default LeaveForm;
 

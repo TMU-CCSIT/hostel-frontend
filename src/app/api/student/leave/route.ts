@@ -3,11 +3,12 @@ import { z } from 'zod';
 import Student from '@/models/student.model';
 import LeaveForm from '@/models/form.model';
 import { NextRequest, NextResponse } from 'next/server';
+import { dbConnection } from '@/app/config/dbConfig';
 
+dbConnection();
 
 // validating by zod
 const studentSchema = z.object({
-    userId: z.string(),
     dateFrom: z.date(),
     dateTo: z.date(),
     reasonForLeave: z.string(),
@@ -15,15 +16,14 @@ const studentSchema = z.object({
 });
 
 
-const validateDate = (date: Date): boolean => {
+const validateDate = (dateString: string): boolean => {
+    const date = new Date(dateString);
     const currentDate = new Date();
-    return date >= currentDate;
+    return date > currentDate;
 }
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
-
-    console.log("reached----------")
 
     try {
         // initializing body
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // validation by parsing
         try {
-            studentSchema.parse(body);
+            studentSchema.safeParse(body);
         } catch (err) {
             return NextResponse.json(
                 {
@@ -47,28 +47,30 @@ export async function POST(req: NextRequest, res: NextResponse) {
             );
         }
 
-        console.log("parsed--")
-
-
         // getting data by destructuring
         const {
-            userId,
             dateFrom,
             dateTo,
             reasonForLeave,
             addressDuringLeave
         } = body;
 
+        const userId = "";
 
-        if (!validateDate) {
+        const isDateValid = validateDate(dateFrom);
+
+        if (!isDateValid) {
             return NextResponse.json(
                 {
                     message: "please enter a valid date",
                     success: false,
+                    data: null,
+                    error: "please enter a valid date",
                 }, {
                 status: 400
             });
         }
+
 
         // check if user exist or not
         const userExist = await Student.findById(userId);
@@ -78,6 +80,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 {
                     message: "user does not exist",
                     success: false,
+                    error: "user does not exist",
+                    data: null
                 }, {
                 status: 400
             }
@@ -100,19 +104,22 @@ export async function POST(req: NextRequest, res: NextResponse) {
             {
                 message: "leave form creation successfull",
                 success: true,
+                error: null,
+                data: null
             }, {
             status: 200
         }
         );
-
     }
 
     // catch block 
-    catch (err) {
+    catch (err: any) {
         return NextResponse.json(
             {
                 message: "problem in leave form creation controller",
                 success: false,
+                error: err.message,
+                data: null
             }, {
             status: 400
         }
