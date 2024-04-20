@@ -50,23 +50,33 @@ const Signup = () => {
 
   async function addDataToStore() {
     try {
-
       console.log("hello, data is ", data);
-
+  
       // Add document to Firestore
       const docRef = await addDoc(collection(db, "User"), {
-
-        data,
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        enrolNumber: data.enrolNumber,
+        contact: data.contact,
+        fingerNumber: data.fingerNumber,
+        fatherName: data.fatherName,
+        fatherContact: data.fatherContact,
+        course: data.course,
+        roomNumber: data.roomNumber,
 
       });
-
-      console.log(docRef)
-
+  
+      console.log(docRef);
+  
       // Check if document reference exists
       if (docRef.id) {
+
         console.log("Document successfully added with ID: ", docRef.id);
         // Entry was successful
+
       } else {
+
         console.log("Error: Document reference not returned");
         // Entry was not successful
       }
@@ -82,9 +92,11 @@ const Signup = () => {
   const submitHandler = async(e: any) =>{
 
     e.preventDefault();
+
+    console.log(process.env.NEXT_PUBLIC_authDomain);
+
     await addDataToStore();
-  
-    
+
   }
 
   return (
