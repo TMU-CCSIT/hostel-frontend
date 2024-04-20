@@ -70,7 +70,6 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
         let isUserExists = await isEmailAlreadyExist(email);
 
-
         if (isUserExists) {
 
             return res.status(400).json({
@@ -85,20 +84,15 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         }
 
         // hash the passowrd
-
         let hashPassword = await bcrypt.hash(password, 10);
 
 
         // create new user enrty in DB 
-
-
         const newUser = await Student.create({
-
             fullName,
             email,
             password,
             contactNumber,
-
         })
 
 
@@ -110,16 +104,13 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
         // sucessfully return the resposne 
 
-
         return res.status(200).json({
 
             message: "user signup successfull",
             error: "null",
             success: "true",
             data: null
-
-        })
-
+        });
 
     } catch (error: any) {
 
