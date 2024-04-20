@@ -1,4 +1,7 @@
 export default function Home() {
+
+  return <div></div>;
+
   return (
     <>
       <div className=" w-full flex justify-center items-start bg-[#fff]">
@@ -9,4 +12,5 @@ export default function Home() {
       </div>
     </>
   );
+
 }

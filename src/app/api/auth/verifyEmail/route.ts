@@ -1,6 +1,6 @@
 
 
-import User from "@/models/User.model";
+import User from "@/models/user.model";
 
 import { NextRequest,NextResponse } from "next/server";
 

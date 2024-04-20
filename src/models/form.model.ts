@@ -1,9 +1,9 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, IfAny } from 'mongoose';
 import { STATUS } from "@/constants/constant";
-import { IStudent } from '@/models/Student.model';
+import { IStudent } from '@/models/student.model';
 
 export interface IForm extends Document {
-    user: IStudent;
+    student: IStudent;
     dateFrom: Date;
     dateTo: Date;
     reasonForLeave: string;
@@ -56,6 +56,7 @@ const leaveFormSchema = new mongoose.Schema(
 );
 
 
-const LeaveForm = mongoose.model<IForm>("LeaveForm", leaveFormSchema);
+const LeaveForm = mongoose.models.LeaveForm<IForm> || mongoose.model('LeaveForm', leaveFormSchema);
+
 export default LeaveForm;
 

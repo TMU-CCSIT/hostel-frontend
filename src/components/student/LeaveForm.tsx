@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const LeaveForm = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default LeaveForm
+export default LeaveForm;

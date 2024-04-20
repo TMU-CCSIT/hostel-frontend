@@ -3,7 +3,9 @@ import ReactDOMServer from 'react-dom/server'; // Import ReactDOMServer for rend
 import { EmailTemplate } from '@/helper/mailTemplates/verificationMailTemplate';
 import { Resend } from 'resend';
 import bcrypt from "bcrypt";
-import User from '@/models/User.model';
+
+import User from "@/models/user.model";
+
 
 const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
@@ -25,7 +27,7 @@ export async function sendEmail(email: any, emailType: any, userId: any) {
     }, { new: true });
 
     // Render React template to HTML
-    
+
     const reactTemplate = EmailTemplate({
 
         emailType: emailType,
