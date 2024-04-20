@@ -38,6 +38,8 @@ const Page = () => {
 
     console.log("form data is ", formData);
 
+    
+
   };
 
   return <div className="min-h-screen w-full bg-white">
@@ -63,7 +65,7 @@ const Page = () => {
 
               <div className=" relative flex flex-col gap-1">
 
-                <div className={`text-2xl text-black text-xs font-extrabold`}>{data.label}</div>
+                <div className={` text-black text-xs font-extrabold`}>{data.label}</div>
 
                 <input
                   className={`p-3 relative ${data.name ==="leaveReason" ? "w-[750px] h-[100px]" : "w-[500px]"} rounded-lg text-slate-800`}
