@@ -1,14 +1,14 @@
 "use client";
 
 // importing necessities
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import InputField from "./InputField";
 import DropDown from "./DropDown";
 import { colleges } from "@/constants/constant";
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
-import { db } from "@/config/dbConfig";
-import { collection, addDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 // interface
 interface FormData {
@@ -44,18 +44,17 @@ const Signup = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-
   // dummy function to pass
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
 
-    console.log(process.env.NEXT_PUBLIC_authDomain);
-
-    await addDataToStore();
-
-
+  async function submitHandler(e: any) {
+    try {
+      e.preventDefault();
+      const res = await axios.post("/api/auth/signup", data);
+      console.log("res: ", res);
+    } catch (error) {
+      toast.error("signup failed");
+    }
   }
-  };
 
   return (
     // main div
@@ -94,7 +93,7 @@ const Signup = () => {
 
           {/* button */}
           <div className="m-12">
-            <CTCButton text={"Submit"} type={true}></CTCButton>
+            <CTCButton text={"Submit"} type={true} />
           </div>
         </form>
       </div>
