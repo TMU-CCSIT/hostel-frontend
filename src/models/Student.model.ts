@@ -1,11 +1,17 @@
+
 import mongoose, { Document } from 'mongoose';
 
-export interface User extends Document {
+export interface Student extends Document {
     fullName: string;
     email: string;
     password: string;
+    enrollmentNumber: number;
     contactNumber: number;
-    role?: "Admin" | "Principal" | "Coordinator" | "Warden" | "Gatekeeper";
+    course: string;
+    college: string;
+    additionalDetails: mongoose.Types.ObjectId;
+    fingerNumber: number;
+    roomNumber: string;
     isVerified: boolean;
     otp?: string;
     otpExpiry?: Date;
@@ -13,7 +19,7 @@ export interface User extends Document {
     resetPasswordTokenExpiry?: Date;
 }
 
-const userSchema = new mongoose.Schema(
+const studentSchema = new mongoose.Schema(
     {
         fullName:{
             type:String,
@@ -28,13 +34,36 @@ const userSchema = new mongoose.Schema(
             type:String,
             required:true
         },
+        enrollmentNumber:{
+            type:Number,
+            required:true,
+            unique:true
+        },
         contactNumber:{
             type:Number,
             required:true,
         },
-        role:{
+        course:{
             type:String,
-            enum:["Admin", "Principal", "Cordinator", "Warden", "Gatekeeper"]
+            required:true,
+        },
+        college:{
+            type:String,
+            required:true,
+        },
+        additionalDetails:{
+            type: mongoose.Schema.Types.ObjectId,
+            ref:"AdditionalDetails",
+            required:true
+        },
+        fingerNumber:{
+            type:Number,
+            required:true,
+            unique:true
+        },
+        roomNumber:{
+            type:String,
+            required:true
         },
         isVerified:{
             type:Boolean,
@@ -55,6 +84,6 @@ const userSchema = new mongoose.Schema(
     }
 )
 
-const User = mongoose.model<User>("User", userSchema);
+const Student = mongoose.model<Student>("Student", studentSchema);
 
-export default User;
+export default Student;

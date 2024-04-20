@@ -1,20 +1,28 @@
-import mongoose from 'mongoose'
+// models/AdditionalDetails.ts
 
-const additionalDetailsSchema = new mongoose.Schema(
-    {
-        fatherName:{
-            type:String,
-            required:true
-        },
-        parentContact:{
-            type:Number,
-            required:true
-        },
-        addrerss:{
-            type:String,
-            required:true
-        }
+import mongoose, { Schema, Document } from 'mongoose';
+
+export interface IAdditionalDetails extends Document {
+    fatherName: string;
+    parentContact: number;
+    address: string;
+}
+
+const additionalDetailsSchema: Schema = new Schema({
+    fatherName: {
+        type: String,
+        required: true
+    },
+    parentContact: {
+        type: Number,
+        required: true
+    },
+    address: {
+        type: String,
+        required: true
     }
-)
+});
 
-module.exports = mongoose.model("additionalDetails", additionalDetailsSchema);
+const AdditionalDetails = mongoose.model<IAdditionalDetails>("AdditionalDetails", additionalDetailsSchema);
+
+export default AdditionalDetails;
