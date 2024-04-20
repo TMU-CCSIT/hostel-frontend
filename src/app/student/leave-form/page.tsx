@@ -1,12 +1,11 @@
-<<<<<<< HEAD:src/app/student/leave-form/page.tsx
 
-=======
->>>>>>> 72790470797732cb4c3228371576c5e765f497a7:src/app/(navbar)/student/leave-form/page.tsx
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
+
+import InputField from "@/components/auth/InputField";
+
 import { leaveFormFields } from "@/constants/fields";
-import axios from "axios";
 
 interface leaveFormData {
   enrollmentNumber: string;
@@ -50,18 +49,7 @@ const Page = () => {
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-
-    console.log("Data is sending---");
-
-    const objData = {
-      dateFrom: new Date("2026-04-25"),
-      dateTo: new Date("2025-04-22"),
-      reasonForLeave: "gknijgrb",
-      addressDuringLeave: "vinevbrnrjbvinri",
-    };
-
-    const res = await axios.post("/api/student/leave", objData);
-    console.log("res: ", res);
+    console.log("form data is ", formData);
   };
 
   return (
@@ -70,7 +58,13 @@ const Page = () => {
         <h1 className="text-black text-start font-medium text-3xl">
           Apply for Hostel leave
         </h1>
-
+        <div className="w-[100px] h-[100px] rounded-full bg-yellow-300">
+          <img
+            src="https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVucyUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D"
+            alt=""
+            className="w-full h-full bg-cover rounded-full"
+          />
+        </div>
         <form
           onSubmit={submitHandler}
           className="w-full h-full relative gap-5 flex flex-col justify-center items-center"
@@ -78,7 +72,7 @@ const Page = () => {
           <div className="w-full relative flex gap-3 flex-wrap justify-between">
             {leaveFormFields.map((data: any, index: number) => (
               <div key={index} className="relative flex flex-col gap-1">
-                <div className={`text-2xl text-black font-extrabold`}>
+                <div className={`text-2xl text-black text-xs font-extrabold`}>
                   {data.label}
                 </div>
                 <input
@@ -125,7 +119,4 @@ const Page = () => {
 };
 
 export default Page;
-<<<<<<< HEAD:src/app/student/leave-form/page.tsx
 
-=======
->>>>>>> 72790470797732cb4c3228371576c5e765f497a7:src/app/(navbar)/student/leave-form/page.tsx
