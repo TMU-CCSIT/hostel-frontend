@@ -28,7 +28,6 @@ const signupSchema = z.object({
 
 
 
-
 export async function POST(req: NextRequest, res: NextApiResponse) {
 
     try {
