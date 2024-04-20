@@ -1,27 +1,13 @@
-import { initializeApp } from "firebase/app";
+import mongoose from 'mongoose';
 
-import { getFirestore } from "firebase/firestore";
+export const dbConnection = () => {
 
-
-const firebaseConfig = {
-
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId,
-  measurementId: process.env.measurementId,
-  
-};
-  
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-const db = getFirestore(app);
-
-export { db };
-
-
-
+  mongoose.connect(process.env.DATABASE_URL || "")
+    .then(() => {
+      console.log("DB CONNECTION SUCCESSFULL!")
+    })
+    .catch((err: any) => {
+      console.log("DB CONNECTION FAILED! ");
+      console.log("ERROR: ", err)
+    });
+}
