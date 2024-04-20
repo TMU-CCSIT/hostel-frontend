@@ -1,53 +1,93 @@
-
+"use client"
 import React, { useState, ChangeEvent, FormEvent } from "react";
 
+import InputField from "@/components/auth/InputField";
+
+import UserFieldData from "@/constants/UserProfileFields";
 
 const Page = () => {
 
-  const [formaData,setFromData] = useState({
+  const [formData, setFromData] = useState({
+    enrollmentNumber: "",
+    name: "",
+    phoneNumber: "",
+    course: "",
+    roomNumber: "",
+    fingerNumber: "",
+    fatherName: "",
+    FatherNumber:"",
+    leaveFrom: "",
+    leaveTime: "",
+    leaveTo:"",
+    leaveReason: "",
+    numberOfDays: "",
+    addressDuringLeave: "",
 
-    EnrollMentNumber: "",
-    name:"",
-    phoneNumber:"",
-    Course:"",
-    RoomNumber:"",
-    FingerNumber:"",
-    FatherName:"",
-    LeaveDate:"",
-    LeaveTime:"",
-    LeaveReason:"",
-    LeaveStatus:"",
-    Number_of_days:"",
-    ReasonForLeave:"",
-    AddressDuringLeave:"",
-  
   })
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+
+    const { name, value } = event.target;
+    setFromData((prev) => ({ ...prev, [name]: value }));
+
+  };
 
   const submitHandler = async (e: FormEvent) => {
 
     e.preventDefault();
 
-    // Logic to handle form submission, like sending data to backend
-    console.log("Form submitted!");
+    console.log("form data is ",formData);
 
   };
 
-  return <div>
+  return <div className="min-h-screen w-full">
 
-    <div>
+    <div className="flex flex-col justify-center items-center">
 
-      <h1>Apply for Hostel leave </h1>
+      <h1 className="text-white text-start font-medium text-3xl">Apply for Hostel leave </h1>
 
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} className=" flex flex-col justify-center items-center">
 
+        <div>
+
+          {
+
+            UserFieldData.map((data: any) => (
+
+              <InputField
+
+                label={data?.label}
+                type={data?.type}
+                placeholder={data.placeholder}
+                value={formData[data.name]}
+                name={data?.name}
+                min={data?.min}
+                readOnly={Boolean(data?.readOnly)} // Corrected attribute name to readOnly
+                onChange={handleChange}
+
+              >
+              </InputField>
+
+            ))
+
+          }
+
+        </div>
+
+        <div>
+
+          <button type="submit" className="border">Submit Form </button>
+
+        </div>
 
       </form>
 
     </div>
-
 
   </div>;
 
 };
 
 export default Page;
+
+
