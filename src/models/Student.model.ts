@@ -1,6 +1,6 @@
 
 import mongoose, { Document } from 'mongoose';
-import { IAdditionalDetails } from '@/models/AdditionalDetails.model';
+import { IAdditionalDetails } from '@/models/additionalDetails.model';
 
 export interface IStudent extends Document {
     fullName: string;
@@ -77,8 +77,7 @@ const studentSchema = new mongoose.Schema(
     }
 )
 
-const Student = mongoose.model<IStudent>("Student", studentSchema);
-
+const Student = mongoose.models.Student<IStudent> || mongoose.model('Student', studentSchema);
 export default Student;
 
 

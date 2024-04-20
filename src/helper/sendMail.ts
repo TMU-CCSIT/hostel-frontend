@@ -5,7 +5,7 @@ import { Resend } from 'resend';
 
 import bcrypt from "bcrypt";
 
-import User from '@/models/User.model';
+import User from '@/models/user.model';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 

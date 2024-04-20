@@ -1,7 +1,6 @@
-
 // importing necessities
-import {z} from 'zod';
-import Student from '@/models/Student.model';
+import { z } from 'zod';
+import Student from '@/models/student.model';
 import LeaveForm from '@/models/form.model';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,36 +12,46 @@ const studentSchema = z.object({
     dateTo: z.date(),
     reasonForLeave: z.string(),
     addressDuringLeave: z.string(),
-})
+});
 
 
-// main controller
-exports.createLeaveForm = async (req: NextRequest,res: NextResponse) =>{
+const validateDate = (date: Date): boolean => {
+    const currentDate = new Date();
+    return date >= currentDate;
+}
 
-    try{
+
+export async function POST(req: NextRequest, res: NextResponse) {
+
+    console.log("reached----------")
+
+    try {
         // initializing body
         const body = await req.json();
 
+        console.log("body: ", body);
 
         // validation by parsing
-        try{
+        try {
             studentSchema.parse(body);
-        } catch(err){
+        } catch (err) {
             return NextResponse.json(
                 {
                     message: "Validation error in parsing data",
                     error: err,
                     data: null,
                     success: false,
-                },{
-                    status:400
-                }
+                }, {
+                status: 400
+            }
             );
         }
 
+        console.log("parsed--")
+
 
         // getting data by destructuring
-        const{
+        const {
             userId,
             dateFrom,
             dateTo,
@@ -51,41 +60,29 @@ exports.createLeaveForm = async (req: NextRequest,res: NextResponse) =>{
         } = body;
 
 
-
-        // date validation (date should be more or equal to current date)
-        const validateDate = (date: Date) :boolean =>{
-            const currentDate = new Date();
-            return date >=currentDate;
-        }
-
-        if(!validateDate){
+        if (!validateDate) {
             return NextResponse.json(
                 {
                     message: "please enter a valid date",
                     success: false,
-                },{
-                    status:400
-                }
-            );
+                }, {
+                status: 400
+            });
         }
-
-
 
         // check if user exist or not
         const userExist = await Student.findById(userId);
 
-        if(!userId){
+        if (!userExist) {
             return NextResponse.json(
                 {
                     message: "user does not exist",
                     success: false,
-                },{
-                    status:400
-                }
+                }, {
+                status: 400
+            }
             );
         }
-
-
 
         // create entry in db 
         const leaveForm = await LeaveForm.create(
@@ -98,29 +95,27 @@ exports.createLeaveForm = async (req: NextRequest,res: NextResponse) =>{
             }
         );
 
-
         // return success response
         return NextResponse.json(
             {
-                message:"leave form creation successfull",
-                success:true,
-            },{
-                status:200
-            }
+                message: "leave form creation successfull",
+                success: true,
+            }, {
+            status: 200
+        }
         );
 
     }
 
-
     // catch block 
-    catch(err){
+    catch (err) {
         return NextResponse.json(
             {
                 message: "problem in leave form creation controller",
                 success: false,
-            },{
-                status:400
-            }
+            }, {
+            status: 400
+        }
         );
     }
 }

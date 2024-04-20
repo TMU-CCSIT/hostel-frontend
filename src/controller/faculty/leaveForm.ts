@@ -1,6 +1,6 @@
 import { ROLE, STATUS } from "@/constants/constant";
 import LeaveForm, { IForm } from "@/models/form.model";
-import User, { IUser } from "@/models/User.model";
+import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 
 

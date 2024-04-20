@@ -13,7 +13,7 @@ import { NextApiRequest,NextApiResponse } from "next";
 
 import { NextRequest } from "next/server";
 
-import User from "@/models/User.model";
+import User from "@/models/user.model";
 
 
 const signupSchema = z.object({
