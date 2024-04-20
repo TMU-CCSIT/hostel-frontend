@@ -5,8 +5,32 @@ import InputField from "@/components/auth/InputField";
 
 import { leaveFormFields } from "@/constants/fields";
 
+
+
+interface leaveFormData  {
+  enrollmentNumber:string,
+  name:string,
+  phoneNumber: string,
+  course: string,
+  roomNumber: string,
+  fingerNumber: string,
+  fatherName: string,
+  FatherNumber:string,
+  leaveFrom: string,
+  leaveTime: string,
+  leaveTo:string,
+  leaveReason: string,
+  numberOfDays: string,
+  addressDuringLeave: string,
+}
+
 const Page = () => {
+<<<<<<< HEAD
   const [formData, setFromData] = useState({
+=======
+
+  const [formData, setFromData] = useState<leaveFormData>({
+>>>>>>> 8cdac5feb5a35ad6d936b9d6c5d43e3d209bdeec
     enrollmentNumber: "",
     name: "",
     phoneNumber: "",
@@ -60,6 +84,16 @@ const Page = () => {
                   {data.label}
                 </div>
 
+
+                label={data?.label}
+                type={data?.type}
+                placeholder={data.placeholder}
+                value={formData[data.name as keyof leaveFormData]}
+                name={data?.name}
+                min={data?.min}
+                readOnly={Boolean(data?.readOnly)} // Corrected attribute name to readOnly
+                onChange={handleChange}
+
                 <input
                   className={`p-3 relative ${
                     data.name === "leaveReason"
@@ -78,8 +112,22 @@ const Page = () => {
             ))}
           </div>
 
+<<<<<<< HEAD
           <button
             type="submit"
+=======
+
+
+            ))
+
+          }
+
+        </div>
+
+
+          <button type="submit"
+
+>>>>>>> 8cdac5feb5a35ad6d936b9d6c5d43e3d209bdeec
             className="flex items-center gap-2 px-6 py-3 font-sans text-xs bg-[#6DAFFE]  text-center text-white font-bold uppercase align-middle transition-all rounded-lg select-none disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none hover:bg-gray-900/10 active:bg-gray-900/20"
           >
             Submit Form
