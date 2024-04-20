@@ -42,13 +42,23 @@ const Signup = () => {
 
   // function for data matching
   const handleChange = (e: any) => {
+
+
     setData({ ...data, [e.target.name]: e.target.value });
+
   };
 
 
   // dummy function to pass
   const submitHandler = () =>{
+
+  const submitHandler = (e:any) =>{
+
+    e.preventDefault();
+
+
     console.log(data);
+    
   }
 
   return (

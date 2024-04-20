@@ -4,16 +4,15 @@ import React from "react";
 interface InputFieldProps {
   label: string;
   type: string;
-  placeholder?: string ;
-  value: string;
-  name: string;
-  min?:number;
-  readOnly?:any;
+  placeholder?: string;
+  value: any;
+  name: any;
+  min?: number;
+  readOnly?: any;
   onChange: (value: any) => void;
 }
 
 const InputField = (props: InputFieldProps) => {
-
   return (
     <div className="flex flex-col">
       <label htmlFor={props.label || ""} className="font-bold text-lg">

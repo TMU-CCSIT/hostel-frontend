@@ -93,19 +93,19 @@ const FieldData = [
         required: "true",
     },
     {
-        label: "Reason For Leave",
-        placeholder: "Enter the reason for Leave",
-        type: "textArea",
-        name: "leaveReason",
-        required: "true",
-    },
-    {
         label: "Address During Leave",
         placeholder: "Enter your address During Leave",
         type: "text",
         name: "addressDuringLeave",
         required: "true",
 
+    },
+    {
+        label: "Reason For Leave",
+        placeholder: "Enter the reason for Leave",
+        type: "textArea",
+        name: "leaveReason",
+        required: "true",
     },
 ];
 
