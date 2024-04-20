@@ -19,8 +19,6 @@ dbConnection();
 
 
 const signupSchema = z.object({
-
-    fullName: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
     contactNumber: z.number().min(10),
@@ -35,6 +33,8 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
         // fetch data 
 
         const body = await req.json();
+
+        console.log("body: ", body)
 
         // Validate request body
 
