@@ -10,27 +10,27 @@ import bcrypt from "bcrypt";
 import {sendEmail} from "@/helper/sendMail";
 
 import { NextApiRequest,NextApiResponse } from "next";
-import { error } from "console";
+
+import { NextRequest } from "next/server";
+
+import User from "@/models/User.model";
+
 
 const signupSchema = z.object({
 
     fullName: z.string(),
     email: z.string().email(),
     password: z.string().min(8),
-    course: z.string(),
-    college: z.string(),
-    fingerNumber: z.number(),
-    rooomNumber: z.string(),
-    fatherName: z.string(),
-    address: z.string(),
-    parentNumber: z.number(),
+    contactNumber: z.number().min(10),
+    role: z.enum(["ADMIN", "USER"]),
+
 
 });
 
 dbConnection();
 
 
-export async function Signup(req:NextApiRequest, res:NextApiResponse) {
+export async function Signup(req:NextRequest, res:NextApiResponse) {
 
     try {
 
@@ -64,20 +64,15 @@ export async function Signup(req:NextApiRequest, res:NextApiResponse) {
             fullName,
             email,
             password,
-            course,
-            college,
-            fingerNumber,
-            rooomNumber,
-            fatherName,
-            address,
-            parentNumber
+            contactNumber,
+            role,
 
         } = body;
 
 
         // check the user is already exists 
 
-        let isUserExists = isEmailAlreadyExist(email);
+        let isUserExists = await isEmailAlreadyExist(email);
 
 
         if(isUserExists){
@@ -100,28 +95,26 @@ export async function Signup(req:NextApiRequest, res:NextApiResponse) {
 
         // create new user enrty in DB 
 
-        const newUser = await user.create({
+        
+        const newUser = await User.create({
 
             fullName,
             email,
             password,
-            course,
-            college,
-            fingerNumber,
-            rooomNumber,
-            fatherName,
-            address,
-            parentNumber
+            contactNumber,
+            role,
 
         })
 
         
-        let url = process.env.NEXT_PUBLIC_BASE_URL;
+        // let url = process.env.NEXT_PUBLIC_BASE_URL;
 
-        // send the mail to the user 
+        // // send the mail to the user 
 
-        await sendEmail(email,"VERIFY",newUser._id);
-        
+        // await sendEmail(email,"VERIFY",newUser._id);
+
+        // sucessfully return the resposne 
+
 
         return res.status(200).json({
 
@@ -139,8 +132,8 @@ export async function Signup(req:NextApiRequest, res:NextApiResponse) {
 
         return res.status(400).json({
 
-            message: "Email already registered, Please login to continue",
-            error: "Email already registered, Please login to continue",
+            message: "some error occurred while creating a signup",
+            error: error.message,
             success: false,
             data: null
 

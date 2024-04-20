@@ -1,87 +1,44 @@
 
-import nodemailer from "nodemailer";
+import { EmailTemplate } from '@/helper/mailTemplates/verificationMailTemplate';
 
-import User from "@/models/userModel";
+import { Resend } from 'resend';
 
 import bcrypt from "bcrypt";
 
-// import {connect} from "@/dbConfig/dbConfig";
+import User from '@/models/User.model';
 
-import { dbConnection } from "@/app/config/dbConfig";
-
-
-
-export const sendEmail = async(email:any,emailType:any,userId:any)=>{
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 
-    try{
+export async function sendEmail(email:any,emailType:any,userId:any) {
+    
+  try {
+
+    const hashedToken = await bcrypt.hash(userId.toString(), 10);
 
 
-        console.log("send email ke andar ",email,emailType,userId);
+    await User.findByIdAndUpdate(userId,{
 
-        // creatw the hashed token 
+        verifyToken:hashedToken,
+        verifyTokenExpiry:Date.now() + 3600000
 
-        const hashedToken = await bcrypt.hash(userId.toString(), 10);
-
-        if(emailType ==="VERIFY"){
-
-            await User.findByIdAndUpdate(userId,{
-
-                verifyToken:hashedToken,
-                verifyTokenExpiry:Date.now() + 3600000
-
-            },{new :true});
-
-        }
-
-        if(emailType ==="RESET"){
-
-            await User.findByIdAndUpdate(userId,{
-
-                forgotPasswordToken:hashedToken,
-                forgotPasswordTokenExpiry:Date.now() + 3600000
-
-            },{new :true});
-            
-        }
-
-        console.log("mailer ke andar ");
-
-        console.log(process.env.userMail,process.env.userPass);
-
-        var transport = nodemailer.createTransport({
-            host: process.env.mail_host,
-            port:587,
-            auth: {
-              user:process.env.mail_user,
-              pass:process.env.mail_pass
-
-            }
-        });
+    },{new :true});
 
 
 
-        const mailOptions = {
+    // const data = await resend.emails.send({
 
-            from: process.env.mail_user,
-            to: email, 
-            subject: emailType ==="VERIFY" ? "verify your email" : " reset your password",
-            html: `<p> Click <a href="${process.env.domain}/verifyEmail?token=${hashedToken}"here</a> to ${emailType ==="VERIFY" ? "verify your email" :"reset your password "}</p>`
+    //   from: 'Acme <onboarding@resend.dev>',
+    //   to: ['delivered@resend.dev'],
+    //   subject: 'Hello world',
+    //   react: EmailTemplate({ firstName: 'John' }),
 
-        }
+    // });
 
-        const mailResponse = await transport.sendMail(mailOptions);
-
-        return mailResponse;
-
-    }catch(error:any){
-
-        console.log(error);
-        throw new Error(error.message);
-
-    }
+    return Response.json("done");
+  } catch (error) {
+    return Response.json({ error });
+  }
 }
-
-
 
 

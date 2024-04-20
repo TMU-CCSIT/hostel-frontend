@@ -80,3 +80,5 @@ const studentSchema = new mongoose.Schema(
 const Student = mongoose.model<IStudent>("Student", studentSchema);
 
 export default Student;
+
+
