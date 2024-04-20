@@ -1,26 +1,61 @@
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose';
+import { STATUS } from "@/constants/constant";
+import { IStudent } from '@/models/Student.model';
 
-const formSchema = new mongoose.Schema(
+export interface IForm extends Document {
+    user: IStudent;
+    dateFrom: Date;
+    dateTo: Date;
+    reasonForLeave: string;
+    addressDuringLeave: string;
+    status: {
+        coordinator: STATUS;
+        hostelWarden: STATUS;
+    };
+}
+
+
+const leaveFormSchema = new mongoose.Schema(
     {
-        user: {
+        student: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "user"
+            ref: "Student"
         },
-        from: {
+        dateFrom: {
             type: Date,
             required: true
         },
-        to: {
+        dateTo: {
             type: Date,
             required: true
         },
-        reason: {
+        reasonForLeave: {
             type: String,
             required: true
         },
         addressDuringLeave: {
             type: String,
             required: true
+        },
+        status: {
+            coordinator: {
+                type: String,
+                enum: Object.values(STATUS),
+                default: STATUS.PENDING
+            },
+            hostelWarden: {
+                type: String,
+                enum: Object.values(STATUS),
+                default: STATUS.PENDING
+            }
         }
+    },
+    {
+        timestamps: true
     }
 );
+
+
+const LeaveForm = mongoose.model<IForm>("LeaveForm", leaveFormSchema);
+export default LeaveForm;
+

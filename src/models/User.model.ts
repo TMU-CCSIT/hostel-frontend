@@ -1,42 +1,56 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
+import { ROLE } from '@/constants/constant';
+
+export interface User extends Document {
+    fullName: string;
+    email: string;
+    password: string;
+    contactNumber: number;
+    role: ROLE;
+    isVerified: boolean;
+    token?: string;
+    tokenExpiry?: Date;
+}
+
 
 const userSchema = new mongoose.Schema(
     {
-        fullName:{
-            type:String,
-            required:true,
-            trim:true
+        fullName: {
+            type: String,
+            required: true,
+            trim: true
         },
-        enrollmentNumber:{
-            type:Number,
-            required:true,
+        email: {
+            type: String,
+            required: true,
+            unique: true,
         },
-        contactNumber:{
-            type:Number,
-            required:true,
+        password: {
+            type: String,
+            required: true
         },
-        course:{
-            type:String,
-            required:true,
+        contactNumber: {
+            type: Number,
+            required: true,
         },
-        college:{
-            type:String,
-            required:true,
+        role: {
+            type: String,
+            enum: Object.values(ROLE),
+            required: true,
         },
-        additionalDetails:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref:"additionalDetails",
-            required:true
+        isVerified: {
+            type: Boolean,
+            default: false
         },
-        fingerNumber:{
-            type:Number,
-            required:true
+        token: {
+            type: String
         },
-        roomNumber:{
-            type:String,
-            required:true
-        }
+        tokenExpiry: {
+            type: Date
+        },
     }
 )
 
-module.exports = mongoose.model("user", userSchema);
+const User = mongoose.model<User>("User", userSchema);
+
+export default User;

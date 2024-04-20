@@ -1,5 +1,5 @@
 import LeaveForm from "@/models/form.model";
-import User from "@/models/user.model";
+import Student from "@/models/Student.model";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -10,7 +10,7 @@ export const updateForm = async (req: NextRequest, res: NextResponse) => {
         const { formId, result, userId } = body;
 
         const form = await LeaveForm.findById(formId);
-        const user = await User.findById(userId);
+        const user = await Student.findById(userId);
 
         if (!form || !user) {
             return NextResponse
@@ -25,10 +25,7 @@ export const updateForm = async (req: NextRequest, res: NextResponse) => {
                 });
         }
 
-        if (result) form.status = form.status + 1;
-        else form.status = -1;
-
-        await form.save();
+        // pending
 
         return NextResponse
             .json(
