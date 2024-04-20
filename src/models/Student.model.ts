@@ -1,6 +1,6 @@
 
 import mongoose, { Document } from 'mongoose';
-import { IAdditionalDetails } from './additionalDetails.model';
+import { IAdditionalDetails } from '@/models/AdditionalDetails.model';
 
 export interface IStudent extends Document {
     fullName: string;
