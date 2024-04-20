@@ -1,7 +1,16 @@
 
 import { z } from "zod";
 
-import {} from "@/"
+import {dbConnection} from "@/app/config/dbConfig";
+
+import { isEmailAlreadyExist } from "@/helper/isEmailExists";
+
+import bcrypt from "bcrypt";
+
+import {sendEmail} from "@/helper/sendMail";
+
+import { NextApiRequest,NextApiResponse } from "next";
+import { error } from "console";
 
 const signupSchema = z.object({
 
@@ -18,8 +27,10 @@ const signupSchema = z.object({
 
 });
 
+dbConnection();
 
-export async function Signup(req, res) {
+
+export async function Signup(req:NextApiRequest, res:NextApiResponse) {
 
     try {
 
@@ -66,13 +77,77 @@ export async function Signup(req, res) {
 
         // check the user is already exists 
 
+        let isUserExists = isEmailAlreadyExist(email);
+
+
+        if(isUserExists){
+
+            return res.status(400).json({
+
+                message: "Email already registered, Please login to continue",
+                error: "Email already registered, Please login to continue",
+                success: false,
+                data: null
+
+            });
+
+        }
+
+        // hash the passowrd
+
+        let hashPassword = await bcrypt.hash(password,10);
+
+
+        // create new user enrty in DB 
+
+        const newUser = await user.create({
+
+            fullName,
+            email,
+            password,
+            course,
+            college,
+            fingerNumber,
+            rooomNumber,
+            fatherName,
+            address,
+            parentNumber
+
+        })
+
+        
+        let url = process.env.NEXT_PUBLIC_BASE_URL;
+
+        // send the mail to the user 
+
+        await sendEmail(email,"VERIFY",newUser._id);
         
 
+        return res.status(200).json({
+
+            message:"user signup successfull",
+            error:"null",
+            success:"true",
+            data:null
+
+        })
 
 
-    } catch (error) {
+    } catch (error:any) {
 
+        console.log(error.message);
+
+        return res.status(400).json({
+
+            message: "Email already registered, Please login to continue",
+            error: "Email already registered, Please login to continue",
+            success: false,
+            data: null
+
+        });
 
     }
 }
+
+
 
