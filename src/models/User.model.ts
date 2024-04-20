@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 import { ROLE } from '@/constants/constant';
 
-export interface User extends Document {
+export interface IUser extends Document {
     fullName: string;
     email: string;
     password: string;
@@ -51,6 +51,6 @@ const userSchema = new mongoose.Schema(
     }
 )
 
-const User = mongoose.model<User>("User", userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;

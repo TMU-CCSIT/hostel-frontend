@@ -1,6 +1,25 @@
-import LeaveForm from "@/models/form.model";
-import Student from "@/models/Student.model";
+import { ROLE, STATUS } from "@/constants/constant";
+import LeaveForm, { IForm } from "@/models/form.model";
+import User, { IUser } from "@/models/User.model";
 import { NextRequest, NextResponse } from "next/server";
+
+
+function queryByRole(user: IUser): string {
+
+    let query = ``;
+
+    switch (user.role) {
+        case ROLE.Cordinator:
+            query = 'leaveForm.student && leaveForm.student.course === "Btech"';
+            break;
+        case ROLE.Principal:
+            query = '';
+            break;
+        default:
+            query = ``;
+    }
+    return query;
+}
 
 
 export const updateForm = async (req: NextRequest, res: NextResponse) => {
@@ -10,7 +29,7 @@ export const updateForm = async (req: NextRequest, res: NextResponse) => {
         const { formId, result, userId } = body;
 
         const form = await LeaveForm.findById(formId);
-        const user = await Student.findById(userId);
+        const user = await User.findById(userId);
 
         if (!form || !user) {
             return NextResponse
@@ -25,7 +44,25 @@ export const updateForm = async (req: NextRequest, res: NextResponse) => {
                 });
         }
 
-        // pending
+        if (user.role === ROLE.Cordinator) {
+            form.status.coordinator = result ? STATUS.ACCEPTED : STATUS.REJECTED;
+        }
+        else if (user.role === ROLE.Warden) {
+            form.status.coordinator = result ? STATUS.ACCEPTED : STATUS.REJECTED;
+
+        } else {
+
+            return NextResponse
+                .json(
+                    {
+                        message: "User role is not authorize",
+                        error: "User role is not authorize",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 401
+                });
+        }
 
         return NextResponse
             .json(
@@ -39,6 +76,65 @@ export const updateForm = async (req: NextRequest, res: NextResponse) => {
             });
 
     } catch (error) {
+
+        return NextResponse
+            .json(
+                {
+                    message: "Server failed to update form, try again later",
+                    error: error,
+                    data: null,
+                    success: false,
+                },
+                {
+                    status: 500
+                }
+            );
+    }
+}
+
+
+export const getAllForms = async (req: NextRequest, res: NextResponse) => {
+    try {
+
+        const body = await req.json();
+        const { userId } = body;
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return NextResponse
+                .json(
+                    {
+                        message: "User not found",
+                        error: "User not found",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 404
+                });
+        }
+
+        const query = queryByRole(user);
+
+        const allForms = await LeaveForm.find().populate("student").exec();
+
+        const filteredLeaveForms = allForms.filter((leaveForm: IForm) => {
+            return eval(query);
+        });
+
+        return NextResponse
+            .json(
+                {
+                    message: "Leave form update successfully",
+                    error: null,
+                    data: null,
+                    success: true,
+                }, {
+                status: 200
+            });
+
+    } catch (error) {
+
         return NextResponse
             .json(
                 {

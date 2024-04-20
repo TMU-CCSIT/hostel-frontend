@@ -3,7 +3,7 @@ import { STATUS } from "@/constants/constant";
 import { IStudent } from '@/models/Student.model';
 
 export interface IForm extends Document {
-    user: IStudent;
+    student: IStudent;
     dateFrom: Date;
     dateTo: Date;
     reasonForLeave: string;
