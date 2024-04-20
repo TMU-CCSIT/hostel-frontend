@@ -1,12 +1,8 @@
-<<<<<<< HEAD
-=======
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
-
-import InputField from "@/components/auth/InputField";
-
 import { leaveFormFields } from "@/constants/fields";
+import axios from "axios";
 
 interface leaveFormData {
   enrollmentNumber: string;
@@ -50,7 +46,18 @@ const Page = () => {
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    console.log("form data is ", formData);
+
+    console.log("Data is sending---");
+
+    const objData = {
+      leaveFrom: "894534",
+      leaveTo: "98348573485",
+      leaveReason: "gknijgrb",
+      addressDuringLeave: "vinevbrnrjbvinri",
+    };
+
+    const res = await axios.post("/api/student/leave", objData);
+    console.log("res: ", res);
   };
 
   return (
@@ -60,11 +67,11 @@ const Page = () => {
           Apply for Hostel leave
         </h1>
         <div className="w-[100px] h-[100px] rounded-full bg-yellow-300">
-          <img
+          {/* <img
             src="https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVucyUyMGZhc2hpb258ZW58MHx8MHx8fDA%3D"
             alt=""
             className="w-full h-full bg-cover rounded-full"
-          />
+          /> */}
         </div>
         <form
           onSubmit={submitHandler}
@@ -73,7 +80,7 @@ const Page = () => {
           <div className="w-full relative flex gap-3 flex-wrap justify-between">
             {leaveFormFields.map((data: any, index: number) => (
               <div key={index} className="relative flex flex-col gap-1">
-                <div className={`text-2xl text-black text-xs font-extrabold`}>
+                <div className={`text-2xl text-black font-extrabold`}>
                   {data.label}
                 </div>
                 <input
@@ -120,4 +127,3 @@ const Page = () => {
 };
 
 export default Page;
->>>>>>> f9dfbda437727c46eeb38e3d48a767c190696aba

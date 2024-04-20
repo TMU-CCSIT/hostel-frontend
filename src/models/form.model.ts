@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 import { STATUS } from "@/constants/constant";
-import { IStudent } from '@/models/Student.model';
+import { IStudent } from '@/models/student.model';
 
 export interface IForm extends Document {
     student: IStudent;
