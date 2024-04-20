@@ -5,9 +5,28 @@ import InputField from "@/components/auth/InputField";
 
 import UserFieldData from "@/constants/UserProfileFields";
 
+
+
+interface leaveFormData  {
+  enrollmentNumber:string,
+  name:string,
+  phoneNumber: string,
+  course: string,
+  roomNumber: string,
+  fingerNumber: string,
+  fatherName: string,
+  FatherNumber:string,
+  leaveFrom: string,
+  leaveTime: string,
+  leaveTo:string,
+  leaveReason: string,
+  numberOfDays: string,
+  addressDuringLeave: string,
+}
+
 const Page = () => {
 
-  const [formData, setFromData] = useState({
+  const [formData, setFromData] = useState<leaveFormData>({
     enrollmentNumber: "",
     name: "",
     phoneNumber: "",
@@ -59,7 +78,7 @@ const Page = () => {
                 label={data?.label}
                 type={data?.type}
                 placeholder={data.placeholder}
-                value={formData[data.name]}
+                value={formData[data.name as keyof leaveFormData]}
                 name={data?.name}
                 min={data?.min}
                 readOnly={Boolean(data?.readOnly)} // Corrected attribute name to readOnly

@@ -11,6 +11,20 @@ const SignUpData = [
         readOnly:"false",
     },
     {
+        label: "Email :",
+        placeholder: "Enter Your Email",
+        type: "text",
+        name: "email",
+        readOnly:"false",
+    },
+    {
+        label: "Password :",
+        placeholder: "Enter Your Password",
+        type: "text",
+        name: "password",
+        readOnly:"false",
+    },
+    {
         label: "Phone Number :",
         placeholder: "Enter your phone Number",
         type: "tel",
@@ -42,7 +56,7 @@ const SignUpData = [
     {
         label: "Finger Number :",
         placeholder: "Enter your finger Number",
-        type: "Number",
+        type: "text",
         name: "fingerNumber",
         readOnly:"true",
     },

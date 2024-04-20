@@ -22,7 +22,7 @@ const FieldData = [
     {
         label: "Phone Number :",
         placeholder: "Enter your phone Number",
-        type: "tel",
+        type: "text",
         name: "phoneNumber",
         readOnly:"true",
     },
