@@ -2,13 +2,18 @@
 import React from "react";
 import Avatar from "react-avatar";
 import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+
   useEffect(() => {
     function handleClickOutside(event: any) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.targety)) {
+      if (
+        dropdownRef.current.contains &&
+        !dropdownRef.current.contains(event.targety)
+      ) {
         setDropdownOpen(false);
       }
     }
@@ -22,11 +27,12 @@ const Navbar = () => {
   return (
     <nav className="py-2 shadow-md px-4">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <div>
-          <img
+        <div className="relative">
+          <Image
             className="h-12 w-auto object-cover bg-cover"
             src="http://portal2.tmu.ac.in/images/rightlogo.png"
             alt="Logo"
+            fill
           />
         </div>
         <div className="flex items-center">
@@ -56,16 +62,10 @@ const Navbar = () => {
                   >
                     Logout
                   </a>
-
-                  {/* Add more items as needed */}
                 </div>
               </div>
             )}
           </div>
-          {/* Logout button */}
-          {/* <button className="text-black bg-[#6DAFFE] hover:bg-[#437FC7] rounded-xl px-4 py-2 transition-all ease-in-out duration-200">
-            Logout
-          </button> */}
         </div>
       </div>
     </nav>
