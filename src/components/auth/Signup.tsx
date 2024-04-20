@@ -1,11 +1,9 @@
 "use client";
 
 // importing necessities
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import InputField from "./InputField";
-import DropDown from "./DropDown";
-import { colleges } from "@/constants/constant";
-import SignupData from "@/constants/SignupData";
+import { SignupFields } from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
 
 interface FormData {
@@ -52,7 +50,7 @@ const Signup = () => {
 
         <form className=" flex flex-col justify-center items-center">
           <div className="flex flex-col gap-7">
-            {SignupData.map((a: any) => (
+            {SignupFields.map((a: any) => (
               <InputField
                 key={a.name}
                 label={a?.label}
