@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-=======
+
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
@@ -120,4 +119,4 @@ const Page = () => {
 };
 
 export default Page;
->>>>>>> f9dfbda437727c46eeb38e3d48a767c190696aba
+

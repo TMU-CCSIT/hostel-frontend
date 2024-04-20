@@ -95,7 +95,7 @@ export async function Signup(req:NextRequest, res:NextApiResponse) {
 
         // create new user enrty in DB 
 
-        
+
         const newUser = await User.create({
 
             fullName,
@@ -106,15 +106,12 @@ export async function Signup(req:NextRequest, res:NextApiResponse) {
 
         })
 
-        
-        // let url = process.env.NEXT_PUBLIC_BASE_URL;
 
-        // // send the mail to the user 
 
-        // await sendEmail(email,"VERIFY",newUser._id);
+        await sendEmail(email,"verify",newUser._id);
 
-        // sucessfully return the resposne 
 
+        // successfully return the resposne 
 
         return res.status(200).json({
 
