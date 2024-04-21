@@ -2,8 +2,8 @@
 
 // importing necessities
 import React, { useState } from "react";
-import InputField from "./InputField";
-import DropDown from "./DropDown";
+import InputField from "../common/InputField";
+import DropDown from "../common/DropDown";
 import { colleges } from "@/constants/constant";
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
