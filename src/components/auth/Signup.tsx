@@ -12,31 +12,38 @@ import axios from "axios";
 
 // interface
 interface FormData {
-  name: string;
+  
+  fullName: string;
   email: string;
   password: string;
-  enrolNumber: string;
-  contact: string;
-  fingerNumber: string;
-  fatherName: string;
-  fatherContact: string;
+  enrollmentNumber: string; // Assuming enrollmentNumber is a string based on your usage
+  contactNumber: number;
   course: string;
+  college: string;
+  fingerNumber: number;
   roomNumber: string;
+  fatherName: string;
+  parentContact: number;
+  address: string; // Assuming address is a string
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
   const [data, setData] = useState<FormData>({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
-    enrolNumber: "",
-    contact: "",
-    fingerNumber: "",
-    fatherName: "",
-    fatherContact: "",
+    enrollmentNumber: "",
+    contactNumber: 0,
     course: "",
+    college: "CCSIT",
+    fingerNumber: 0,
     roomNumber: "",
+    fatherName: "",
+    parentContact: 0,
+    address: "",
   });
 
   // function for data matching
@@ -49,6 +56,9 @@ const Signup = () => {
   async function submitHandler(e: any) {
     try {
       e.preventDefault();
+
+      console.log("data is",data);
+
       const res = await axios.post("/api/auth/signup", data);
       console.log("res: ", res);
     } catch (error) {

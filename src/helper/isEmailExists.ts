@@ -1,5 +1,5 @@
 
-import User from "@/models/user.model"
+// import User from "@/models/user.model";
 
 import { dbConnection } from "@/config/dbConfig";
 
@@ -17,6 +17,7 @@ export async function isEmailAlreadyExist(email: string) {
 
     }
 }
+
 
 
 

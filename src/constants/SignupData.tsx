@@ -3,7 +3,7 @@ const SignUpData = [
     label: "Name :",
     placeholder: "Enter Your Name",
     type: "text",
-    name: "name",
+    name: "fullName",
     readOnly: "false",
   },
   {
@@ -23,15 +23,15 @@ const SignUpData = [
   {
     label: "Phone Number :",
     placeholder: "Enter your phone Number",
-    type: "tel",
-    name: "contact",
+    type: "number",
+    name: "contactNumber", // Changed to match FormData interface
     readOnly: "false",
   },
   {
     label: "Enrollment Number :",
     placeholder: "Enter your enrollment Number",
     type: "text",
-    name: "enrolNumber",
+    name: "enrollmentNumber", // Changed to match FormData interface
     readOnly: "false",
   },
   {
@@ -51,7 +51,7 @@ const SignUpData = [
   {
     label: "Finger Number :",
     placeholder: "Enter your finger Number",
-    type: "text",
+    type: "number",
     name: "fingerNumber",
     readOnly: "true",
   },
@@ -65,10 +65,21 @@ const SignUpData = [
   {
     label: "Father Mobile Number :",
     placeholder: "Enter your father Mobile Number",
-    type: "tel",
-    name: "fatherContact",
+    type: "number",
+    name: "parentContact", // Changed to match FormData interface
+    readOnly: "true",
+  },
+  {
+    label: "Address :",
+    placeholder: "Enter your Address",
+    type: "text",
+    name: "address",
     readOnly: "true",
   },
 ];
 
 export default SignUpData;
+
+
+
+
