@@ -1,22 +1,22 @@
 import { ROLE, STATUS } from "@/constants/constant";
 import LeaveForm from "@/models/form.model";
-import User, { IUser } from "@/models/user.model";
+import User, { IUser } from "@/models/User.model";
 import { NextRequest, NextResponse } from "next/server";
 
 
 function queryByRole(user: IUser): string {
 
-    let query = ``;
+    let query = `leaveForm`;
 
     switch (user.role) {
         case ROLE.Coordinator:
             query = 'leaveForm.student && leaveForm.student.course === "Btech"';
             break;
         case ROLE.Principal:
-            query = '';
+            query = 'leaveForm';
             break;
         default:
-            query = ``;
+            query = `leaveForm`;
     }
     return query;
 }
@@ -96,25 +96,25 @@ export const PATCH = async (req: NextRequest, res: NextResponse) => {
 export const GET = async (req: NextRequest, res: NextResponse) => {
     try {
 
-        const body = await req.json();
-        const { userId } = body;
+        // const { userId } = body;
 
-        const user = await User.findById(userId);
+        // const user = await User.findById(userId);
 
-        if (!user) {
-            return NextResponse
-                .json(
-                    {
-                        message: "User not found",
-                        error: "User not found",
-                        data: null,
-                        success: false,
-                    }, {
-                    status: 404
-                });
-        }
+        // if (!user) {
+        //     return NextResponse
+        //         .json(
+        //             {
+        //                 message: "User not found",
+        //                 error: "User not found",
+        //                 data: null,
+        //                 success: false,
+        //             }, {
+        //             status: 404
+        //         });
+        // }
 
-        const query = queryByRole(user);
+        // const query = queryByRole(user);
+        const query = `leaveForm`;
 
         const allForms = await LeaveForm.find().populate("user").exec();
 
@@ -133,13 +133,13 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
                 status: 200
             });
 
-    } catch (error) {
+    } catch (error: any) {
 
         return NextResponse
             .json(
                 {
                     message: "Server failed to fetch all form, try again later",
-                    error: error,
+                    error: error.message,
                     data: null,
                     success: false,
                 },

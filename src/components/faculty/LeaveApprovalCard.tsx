@@ -7,8 +7,7 @@ import Link from "next/link";
 import { dateIntoReadableFormat } from "@/helper/date";
 
 const LeaveApprovalCard = ({ userInfo }: any) => {
-  const url =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs7HxzKKvBIkjKHsnqkVp-9MXfpoxiNKx7v6x8ks1ToA&s";
+  console.log("userInfo: ", userInfo);
 
   return (
     <>
@@ -24,25 +23,25 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
                   alt="channel"
                   loading="lazy"
                   fill
-                  src={userInfo.profileImage || url}
+                  src={userInfo.user.profileImage || ""}
                 />
               </span>
             </>
 
             {/* username | rollno */}
             <div className="flex flex-col justify-start items-start">
-              <Link href={`/profile/${userInfo.id}`}>
+              <Link href={`/profile/${userInfo.user._id}`}>
                 <span className="hover:underline hover:text-[red] transition-all duration-300 ease-in-out">
-                  {userInfo.name || "Name"}
+                  {userInfo.user.name || "Name"}
                 </span>
               </Link>
-              <span>{userInfo.name || "Enrollment no."}</span>
+              <span>{userInfo.user.enrollmentNo || "Enrollment no."}</span>
             </div>
           </div>
 
           {/* course */}
           <div>
-            <span>{userInfo.course || "course"} </span>
+            <span>{userInfo.user.course || "course"} </span>
           </div>
         </div>
 

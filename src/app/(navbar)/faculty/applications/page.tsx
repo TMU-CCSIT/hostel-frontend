@@ -1,92 +1,26 @@
+"use client";
 import LeaveApprovalCard from "@/components/faculty/LeaveApprovalCard";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
-// const data = [
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-//   {
-//     userName: "",
-//     enrollment: "",
-//     id: "",
-//     profileImage: "",
-//   },
-// ];
+const ApplicationPage = () => {
+  const [data, setData] = useState<null | []>(null);
 
-async function fetchAllPendingLeaves() {
-  try {
-    const result = await axios.get(`/api/faculty/leave-form`);
-    console.log("res: ", result);
-  } catch (error) {
-    return null;
+  async function fetchAllPendingLeaves() {
+    try {
+      const res: any = await axios.get("/api/faculty/leave-form");
+      setData(res?.data?.data);
+
+      console.log("mil gyaa");
+    } catch (error) {
+      console.log("Error when try to fetch faculty applications");
+      setData(null);
+    }
   }
-}
 
-const ApplicationPage = async () => {
-  const data = await fetchAllPendingLeaves();
+  useEffect(() => {
+    fetchAllPendingLeaves();
+  }, []);
 
   return (
     <>
@@ -99,8 +33,8 @@ const ApplicationPage = async () => {
           </div>
           <div className="w-full mt-5 flex-col flex gap-5">
             {data &&
-              data?.map((user: any) => (
-                <LeaveApprovalCard key={user.id} userInfo={user} />
+              data?.map((leaveForm: any) => (
+                <LeaveApprovalCard key={leaveForm._id} userInfo={leaveForm} />
               ))}
           </div>
         </div>
