@@ -1,7 +1,3 @@
-<<<<<<< HEAD:src/app/student/leave-form/page.tsx
-
-=======
->>>>>>> 72790470797732cb4c3228371576c5e765f497a7:src/app/(navbar)/student/leave-form/page.tsx
 "use client";
 
 import React, { useState, ChangeEvent, FormEvent } from "react";
@@ -125,7 +121,3 @@ const Page = () => {
 };
 
 export default Page;
-<<<<<<< HEAD:src/app/student/leave-form/page.tsx
-
-=======
->>>>>>> 72790470797732cb4c3228371576c5e765f497a7:src/app/(navbar)/student/leave-form/page.tsx
