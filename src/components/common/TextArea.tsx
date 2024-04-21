@@ -1,36 +1,34 @@
-// components/InputField.tsx
 import React from "react";
 
-interface InputFieldProps {
+interface TextAreaProps {
   label: string;
-  type: string;
   placeholder?: string;
   value: any;
-  name: any;
-  min?: number;
+  name?: any;
+  required: Boolean;
+
   readOnly?: any;
   onChange: (value: any) => void;
 }
 
-const InputField = (props: InputFieldProps) => {
+const TextArea = (props: TextAreaProps) => {
   return (
     <div className="flex flex-col">
       <label htmlFor={props.label || ""} className="font-bold text-lg">
         {props.label}
       </label>
-      <input
-        type={props.type}
+      <textarea
         id={props.label || ""}
         placeholder={props.placeholder || ""}
         value={props.value}
         onChange={props.onChange}
         name={props.name}
-        min={props.min}
+        required={props.required ? true : false}
         readOnly={props.readOnly}
-        className="shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline w-[15rem] sm:w-[30rem] lg:w-[45rem]"
+        className="shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline resize-none h-32 w-[15rem] sm:w-[30rem] lg:w-[45rem]"
       />
     </div>
   );
 };
 
-export default InputField;
+export default TextArea;

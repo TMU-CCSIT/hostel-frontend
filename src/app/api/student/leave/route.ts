@@ -1,9 +1,9 @@
 // importing necessities
 import { z } from 'zod';
-import Student from '@/models/student.model';
 import LeaveForm from '@/models/form.model';
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnection } from '@/config/dbConfig';
+import User from '@/models/user.model';
 
 dbConnection();
 
@@ -53,26 +53,26 @@ export async function POST(req: NextRequest, res: NextResponse) {
             addressDuringLeave
         } = body;
 
-        const userId = "";
+        const userId = '6624f8bba3a6bb07d79a2028';
 
-        // validating the dates
-        const isDateFromValid = validateDate(new Date(dateFrom), new Date());
-        const isDateToValid = validateDate(new Date(dateFrom), new Date(dateTo));
+        // // validating the dates
+        // const isDateFromValid = validateDate(dateFrom, new Date());
+        // const isDateToValid = validateDate(dateFrom, new Date(dateTo));
 
-        if (!isDateFromValid || !isDateToValid) {
-            return NextResponse.json(
-                {
-                    message: "please enter a valid date",
-                    success: false,
-                    data: null,
-                    error: "please enter a valid date",
-                }, {
-                status: 400
-            });
-        }
+        // if (!isDateFromValid || !isDateToValid) {
+        //     return NextResponse.json(
+        //         {
+        //             message: "please enter a valid date",
+        //             success: false,
+        //             data: null,
+        //             error: "please enter a valid date",
+        //         }, {
+        //         status: 400
+        //     });
+        // }
 
         // check if user exist or not
-        const userExist = await Student.findById(userId);
+        const userExist = await User.findById(userId);
 
         if (!userExist) {
             return NextResponse.json(
@@ -81,22 +81,25 @@ export async function POST(req: NextRequest, res: NextResponse) {
                     success: false,
                     error: "user does not exist",
                     data: null
-                }, {
-                status: 400
-            }
+                },
+                {
+                    status: 404
+                }
             );
         }
 
         // create entry in db 
         const leaveForm = await LeaveForm.create(
             {
-                userId,
-                dateFrom: new Date(dateFrom),
-                dateTo: new Date(dateTo),
+                user: userId,
+                dateFrom: dateFrom,
+                dateTo: dateTo,
                 reasonForLeave,
                 addressDuringLeave
             }
         );
+
+        console.log(5)
 
         // return success response
         return NextResponse.json(
@@ -119,9 +122,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 success: false,
                 error: err.message,
                 data: null
-            }, {
-            status: 400
-        }
+            },
+            {
+                status: 400
+            }
         );
     }
 }

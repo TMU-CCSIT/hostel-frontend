@@ -1,14 +1,8 @@
 
 import { z } from "zod";
-
 import { dbConnection } from "@/config/dbConfig";
-
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
-
 import bcrypt from "bcrypt";
-
-import { sendEmail } from "@/helper/sendMail";
-
 import { NextRequest, NextResponse } from "next/server";
 
 import Student from "@/models/Student.model";
@@ -46,14 +40,14 @@ export async function POST(req: NextRequest) {
 
         const body = await req.json();
 
-        console.log("body: ", body)
-
         // Validate request body
 
         try {
 
             userSchema.parse(body);
 
+
+            await signupSchema.safeParse(body);
         } catch (error: any) {
 
             // If validation fails, return error response
@@ -83,10 +77,9 @@ export async function POST(req: NextRequest) {
 
         } = body;
 
-
         // check the user is already exists 
 
-        let isUserExists = await isEmailAlreadyExist(email);
+        const isUserExists = await isEmailAlreadyExist(email);
 
         console.log("is user exists ",isUserExists);
 
@@ -115,7 +108,9 @@ export async function POST(req: NextRequest) {
         // push this additional information to the userAddtional info field
         // create new user enrty in DB 
 
+
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
+
 
         // newly created user 
 
@@ -129,13 +124,13 @@ export async function POST(req: NextRequest) {
             password: hashPassword,
             profileImage:imageUrl,
             isVerified:true,
-
+            role,
+            password: hashPassword,
         })
     
+
         // send the mail to the user 
-
-        // await sendEmail(email,"verify",newStudent._id);
-
+        // await sendEmail(email, "verify", newStudent._id);
 
         // sucessfully return the response
 
