@@ -18,13 +18,16 @@ export async function Post (req:NextRequest, res:NextResponse){
 
         try{
 
-            resetPasswordSchema
+            resetPasswordSchema.parse(body);
 
         }catch(error:any){
 
             console.log(error.message);
 
         }
+
+
+        const {newPassword,confirmPassword} = body;
 
 
     }catch(error:any){

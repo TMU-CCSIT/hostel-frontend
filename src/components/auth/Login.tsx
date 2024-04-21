@@ -9,6 +9,7 @@ import axios from "axios";
 
 // logic for saving login details
 const LoginPage = () => {
+
   const router = useRouter();
 
   // hook for reading different email and password values
@@ -29,6 +30,8 @@ const LoginPage = () => {
         "http://localhost:3000/api/auth/login",
         data
       );
+
+      router.push("/");
 
       console.log(resposne.data);
     } catch (error: any) {
