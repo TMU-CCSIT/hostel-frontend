@@ -1,9 +1,9 @@
 // importing necessities
 import { z } from 'zod';
-import Student from '@/models/Student.model';
 import LeaveForm from '@/models/form.model';
 import { NextRequest, NextResponse } from 'next/server';
 import { dbConnection } from '@/config/dbConfig';
+import User from '@/models/user.model';
 
 dbConnection();
 
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             addressDuringLeave
         } = body;
 
-        const userId = '6624e598a3a6bb07d79a1ff6';
+        const userId = '6624f8bba3a6bb07d79a2028';
 
         // // validating the dates
         // const isDateFromValid = validateDate(dateFrom, new Date());
@@ -72,20 +72,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // }
 
         // check if user exist or not
-        // const userExist = await Student.findById(userId);
+        const userExist = await User.findById(userId);
 
-        // if (!userExist) {
-        //     return NextResponse.json(
-        //         {
-        //             message: "user does not exist",
-        //             success: false,
-        //             error: "user does not exist",
-        //             data: null
-        //         }, {
-        //         status: 400
-        //     }
-        //     );
-        // }
+        if (!userExist) {
+            return NextResponse.json(
+                {
+                    message: "user does not exist",
+                    success: false,
+                    error: "user does not exist",
+                    data: null
+                },
+                {
+                    status: 404
+                }
+            );
+        }
 
         // create entry in db 
         const leaveForm = await LeaveForm.create(
@@ -97,6 +98,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 addressDuringLeave
             }
         );
+
+        console.log(5)
 
         // return success response
         return NextResponse.json(
@@ -119,9 +122,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 success: false,
                 error: err.message,
                 data: null
-            }, {
-            status: 400
-        }
+            },
+            {
+                status: 400
+            }
         );
     }
 }
