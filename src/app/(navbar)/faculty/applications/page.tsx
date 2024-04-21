@@ -1,84 +1,93 @@
-"use client";
-
-import React from "react";
 import LeaveApprovalCard from "@/components/faculty/LeaveApprovalCard";
+import axios from "axios";
 
-const data = [
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-  {
-    userName: "",
-    enrollment: "",
-    id: "",
-    profileImage: "",
-  },
-];
+// const data = [
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+//   {
+//     userName: "",
+//     enrollment: "",
+//     id: "",
+//     profileImage: "",
+//   },
+// ];
 
-const ApplicationPage = () => {
+async function fetchAllPendingLeaves() {
+  try {
+    const result = await axios.get(`/api/faculty/leave-form`);
+    console.log("res: ", result);
+  } catch (error) {
+    return null;
+  }
+}
+
+const ApplicationPage = async () => {
+  const data = await fetchAllPendingLeaves();
+
   return (
     <>
       <div className="min-h-screen w-full bg-[#ffffff] flex flex-col gap-5 justify-start items-center">
@@ -89,9 +98,10 @@ const ApplicationPage = () => {
             </span>
           </div>
           <div className="w-full mt-5 flex-col flex gap-5">
-            {data.map((user) => (
-              <LeaveApprovalCard key={user.id} userInfo={user} />
-            ))}
+            {data &&
+              data?.map((user: any) => (
+                <LeaveApprovalCard key={user.id} userInfo={user} />
+              ))}
           </div>
         </div>
       </div>

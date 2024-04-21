@@ -18,25 +18,21 @@ const LoginPage = () => {
   });
 
   const handleChange = (e: any) => {
-
     setData({ ...data, [e.target.name]: e.target.value });
-    
   };
 
-  async function loginHandler(){
-
-    try{
-
+  async function loginHandler() {
+    try {
       console.log("hellow");
 
-      let resposne = await axios.post("http://localhost:3000/api/auth/login", data);
+      let resposne = await axios.post(
+        "http://localhost:3000/api/auth/login",
+        data
+      );
 
       console.log(resposne.data);
-
-    }catch(error:any){
-
+    } catch (error: any) {
       console.log(error);
-
     }
   }
 
@@ -56,6 +52,7 @@ const LoginPage = () => {
             label="Email"
             type="email"
             value={data.email}
+            required={true}
             onChange={handleChange}
             name="email"
             placeholder="Enter your email"
@@ -66,6 +63,7 @@ const LoginPage = () => {
             label="Password"
             type="password"
             value={data.password}
+            required={true}
             onChange={handleChange}
             name="password"
             placeholder="Enter your password"
@@ -82,12 +80,12 @@ const LoginPage = () => {
 
         {/* For Signup */}
         <div className="text-sm text-center">
-          Don't have an account?{" "}
+          {"Don't have an account?"}
           <div
             onClick={() => {
               router.push("/auth/signup");
             }}
-            className="underline text-blue-500"
+            className="underline cursor-pointer text-blue-500"
           >
             Sign Up
           </div>
@@ -96,7 +94,7 @@ const LoginPage = () => {
         {/* For Forget Password */}
         <div className="text-sm text-center mt-0">
           <div
-            className="text-blue-500 underline"
+            className="text-blue-500 cursor-pointer underline"
             onClick={() => {
               router.push("/forgetpassword");
             }}
