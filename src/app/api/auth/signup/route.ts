@@ -15,7 +15,6 @@ import Student from "@/models/Student.model";
 
 import { model } from "mongoose";
 
-// import AdditionalDetails from "@/models/additionalDetails.model";
 
 dbConnection();
 
