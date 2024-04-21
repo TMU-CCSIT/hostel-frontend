@@ -1,9 +1,9 @@
 import mongoose, { Document, IfAny } from 'mongoose';
 import { STATUS } from "@/constants/constant";
-import { IStudent } from '@/models/student.model';
+import { IUser } from '@/models/user.model';
 
 export interface IForm extends Document {
-    student: IStudent;
+    user: IUser;
     dateFrom: Date;
     dateTo: Date;
     reasonForLeave: string;
@@ -17,9 +17,9 @@ export interface IForm extends Document {
 
 const leaveFormSchema = new mongoose.Schema(
     {
-        student: {
+        user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Student"
+            ref: "User"
         },
         dateFrom: {
             type: Date,
@@ -41,12 +41,12 @@ const leaveFormSchema = new mongoose.Schema(
             coordinator: {
                 type: String,
                 enum: Object.values(STATUS),
-                default: STATUS.PENDING
+                default: STATUS.Pending
             },
             hostelWarden: {
                 type: String,
                 enum: Object.values(STATUS),
-                default: STATUS.PENDING
+                default: STATUS.Pending
             }
         }
     },

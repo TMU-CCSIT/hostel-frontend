@@ -5,7 +5,7 @@ import { dbConnection } from "@/config/dbConfig";
 
 dbConnection();
 
-export async function isEmailAlreadyExist(email:any) {
+export async function isEmailAlreadyExist(email: string) {
 
     try {
 
@@ -14,7 +14,7 @@ export async function isEmailAlreadyExist(email:any) {
     } catch (error) {
 
         throw new Error("Server failed to findout user by email");
-        
+
     }
 }
 

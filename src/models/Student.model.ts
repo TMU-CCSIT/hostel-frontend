@@ -1,5 +1,6 @@
 
 import mongoose, { Document } from 'mongoose';
+<<<<<<< HEAD
 
 // import AdditionalDetails from './additionalDetails.model';
 
@@ -17,22 +18,44 @@ export interface IStudent extends Document {
     isVerified: boolean;
     token?: string;
     tokenExpiry?: Date;
+=======
+import { IUser } from '@/models/user.model';
+
+
+export interface IStudent extends Document {
+    enrollmentNo: string;
+    parentName: string;
+    parentContactNo: string;
+    fingerNo: string;
+    course: string;
+    college: string;
+    roomNo: string;
+    user: IUser;
+    programe: string;
+>>>>>>> ca70cb6ceb252db502950e1bb9aff7dfdec7e163
 }
+
 
 const studentSchema = new mongoose.Schema(
     {
-        fullName: {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        parentName: {
             type: String,
             required: true,
             trim: true
         },
-        email: {
+        enrollmentNo: {
             type: String,
             required: true,
             unique: true,
         },
-        password: {
+        parentContactNo: {
             type: String,
+<<<<<<< HEAD
             required: true
         },
         enrollmentNumber: {
@@ -42,6 +65,8 @@ const studentSchema = new mongoose.Schema(
         },
         contactNumber: {
             type: Number,
+=======
+>>>>>>> ca70cb6ceb252db502950e1bb9aff7dfdec7e163
             required: true,
         },
         course: {
@@ -52,31 +77,24 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        additionalDetails: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "AdditionalDetails",
-        },
-        fingerNumber: {
-            type: Number,
+        fingerNo: {
+            type: String,
             required: true,
             unique: true
         },
-        roomNumber: {
+        roomNo: {
             type: String,
             required: true
         },
-        isVerified: {
-            type: Boolean,
-            default: false
+        programe: {
+            type: String,
+            required: true
         },
-        token: {
-            type: String
-        },
-        tokenExpiry: {
-            type: Date
-        }
+    },
+    {
+        timestamps: true
     }
-)
+);
 
 const Student = mongoose.models.Student<IStudent> || mongoose.model('Student', studentSchema);
 
