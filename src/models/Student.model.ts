@@ -1,28 +1,12 @@
 
 import mongoose, { Document } from 'mongoose';
-<<<<<<< HEAD
+import { string } from 'zod';
 
-// import AdditionalDetails from './additionalDetails.model';
-
-export interface IStudent extends Document {
-    fullName: string;
-    email: string;
-    password: string;
-    enrollmentNumber: string;
-    contactNumber: number;
-    course: string;
-    college: string;
-    // additionalDetails: IAdditionalDetails;
-    fingerNumber: string;
-    roomNumber: string;
-    isVerified: boolean;
-    token?: string;
-    tokenExpiry?: Date;
-=======
-import { IUser } from '@/models/user.model';
+import {IUser} from "@/models/User.model";
 
 
 export interface IStudent extends Document {
+    
     enrollmentNo: string;
     parentName: string;
     parentContactNo: string;
@@ -32,7 +16,6 @@ export interface IStudent extends Document {
     roomNo: string;
     user: IUser;
     programe: string;
->>>>>>> ca70cb6ceb252db502950e1bb9aff7dfdec7e163
 }
 
 
@@ -55,18 +38,15 @@ const studentSchema = new mongoose.Schema(
         },
         parentContactNo: {
             type: String,
-<<<<<<< HEAD
             required: true
         },
         enrollmentNumber: {
-            type: String,  // 
+            type: String,  
             required: true,
             unique: true,
         },
         contactNumber: {
-            type: Number,
-=======
->>>>>>> ca70cb6ceb252db502950e1bb9aff7dfdec7e163
+            type: String,
             required: true,
         },
         course: {
