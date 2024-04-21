@@ -72,7 +72,7 @@ const Page = () => {
           <div className="w-full relative flex gap-3 flex-wrap justify-between">
             {leaveFormFields.map((data: any, index: number) => (
               <div key={index} className="relative flex flex-col gap-1">
-                <div className={`text-2xl text-black text-xs font-extrabold`}>
+                <div className={`text-black text-xs font-extrabold`}>
                   {data.label}
                 </div>
                 <input
