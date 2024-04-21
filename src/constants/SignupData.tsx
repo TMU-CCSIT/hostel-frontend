@@ -23,15 +23,15 @@ const SignUpData = [
   {
     label: "Phone Number :",
     placeholder: "Enter your phone Number",
-    type: "number",
-    name: "contactNumber", // Changed to match FormData interface
+    type: "text",
+    name: "contactNo", // Changed to match FormData interface
     readOnly: "false",
   },
   {
     label: "Enrollment Number :",
     placeholder: "Enter your enrollment Number",
     type: "text",
-    name: "enrollmentNumber", // Changed to match FormData interface
+    name: "enrollmentNo", // Changed to match FormData interface
     readOnly: "false",
   },
   {
@@ -45,28 +45,28 @@ const SignUpData = [
     label: "Room Number :",
     placeholder: "Enter your room Number",
     type: "text",
-    name: "roomNumber",
+    name: "roomNo",
     readOnly: "true",
   },
   {
     label: "Finger Number :",
     placeholder: "Enter your finger Number",
-    type: "number",
-    name: "fingerNumber",
+    type: "text",
+    name: "fingerNo",
     readOnly: "true",
   },
   {
     label: "Father Name :",
     placeholder: "Enter your father's Name",
     type: "text",
-    name: "fatherName",
+    name: "parentName",
     readOnly: "true",
   },
   {
     label: "Father Mobile Number :",
     placeholder: "Enter your father Mobile Number",
-    type: "number",
-    name: "parentContact", // Changed to match FormData interface
+    type: "text",
+    name: "parentContactNo", // Changed to match FormData interface
     readOnly: "true",
   },
   {
@@ -76,6 +76,15 @@ const SignUpData = [
     name: "address",
     readOnly: "true",
   },
+  {
+
+    label: "programe :",
+    placeholder: "Enter your Programe",
+    type: "text",
+    name: "programe",
+    readOnly: "true",
+
+  }
 ];
 
 export default SignUpData;

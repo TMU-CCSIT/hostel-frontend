@@ -17,15 +17,16 @@ interface FormData {
   fullName: string;
   email: string;
   password: string;
-  enrollmentNumber: string; // Assuming enrollmentNumber is a string based on your usage
-  contactNumber: number;
+  enrollmentNo: string; // Assuming enrollmentNumber is a string based on your usage
+  contactNo: string;
   course: string;
   college: string;
-  fingerNumber: number;
-  roomNumber: string;
-  fatherName: string;
-  parentContact: number;
+  fingerNo: string;
+  roomNo: string;
+  parentName: string;
+  parentContactNo: string;
   address: string; // Assuming address is a string
+  programe: string;
 }
 
 const Signup = () => {
@@ -35,15 +36,17 @@ const Signup = () => {
     fullName: "",
     email: "",
     password: "",
-    enrollmentNumber: "",
-    contactNumber: 0,
+    enrollmentNo: "",
+    contactNo: "",
     course: "",
     college: "CCSIT",
-    fingerNumber: 0,
-    roomNumber: "",
-    fatherName: "",
-    parentContact: 0,
+    fingerNo: "",
+    roomNo: "",
+    parentName: "",
+    parentContactNo: "",
     address: "",
+    programe:"",
+    
   });
 
   // function for data matching
@@ -59,10 +62,37 @@ const Signup = () => {
 
       console.log("data is", data);
 
-      const res = await axios.post("/api/auth/signup", data);
-      console.log("res: ", res);
+      const userResponse = await axios.post("/api/auth/signup",{
+
+        email:data.email,
+        password:data.password,
+        fullName:data.fullName,
+        contactNo:data.contactNo,
+        address:data.address,
+        role:"Student"
+
+      });
+
+
+      const userSignupReponse = await axios.post("/api/auth/studentSignup",{
+
+        enrollmentNo:data.enrollmentNo,
+        course:data.course,
+        college:data.college,
+        fingerNo:data.fingerNo,
+        programe:data.programe,
+        roomNo:data.roomNo,
+        parentName:data.parentName,
+        parentContactNo:data.parentContactNo,
+        userId:userResponse.data._id,
+
+      })
+
+      
     } catch (error) {
+
       toast.error("signup failed");
+
     }
   }
 

@@ -1,3 +1,7 @@
+
+
+import User from "@/models/User.model";
+
 import { dbConnection } from "@/config/dbConfig";
 import User from "@/models/user.model";
 
