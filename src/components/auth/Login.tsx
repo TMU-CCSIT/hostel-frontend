@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import InputField from "../common/InputField";
 // import Link from "next/link";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 // logic for saving login details
 const LoginPage = () => {
@@ -17,8 +18,27 @@ const LoginPage = () => {
   });
 
   const handleChange = (e: any) => {
+
     setData({ ...data, [e.target.name]: e.target.value });
+    
   };
+
+  async function loginHandler(){
+
+    try{
+
+      console.log("hellow");
+
+      let resposne = await axios.post("http://localhost:3000/api/auth/login", data);
+
+      console.log(resposne.data);
+
+    }catch(error:any){
+
+      console.log(error);
+
+    }
+  }
 
   // frontend of login page
   return (
@@ -54,7 +74,7 @@ const LoginPage = () => {
 
         {/* login button */}
         <button
-          onClick={() => console.log(data.email, data.password)}
+          onClick={loginHandler}
           className="bg-[#437FC7] text-white py-2 px-4 rounded-md mt-4 w-full"
         >
           Login

@@ -9,59 +9,69 @@ import bcrypt from "bcrypt";
 
 import { sendEmail } from "@/helper/sendMail";
 
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
-import { NextRequest } from "next/server";
+import Student from "@/models/Student.model";
+import User from "@/models/user.model";
+import { ROLE } from "@/constants/constant";
 
-import Student from "@/models/student.model";
+
 
 dbConnection();
 
 
 const signupSchema = z.object({
+    fullName: z.string(),
     email: z.string().email(),
-    password: z.string().min(8),
-    contactNumber: z.number().min(10),
+    password: z.string(),
+    contactNo: z.string(),
+    address: z.string(),
+    role: z.string()
 });
 
+// course: z.string(),
+// college: z.string(),
+// fingerNo: z.string(),
+// programe: z.string(),
+// roomNo: z.string(),
+// parentName: z.string(),
+// parentContactNo: z.string(),
+// enrollmentNo: z.string(),
 
 
-export async function POST(req: NextRequest, res: NextApiResponse) {
+
+export async function POST(req: NextRequest) {
 
     try {
 
         // fetch data 
-
         const body = await req.json();
 
         console.log("body: ", body)
 
         // Validate request body
-
         try {
-
-            signupSchema.parse(body);
-
+            signupSchema.safeParse(body);
         } catch (error: any) {
-
-            // If validation fails, return error response
-
-            return res.status(400).json({
-
-                message: "Validation error",
-                success: false,
-                error: error.errors,
-                data: null
-
-            });
+            return NextResponse
+                .json(
+                    {
+                        message: "validation error ",
+                        error: "",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 401
+                });
         }
-
 
         const {
             fullName,
+            contactNo,
             email,
             password,
-            contactNumber,
+            address,
+            role,
         } = body;
 
 
@@ -69,63 +79,78 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
         let isUserExists = await isEmailAlreadyExist(email);
 
+        console.log("is user exists:  ", isUserExists);
+
         if (isUserExists) {
 
-            return res.status(400).json({
-
-                message: "Email already registered, Please login to continue",
-                error: "Email already registered, Please login to continue",
-                success: false,
-                data: null
-
-            });
-
+            return NextResponse
+                .json(
+                    {
+                        message: "Email already registered, Please login to continue",
+                        error: "",
+                        data: null,
+                        success: false,
+                    },
+                    {
+                        status: 401
+                    }
+                );
         }
 
         // hash the passowrd
         let hashPassword = await bcrypt.hash(password, 10);
 
+        console.log("hshsed password", hashPassword);
+
+        // push this additional information to the userAddtional info field
 
         // create new user enrty in DB 
-        const newUser = await Student.create({
+        const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
+
+        // newly created user 
+        const newUser = await User.create({
             fullName,
             email,
-            password,
-            contactNumber,
+            contactNo,
+            address,
+            role,
+            password: hashPassword,
+            profileImage: imageUrl,
         })
 
 
-        // let url = process.env.NEXT_PUBLIC_BASE_URL;
+        // send the mail to the user 
+        // await sendEmail(email, "verify", newStudent._id);
 
-        // // send the mail to the user 
+        // sucessfully return the response
+        return NextResponse
+            .json(
+                {
+                    message: "User Signup Successfully",
+                    error: null,
+                    data: newUser,
+                    success: true,
+                }, {
+                status: 200
+            });
 
-        // await sendEmail(email,"VERIFY",newUser._id);
-
-        // sucessfully return the resposne 
-
-        return res.status(200).json({
-
-            message: "user signup successfull",
-            error: "null",
-            success: "true",
-            data: null
-        });
 
     } catch (error: any) {
 
         console.log(error.message);
 
-        return res.status(400).json({
-
-            message: "some error occurred while creating a signup",
-            error: error.message,
-            success: false,
-            data: null
-
-        });
+        return NextResponse
+            .json(
+                {
+                    message: "some error occurred while creating a signup",
+                    error: error.message,
+                    data: null,
+                    success: false,
+                }, {
+                status: 500
+            });
 
     }
 }
-
 
 

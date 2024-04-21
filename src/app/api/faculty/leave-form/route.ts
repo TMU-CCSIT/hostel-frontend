@@ -1,5 +1,5 @@
 import { ROLE, STATUS } from "@/constants/constant";
-import LeaveForm, { IForm } from "@/models/form.model";
+import LeaveForm from "@/models/form.model";
 import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,7 +9,7 @@ function queryByRole(user: IUser): string {
     let query = ``;
 
     switch (user.role) {
-        case ROLE.Cordinator:
+        case ROLE.Coordinator:
             query = 'leaveForm.student && leaveForm.student.course === "Btech"';
             break;
         case ROLE.Principal:
@@ -44,11 +44,11 @@ export const PATCH = async (req: NextRequest, res: NextResponse) => {
                 });
         }
 
-        if (user.role === ROLE.Cordinator) {
-            form.status.coordinator = result ? STATUS.ACCEPTED : STATUS.REJECTED;
+        if (user.role === ROLE.Coordinator) {
+            form.status.coordinator = result ? STATUS.Accepted : STATUS.Rejected;
         }
         else if (user.role === ROLE.Warden) {
-            form.status.coordinator = result ? STATUS.ACCEPTED : STATUS.REJECTED;
+            form.status.coordinator = result ? STATUS.Accepted : STATUS.Rejected;
 
         } else {
 
@@ -116,18 +116,18 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 
         const query = queryByRole(user);
 
-        const allForms = await LeaveForm.find().populate("student").exec();
+        const allForms = await LeaveForm.find().populate("user").exec();
 
-        const filteredLeaveForms = allForms.filter((leaveForm: IForm) => {
+        const filteredLeaveForms = allForms.filter((leaveForm: any) => {
             return eval(query);
         });
 
         return NextResponse
             .json(
                 {
-                    message: "Leave form update successfully",
+                    message: "Fetch all leave form successfully",
                     error: null,
-                    data: null,
+                    data: filteredLeaveForms,
                     success: true,
                 }, {
                 status: 200
@@ -138,7 +138,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
         return NextResponse
             .json(
                 {
-                    message: "Server failed to update form, try again later",
+                    message: "Server failed to fetch all form, try again later",
                     error: error,
                     data: null,
                     success: false,
