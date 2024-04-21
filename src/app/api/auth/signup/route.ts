@@ -1,20 +1,10 @@
 
 import { z } from "zod";
-
 import { dbConnection } from "@/config/dbConfig";
-
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
-
 import bcrypt from "bcrypt";
-
-import { sendEmail } from "@/helper/sendMail";
-
 import { NextRequest, NextResponse } from "next/server";
-
-import Student from "@/models/Student.model";
 import User from "@/models/user.model";
-import { ROLE } from "@/constants/constant";
-
 
 
 dbConnection();
@@ -29,16 +19,6 @@ const signupSchema = z.object({
     role: z.string()
 });
 
-// course: z.string(),
-// college: z.string(),
-// fingerNo: z.string(),
-// programe: z.string(),
-// roomNo: z.string(),
-// parentName: z.string(),
-// parentContactNo: z.string(),
-// enrollmentNo: z.string(),
-
-
 
 export async function POST(req: NextRequest) {
 
@@ -47,11 +27,9 @@ export async function POST(req: NextRequest) {
         // fetch data 
         const body = await req.json();
 
-        console.log("body: ", body)
-
         // Validate request body
         try {
-            signupSchema.safeParse(body);
+            await signupSchema.safeParse(body);
         } catch (error: any) {
             return NextResponse
                 .json(
@@ -74,10 +52,9 @@ export async function POST(req: NextRequest) {
             role,
         } = body;
 
-
         // check the user is already exists 
 
-        let isUserExists = await isEmailAlreadyExist(email);
+        const isUserExists = await isEmailAlreadyExist(email);
 
         console.log("is user exists:  ", isUserExists);
 
@@ -105,7 +82,7 @@ export async function POST(req: NextRequest) {
         // push this additional information to the userAddtional info field
 
         // create new user enrty in DB 
-        const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
+        const profileImage = `https://ui-avatars.com/api/?name=${fullName}`;
 
         // newly created user 
         const newUser = await User.create({
@@ -114,10 +91,9 @@ export async function POST(req: NextRequest) {
             contactNo,
             address,
             role,
+            profileImage,
             password: hashPassword,
-            profileImage: imageUrl,
         })
-
 
         // send the mail to the user 
         // await sendEmail(email, "verify", newStudent._id);
