@@ -16,10 +16,8 @@ const studentSchema = z.object({
 });
 
 
-const validateDate = (dateString: string): boolean => {
-    const date = new Date(dateString);
-    const currentDate = new Date();
-    return date > currentDate;
+const validateDate = (date1: Date, date2: Date): boolean => {
+    return date1 > date2;
 }
 
 
@@ -57,9 +55,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         const userId = "";
 
-        const isDateValid = validateDate(dateFrom);
+        // validating the dates
+        const isDateFromValid = validateDate(new Date(dateFrom), new Date());
+        const isDateToValid = validateDate(new Date(dateFrom), new Date(dateTo));
 
-        if (!isDateValid) {
+        if (!isDateFromValid || !isDateToValid) {
             return NextResponse.json(
                 {
                     message: "please enter a valid date",
@@ -70,7 +70,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 status: 400
             });
         }
-
 
         // check if user exist or not
         const userExist = await Student.findById(userId);
@@ -92,8 +91,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const leaveForm = await LeaveForm.create(
             {
                 userId,
-                dateFrom,
-                dateTo,
+                dateFrom: new Date(dateFrom),
+                dateTo: new Date(dateTo),
                 reasonForLeave,
                 addressDuringLeave
             }
@@ -105,7 +104,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
                 message: "leave form creation successfull",
                 success: true,
                 error: null,
-                data: null
+                data: leaveForm
             }, {
             status: 200
         }
@@ -126,3 +125,4 @@ export async function POST(req: NextRequest, res: NextResponse) {
         );
     }
 }
+

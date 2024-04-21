@@ -41,12 +41,12 @@ const leaveFormSchema = new mongoose.Schema(
             coordinator: {
                 type: String,
                 enum: Object.values(STATUS),
-                default: STATUS.PENDING
+                default: STATUS.Pending
             },
             hostelWarden: {
                 type: String,
                 enum: Object.values(STATUS),
-                default: STATUS.PENDING
+                default: STATUS.Pending
             }
         }
     },

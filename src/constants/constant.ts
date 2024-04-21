@@ -1,4 +1,4 @@
-export enum colleges {
+export enum COLLEGES {
     CCSIT = "College Of Computing Sciences And IT",
     FOE = "Faculty Of Engineering",
     MBBS = "Bachelor of Medicine, Bachelor of Surgery",
@@ -6,29 +6,30 @@ export enum colleges {
 }
 
 export enum CCSIT {
-    BTech,
-    BCA,
-    BSc,
+    Btech,
+    BcA,
+    Bsc,
 }
 
 export enum ROLE {
     Admin,
-    "Principal",
-    "Cordinator",
-    "Warden",
-    "Gatekeeper"
+    Principal,
+    Coordinator,
+    Warden,
+    Gatekeeper,
+    Student,
 }
 
 export enum STATUS {
-    "ACCEPTED",
-    "REJECTED",
-    "PENDING"
+    Accepted,
+    Rejected,
+    Pending
 }
 
 
-export enum filter {
-    latest,
-    oldest,
+export enum FILTER {
+    Lastes,
+    Oldest,
     AtoZ,
     ZtoA,
 }
