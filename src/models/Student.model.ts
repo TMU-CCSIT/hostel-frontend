@@ -1,7 +1,6 @@
 
 import mongoose, { Document } from 'mongoose';
 import { string } from 'zod';
-
 import {IUser} from "@/models/User.model";
 
 
@@ -40,14 +39,12 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        contactNo: {
+            type: Number,
         enrollmentNumber: {
             type: String,  
             required: true,
             unique: true,
-        },
-        contactNumber: {
-            type: String,
-            required: true,
         },
         course: {
             type: String,
@@ -75,6 +72,7 @@ const studentSchema = new mongoose.Schema(
         timestamps: true
     }
 );
+
 
 const Student = mongoose.models.Student<IStudent> || mongoose.model('Student', studentSchema);
 

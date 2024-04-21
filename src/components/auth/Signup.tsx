@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import InputField from "./InputField";
 import DropDown from "./DropDown";
-import { colleges } from "@/constants/constant";
+import { COLLEGES } from "@/constants/constant";
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
@@ -12,7 +12,6 @@ import axios from "axios";
 
 // interface
 interface FormData {
-  
   fullName: string;
   email: string;
   password: string;
@@ -28,7 +27,6 @@ interface FormData {
 }
 
 const Signup = () => {
-
   // hooks for reading different values
 
   const [data, setData] = useState<FormData>({
@@ -57,7 +55,7 @@ const Signup = () => {
     try {
       e.preventDefault();
 
-      console.log("data is",data);
+      console.log("data is", data);
 
       const res = await axios.post("/api/auth/signup", data);
       console.log("res: ", res);
@@ -97,7 +95,7 @@ const Signup = () => {
 
             <div className="flex flex-col ">
               {/* drop down  */}
-              <DropDown name={colleges} label="Select College:"></DropDown>
+              <DropDown name={COLLEGES} label="Select College:"></DropDown>
             </div>
           </div>
 
