@@ -15,11 +15,13 @@ import Student from "@/models/Student.model";
 
 import { getDataFromToken } from "@/helper/getDataFromToken";
 
+import User from "@/models/User.model";
+
 
 const loginSchema = z.object({
 
     email: z.string().email(),
-    password: z.string().min(8),
+    password: z.string(),
 
 });
 

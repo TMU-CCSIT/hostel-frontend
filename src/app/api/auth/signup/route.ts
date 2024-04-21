@@ -12,32 +12,28 @@ import { sendEmail } from "@/helper/sendMail";
 import { NextRequest, NextResponse } from "next/server";
 
 import Student from "@/models/Student.model";
-import User from "@/models/user.model";
+
+import { model } from "mongoose";
+
+import User from "@/models/User.model";
+
 import { ROLE } from "@/constants/constant";
 
-
+// import AdditionalDetails from "@/models/additionalDetails.model";
 
 dbConnection();
 
 
-const signupSchema = z.object({
+const userSchema = z.object({
+
     fullName: z.string(),
     email: z.string().email(),
     password: z.string(),
     contactNo: z.string(),
     address: z.string(),
-    role: z.string()
+    role:z.string(),
+    
 });
-
-// course: z.string(),
-// college: z.string(),
-// fingerNo: z.string(),
-// programe: z.string(),
-// roomNo: z.string(),
-// parentName: z.string(),
-// parentContactNo: z.string(),
-// enrollmentNo: z.string(),
-
 
 
 export async function POST(req: NextRequest) {
@@ -45,14 +41,23 @@ export async function POST(req: NextRequest) {
     try {
 
         // fetch data 
+
+        console.log("hellow ");
+
         const body = await req.json();
 
         console.log("body: ", body)
 
         // Validate request body
+
         try {
-            signupSchema.safeParse(body);
+
+            userSchema.parse(body);
+
         } catch (error: any) {
+
+            // If validation fails, return error response
+
             return NextResponse
                 .json(
                     {
@@ -63,15 +68,19 @@ export async function POST(req: NextRequest) {
                     }, {
                     status: 401
                 });
+
         }
 
+
         const {
+
             fullName,
-            contactNo,
             email,
             password,
+            contactNo,
             address,
-            role,
+            role:role,
+
         } = body;
 
 
@@ -79,7 +88,7 @@ export async function POST(req: NextRequest) {
 
         let isUserExists = await isEmailAlreadyExist(email);
 
-        console.log("is user exists:  ", isUserExists);
+        console.log("is user exists ",isUserExists);
 
         if (isUserExists) {
 
@@ -90,44 +99,51 @@ export async function POST(req: NextRequest) {
                         error: "",
                         data: null,
                         success: false,
-                    },
-                    {
-                        status: 401
-                    }
-                );
+                    }, {
+                    status: 401
+                });
+
         }
 
         // hash the passowrd
+
         let hashPassword = await bcrypt.hash(password, 10);
 
-        console.log("hshsed password", hashPassword);
+        console.log("hshsed password",hashPassword);
+        
 
         // push this additional information to the userAddtional info field
-
         // create new user enrty in DB 
+
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
 
         // newly created user 
+
         const newUser = await User.create({
+
             fullName,
             email,
             contactNo,
             address,
-            role,
+            role:role,
             password: hashPassword,
-            profileImage: imageUrl,
+            profileImage:imageUrl,
+            isVerified:true,
+
         })
-
-
+    
         // send the mail to the user 
-        // await sendEmail(email, "verify", newStudent._id);
+
+        // await sendEmail(email,"verify",newStudent._id);
+
 
         // sucessfully return the response
+
         return NextResponse
             .json(
                 {
-                    message: "User Signup Successfully",
-                    error: null,
+                    message: "Student Signup Successfully",
+                    error: "",
                     data: newUser,
                     success: true,
                 }, {
