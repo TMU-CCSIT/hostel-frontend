@@ -1,7 +1,7 @@
 
 import { z } from "zod";
 
-import {dbConnection} from "@/app/config/dbConfig";
+// import {dbConnection} from "@/app/config/dbConfig";
 
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
 
@@ -27,7 +27,7 @@ const signupSchema = z.object({
 
 });
 
-dbConnection();
+// dbConnection();
 
 
 export async function userSignup(req:NextRequest, res:NextApiResponse) {

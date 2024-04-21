@@ -1,17 +1,18 @@
 
 import mongoose, { Document } from 'mongoose';
-import { IAdditionalDetails } from '@/models/additionalDetails.model';
+
+// import AdditionalDetails from './additionalDetails.model';
 
 export interface IStudent extends Document {
     fullName: string;
     email: string;
     password: string;
-    enrollmentNumber: number;
+    enrollmentNumber: string;
     contactNumber: number;
     course: string;
     college: string;
-    additionalDetails: IAdditionalDetails;
-    fingerNumber: number;
+    // additionalDetails: IAdditionalDetails;
+    fingerNumber: string;
     roomNumber: string;
     isVerified: boolean;
     token?: string;
@@ -35,7 +36,7 @@ const studentSchema = new mongoose.Schema(
             required: true
         },
         enrollmentNumber: {
-            type: Number,
+            type: String,  // 
             required: true,
             unique: true,
         },
@@ -78,6 +79,7 @@ const studentSchema = new mongoose.Schema(
 )
 
 const Student = mongoose.models.Student<IStudent> || mongoose.model('Student', studentSchema);
+
 export default Student;
 
 

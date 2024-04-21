@@ -1,7 +1,7 @@
 
-import User from "@/models/user.model"
+import Student from "@/models/Student.model";
 
-import { dbConnection } from "@/app/config/dbConfig";
+import { dbConnection } from "@/config/dbConfig";
 
 dbConnection();
 
@@ -9,7 +9,7 @@ export async function isEmailAlreadyExist(email:any) {
 
     try {
 
-        return await User.findOne({ email });
+        return await Student.findOne({ email });
 
     } catch (error) {
 
@@ -17,6 +17,7 @@ export async function isEmailAlreadyExist(email:any) {
         
     }
 }
+
 
 
 

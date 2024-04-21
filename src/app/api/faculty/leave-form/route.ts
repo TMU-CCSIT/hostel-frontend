@@ -22,7 +22,7 @@ function queryByRole(user: IUser): string {
 }
 
 
-export const updateForm = async (req: NextRequest, res: NextResponse) => {
+export const PATCH = async (req: NextRequest, res: NextResponse) => {
     try {
 
         const body = await req.json();
@@ -93,7 +93,7 @@ export const updateForm = async (req: NextRequest, res: NextResponse) => {
 }
 
 
-export const getAllForms = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (req: NextRequest, res: NextResponse) => {
     try {
 
         const body = await req.json();

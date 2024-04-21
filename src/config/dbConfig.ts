@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 export const dbConnection = () => {
 
-  mongoose.connect(process.env.NEXT_PUBLIC_DATABASE_URL || "")
+  mongoose.connect(process.env.DATABASE_URL || "")
     .then(() => {
       console.log("DB CONNECTION SUCCESSFULL!")
     })

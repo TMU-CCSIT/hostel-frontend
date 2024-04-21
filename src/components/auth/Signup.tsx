@@ -1,42 +1,49 @@
 "use client";
 
 // importing necessities
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import InputField from "./InputField";
 import DropDown from "./DropDown";
 import { colleges } from "@/constants/constant";
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
-import { db } from "@/app/config/dbConfig";
-import { collection, addDoc } from "firebase/firestore";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 // interface
 interface FormData {
-  name: string;
+  
+  fullName: string;
   email: string;
   password: string;
-  enrolNumber: string;
-  contact: string;
-  fingerNumber: string;
-  fatherName: string;
-  fatherContact: string;
+  enrollmentNumber: string; // Assuming enrollmentNumber is a string based on your usage
+  contactNumber: number;
   course: string;
+  college: string;
+  fingerNumber: number;
   roomNumber: string;
+  fatherName: string;
+  parentContact: number;
+  address: string; // Assuming address is a string
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
   const [data, setData] = useState<FormData>({
-    name: "",
+    fullName: "",
     email: "",
     password: "",
-    enrolNumber: "",
-    contact: "",
-    fingerNumber: "",
-    fatherName: "",
-    fatherContact: "",
+    enrollmentNumber: "",
+    contactNumber: 0,
     course: "",
+    college: "CCSIT",
+    fingerNumber: 0,
     roomNumber: "",
+    fatherName: "",
+    parentContact: 0,
+    address: "",
   });
 
   // function for data matching
@@ -44,18 +51,20 @@ const Signup = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-
   // dummy function to pass
-  const submitHandler = async (e: any) => {
-    e.preventDefault();
 
-    console.log(process.env.NEXT_PUBLIC_authDomain);
+  async function submitHandler(e: any) {
+    try {
+      e.preventDefault();
 
-    await addDataToStore();
+      console.log("data is",data);
 
-
+      const res = await axios.post("/api/auth/signup", data);
+      console.log("res: ", res);
+    } catch (error) {
+      toast.error("signup failed");
+    }
   }
-  };
 
   return (
     // main div
@@ -94,7 +103,7 @@ const Signup = () => {
 
           {/* button */}
           <div className="m-12">
-            <CTCButton text={"Submit"} type={true}></CTCButton>
+            <CTCButton text={"Submit"} type={true} />
           </div>
         </form>
       </div>
