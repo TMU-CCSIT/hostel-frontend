@@ -38,15 +38,20 @@ const Leave = () => {
     });
   };
 
-  // dummy function to pass
   async function submitHandler(e: any) {
     try {
       e.preventDefault();
-      console.log("date", data);
       const res = await axios.post("/api/student/leave", data);
-      console.log("res: ", res);
+      setData({
+        dateFrom: new Date(),
+        dateTo: new Date(),
+        reasonForLeave: "",
+        addressDuringLeave: "",
+      });
+      toast.success("Leave created");
     } catch (error) {
-      toast.error("submission failed");
+      console.log(error);
+      toast.error("Something went wrong");
     }
   }
 
@@ -72,6 +77,7 @@ const Leave = () => {
                 type="date"
                 placeholder="Date From"
                 value={data.dateFrom}
+                required={true}
                 name="dateFrom"
                 onChange={handleChange}
               ></InputField>
@@ -85,6 +91,7 @@ const Leave = () => {
                 key=""
                 label="Date To"
                 type="date"
+                required={true}
                 placeholder="Date To"
                 value={data.dateTo}
                 name="dateTo"
@@ -102,6 +109,7 @@ const Leave = () => {
                 placeholder="Enter Your Reason Here"
                 value={data.reasonForLeave}
                 name="reasonForLeave"
+                required={true}
                 onChange={handleChange}
               ></TextArea>
             }
@@ -116,6 +124,7 @@ const Leave = () => {
                 placeholder="Enter Your Address Here"
                 value={data.addressDuringLeave}
                 name="addressDuringLeave"
+                required={true}
                 onChange={handleChange}
               ></TextArea>
             }

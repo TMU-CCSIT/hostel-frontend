@@ -5,6 +5,8 @@ interface TextAreaProps {
   placeholder?: string;
   value: any;
   name?: any;
+  required: Boolean;
+
   readOnly?: any;
   onChange: (value: any) => void;
 }
@@ -21,6 +23,7 @@ const TextArea = (props: TextAreaProps) => {
         value={props.value}
         onChange={props.onChange}
         name={props.name}
+        required={props.required ? true : false}
         readOnly={props.readOnly}
         className="shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline resize-none h-32 w-[15rem] sm:w-[30rem] lg:w-[45rem]"
       />

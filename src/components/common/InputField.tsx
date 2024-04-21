@@ -8,6 +8,7 @@ interface InputFieldProps {
   value: any;
   name: any;
   min?: number;
+  required: Boolean;
   readOnly?: any;
   onChange: (value: any) => void;
 }
@@ -25,6 +26,7 @@ const InputField = (props: InputFieldProps) => {
         value={props.value}
         onChange={props.onChange}
         name={props.name}
+        required={props.required ? true : false}
         min={props.min}
         readOnly={props.readOnly}
         className="shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline w-[15rem] sm:w-[30rem] lg:w-[45rem]"
