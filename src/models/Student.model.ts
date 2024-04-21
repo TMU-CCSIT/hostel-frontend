@@ -37,10 +37,6 @@ const studentSchema: Schema = new Schema(
             type: String,
             required: true
         },
-        contactNo: {
-            type: String,
-            required: true,
-        },
         course: {
             type: String,
             required: true,
