@@ -45,8 +45,7 @@ const Signup = () => {
     parentName: "",
     parentContactNo: "",
     address: "",
-    programe:"",
-    
+    programe: "",
   });
 
   // function for data matching
@@ -60,39 +59,32 @@ const Signup = () => {
     try {
       e.preventDefault();
 
-      console.log("data is", data);
-
-      const userResponse = await axios.post("/api/auth/signup",{
-
-        email:data.email,
-        password:data.password,
-        fullName:data.fullName,
-        contactNo:data.contactNo,
-        address:data.address,
-        role:"Student"
-
+      const userResponse = await axios.post("/api/auth/signup", {
+        email: data.email,
+        password: data.password,
+        fullName: data.fullName,
+        contactNo: data.contactNo,
+        address: data.address,
+        role: "Student",
       });
 
+      const userSignupReponse = await axios.post("/api/auth/studentSignup", {
+        enrollmentNo: data.enrollmentNo,
+        course: data.course,
+        college: data.college,
+        fingerNo: data.fingerNo,
+        programe: data.programe,
+        roomNo: data.roomNo,
+        parentName: data.parentName,
+        parentContactNo: data.parentContactNo,
+        userId: userResponse.data.data._id,
+      });
 
-      const userSignupReponse = await axios.post("/api/auth/studentSignup",{
+      console.log(userSignupReponse);
 
-        enrollmentNo:data.enrollmentNo,
-        course:data.course,
-        college:data.college,
-        fingerNo:data.fingerNo,
-        programe:data.programe,
-        roomNo:data.roomNo,
-        parentName:data.parentName,
-        parentContactNo:data.parentContactNo,
-        userId:userResponse.data._id,
-
-      })
-
-      
+      toast.success("Signup successfully");
     } catch (error) {
-
-      toast.error("signup failed");
-
+      toast.error("Signup failed");
     }
   }
 
@@ -117,6 +109,7 @@ const Signup = () => {
                   key={a.name}
                   label={a?.label}
                   type={a?.type}
+                  required={true}
                   placeholder={a.placeholder}
                   value={data[a.name as keyof FormData]}
                   name={a?.name}
