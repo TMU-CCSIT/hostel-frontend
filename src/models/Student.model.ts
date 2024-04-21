@@ -1,26 +1,35 @@
 
 import mongoose, { Document } from 'mongoose';
-import { IAdditionalDetails } from '@/models/additionalDetails.model';
+import { IUser } from '@/models/user.model';
+
 
 export interface IStudent extends Document {
-    fullName: string;
-    email: string;
-    password: string;
-    enrollmentNumber: number;
-    contactNumber: number;
+    enrollmentNo: string;
+    contactNo: string;
+    parentName: string;
+    parentContactNo: string;
+    fingerNo: string;
     course: string;
     college: string;
-    additionalDetails: IAdditionalDetails;
-    fingerNumber: number;
-    roomNumber: string;
-    isVerified: boolean;
-    token?: string;
-    tokenExpiry?: Date;
+    roomNo: string;
+    user: IUser;
+    programe: string;
 }
+
 
 const studentSchema = new mongoose.Schema(
     {
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
         fullName: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        parentName: {
             type: String,
             required: true,
             trim: true
@@ -30,17 +39,21 @@ const studentSchema = new mongoose.Schema(
             required: true,
             unique: true,
         },
+        enrollmentNo: {
+            type: String,
+            required: true,
+            unique: true,
+        },
         password: {
             type: String,
             required: true
         },
-        enrollmentNumber: {
-            type: Number,
+        contactNo: {
+            type: String,
             required: true,
-            unique: true,
         },
-        contactNumber: {
-            type: Number,
+        parentContactNo: {
+            type: String,
             required: true,
         },
         course: {
@@ -51,31 +64,21 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        additionalDetails: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "AdditionalDetails",
-        },
-        fingerNumber: {
-            type: Number,
+        fingerNo: {
+            type: String,
             required: true,
             unique: true
         },
-        roomNumber: {
+        roomNo: {
             type: String,
             required: true
         },
-        isVerified: {
-            type: Boolean,
-            default: false
+        programe: {
+            type: String,
+            required: true
         },
-        token: {
-            type: String
-        },
-        tokenExpiry: {
-            type: Date
-        }
     }
-)
+);
 
 const Student = mongoose.models.Student<IStudent> || mongoose.model('Student', studentSchema);
 export default Student;
