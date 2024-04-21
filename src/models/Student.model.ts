@@ -1,7 +1,6 @@
 
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { IUser } from "@/models/User.model";
-import mongoose, { Document } from 'mongoose';
 
 export interface IStudent extends Document {
     enrollmentNo: string;

@@ -1,55 +1,30 @@
-
 import { z } from "zod";
-
 import { dbConnection } from "@/config/dbConfig";
-
-import bcrypt from "bcrypt";
-
-import { sendEmail } from "@/helper/sendMail";
-
 import { NextRequest, NextResponse } from "next/server";
-
 import Student from "@/models/Student.model";
-
-import User from "@/models/User.model";
-
-
 
 dbConnection();
 
-
 const signupSchema = z.object({
-
     enrollmentNo: z.string(),
     course: z.string(),
     college: z.string(),
     fingerNo: z.string(),
-    programe:z.string(),
+    programe: z.string(),
     roomNo: z.string(),
     parentName: z.string(),
     parentContactNo: z.string(),
-    userId:z.string(),
-    
 });
 
 
 export async function POST(req: NextRequest) {
 
     try {
-
-        // waha se contact number or role naii ayaya 
-
-
         // fetch data 
-
-        console.log("hellow ");
-
         const body = await req.json();
 
-        console.log("body: ", body)
 
         // Validate request body
-
         try {
 
             signupSchema.parse(body);
@@ -57,7 +32,6 @@ export async function POST(req: NextRequest) {
         } catch (error: any) {
 
             // If validation fails, return error response
-
             console.log(error.message);
 
             return NextResponse
@@ -67,15 +41,14 @@ export async function POST(req: NextRequest) {
                         error: "",
                         data: null,
                         success: false,
-                    }, {
-                    status: 401
-                });
-
+                    },
+                    {
+                        status: 401
+                    }
+                );
         }
 
-
         const {
-
             enrollmentNo,
             course,
             college,
@@ -89,10 +62,7 @@ export async function POST(req: NextRequest) {
         } = body;
 
 
-        // check the user is already exists 
-
-        let newStudent = await Student.create({
-
+        const newStudent = await Student.create({
             enrollmentNo,
             course,
             college,
@@ -101,12 +71,10 @@ export async function POST(req: NextRequest) {
             roomNo,
             parentName,
             parentContactNo,
-            user:userId,
-
+            user: userId,
         })
 
         // sucessfully return the response
-
         return NextResponse
             .json(
                 {
@@ -136,5 +104,3 @@ export async function POST(req: NextRequest) {
 
     }
 }
-
-

@@ -84,7 +84,7 @@ const Signup = () => {
         roomNo:data.roomNo,
         parentName:data.parentName,
         parentContactNo:data.parentContactNo,
-        userId:userResponse.data._id,
+        userId:userResponse.data.data._id,
 
       })
 
@@ -128,6 +128,7 @@ const Signup = () => {
             <div className="flex flex-col ">
               {/* drop down  */}
               <DropDown name={COLLEGES} label="Select College:"></DropDown>
+
             </div>
           </div>
 

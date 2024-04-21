@@ -46,8 +46,6 @@ export async function POST(req: NextRequest) {
 
             userSchema.parse(body);
 
-
-            await signupSchema.safeParse(body);
         } catch (error: any) {
 
             // If validation fails, return error response
@@ -73,7 +71,7 @@ export async function POST(req: NextRequest) {
             password,
             contactNo,
             address,
-            role:role,
+            role,
 
         } = body;
 
@@ -124,8 +122,6 @@ export async function POST(req: NextRequest) {
             password: hashPassword,
             profileImage:imageUrl,
             isVerified:true,
-            role,
-            password: hashPassword,
         })
     
 
