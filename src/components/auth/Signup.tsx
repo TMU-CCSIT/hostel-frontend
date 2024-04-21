@@ -81,7 +81,6 @@ const Signup = () => {
       });
 
       console.log(userSignupReponse);
-
       toast.success("Signup successfully");
     } catch (error) {
       toast.error("Signup failed");
@@ -121,6 +120,7 @@ const Signup = () => {
             <div className="flex flex-col ">
               {/* drop down  */}
               <DropDown name={COLLEGES} label="Select College:"></DropDown>
+
             </div>
           </div>
 

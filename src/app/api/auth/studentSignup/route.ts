@@ -1,4 +1,3 @@
-
 import { z } from "zod";
 import { dbConnection } from "@/config/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
@@ -105,5 +104,3 @@ export async function POST(req: NextRequest) {
 
     }
 }
-
-
