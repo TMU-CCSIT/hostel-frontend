@@ -3,8 +3,8 @@
 // importing necessities
 import React, { useState } from "react";
 
-import InputField from "@/components/auth/InputField";
-import DropDown from "@/components/auth/DropDown";
+import InputField from "@/components/common/InputField";
+import DropDown from "@/components/common/DropDown";
 
 import { COLLEGES } from "@/constants/constant";
 import SignupData from "@/constants/SignupData";

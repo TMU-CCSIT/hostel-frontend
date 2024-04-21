@@ -2,7 +2,7 @@
 
 // importing necessities
 import React, { useState } from "react";
-import InputField from "./InputField";
+import InputField from "../common/InputField";
 // import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
