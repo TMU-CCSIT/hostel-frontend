@@ -50,7 +50,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // let isUserExists = await isEmailAlreadyExist(email);
 
-        let isUserExists = await Student.findOne({ email: email });
+        let isUserExists = await User.findOne({ email: email });
+
 
         if (!isUserExists) {
 
@@ -64,6 +65,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
             }, { status: 400 }
             )
         }
+
+
+        let isStudentExists = await Student.findOne({ user:isUserExists._id });
+        
 
         // user exists but he is not verified 
 

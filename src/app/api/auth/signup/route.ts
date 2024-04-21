@@ -26,14 +26,14 @@ const signupSchema = z.object({
     email: z.string().email(),
     password: z.string(),
     enrollmentNo: z.string(),
-    contactNo: z.number(),
+    contactNo: z.string(),
     course: z.string(),
     college: z.string(),
-    fingerNo: z.number(),
+    fingerNo: z.string(),
     programe:z.string(),
     roomNo: z.string(),
     parentName: z.string(),
-    parentContactNo: z.number(),
+    parentContactNo: z.string(),
     address: z.string(),
     
 
@@ -54,26 +54,26 @@ export async function POST(req: NextRequest) {
 
         // Validate request body
 
-        // try {
+        try {
 
-        //     signupSchema.parse(body);
+            signupSchema.parse(body);
 
-        // } catch (error: any) {
+        } catch (error: any) {
 
-        //     // If validation fails, return error response
+            // If validation fails, return error response
 
-        //     return NextResponse
-        //         .json(
-        //             {
-        //                 message: "validation error ",
-        //                 error: "",
-        //                 data: null,
-        //                 success: false,
-        //             }, {
-        //             status: 401
-        //         });
+            return NextResponse
+                .json(
+                    {
+                        message: "validation error ",
+                        error: "",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 401
+                });
 
-        // }
+        }
 
 
         const {
@@ -81,15 +81,17 @@ export async function POST(req: NextRequest) {
             fullName,
             email,
             password,
-            enrollmentNumber,
-            contactNumber,
+            enrollmentNo,
+            contactNo,
             course,
             college,
-            fingerNumber,
-            roomNumber,
-            parentContact,
+            fingerNo,
+            programe,
+            roomNo,
+            parentName,
+            parentContactNo,
             address,
-            fatherName,
+            role,
 
         } = body;
 
@@ -125,31 +127,53 @@ export async function POST(req: NextRequest) {
 
         // create new user enrty in DB 
 
+
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
+
+        // newly created user 
 
         const newUser = await User.create({
 
             fullName,
             email,
+            contactNo,
+            address,
+            role,
             password: hashPassword,
-            profileImage:imageUrl
+            profileImage:imageUrl,
 
         })
 
+        // now create the new student 
+
+        const newStudent = await Student.create({
+
+            enrollmentNo,
+            course,
+            college,
+            fingerNo,
+            programe,
+            roomNo,
+            parentName,
+            parentContactNo,
+            user:newUser._id,
+
+        });
 
     
         // send the mail to the user 
 
-        await sendEmail(email,"verify",newUser._id);
+        await sendEmail(email,"verify",newStudent._id);
+
 
         // sucessfully return the response
 
         return NextResponse
             .json(
                 {
-                    message: "user Signup Successfully",
+                    message: "Student Signup Successfully",
                     error: "",
-                    data: newUser,
+                    data: newStudent,
                     success: true,
                 }, {
                 status: 200
@@ -173,8 +197,5 @@ export async function POST(req: NextRequest) {
 
     }
 }
-
-
-
 
 
