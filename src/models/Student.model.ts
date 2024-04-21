@@ -1,5 +1,8 @@
 
 import mongoose, { Document } from 'mongoose';
+
+import { IAdditionalDetails } from '@/models/AdditionalDetails.model';
+
 import { string } from 'zod';
 import {IUser} from "@/models/User.model";
 

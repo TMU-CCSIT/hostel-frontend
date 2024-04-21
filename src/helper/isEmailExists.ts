@@ -1,5 +1,8 @@
 
+import User from "@/models/User.model"
+
 // import User from "@/models/user.model";
+
 
 import { dbConnection } from "@/config/dbConfig";
 

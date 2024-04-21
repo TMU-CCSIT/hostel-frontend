@@ -2,9 +2,15 @@
 
 // importing necessities
 import React, { useState } from "react";
+
+import InputField from "../common/InputField";
+import DropDown from "../common/DropDown";
+import { colleges } from "@/constants/constant";
+
 import InputField from "./InputField";
 import DropDown from "./DropDown";
 import { COLLEGES } from "@/constants/constant";
+
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
