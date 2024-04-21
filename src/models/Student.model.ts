@@ -5,7 +5,6 @@ import { IUser } from '@/models/user.model';
 
 export interface IStudent extends Document {
     enrollmentNo: string;
-    contactNo: string;
     parentName: string;
     parentContactNo: string;
     fingerNo: string;
@@ -24,33 +23,15 @@ const studentSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        fullName: {
-            type: String,
-            required: true,
-            trim: true
-        },
         parentName: {
             type: String,
             required: true,
             trim: true
         },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
         enrollmentNo: {
             type: String,
             required: true,
             unique: true,
-        },
-        password: {
-            type: String,
-            required: true
-        },
-        contactNo: {
-            type: String,
-            required: true,
         },
         parentContactNo: {
             type: String,
@@ -77,6 +58,9 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+    },
+    {
+        timestamps: true
     }
 );
 

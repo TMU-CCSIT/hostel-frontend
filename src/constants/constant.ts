@@ -12,7 +12,7 @@ export enum CCSIT {
 }
 
 export enum ROLE {
-    "Admin",
+    Admin,
     "Principal",
     "Cordinator",
     "Warden",

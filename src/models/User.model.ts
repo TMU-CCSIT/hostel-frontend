@@ -5,11 +5,12 @@ export interface IUser extends Document {
     fullName: string;
     email: string;
     password: string;
-    contactNumber: string;
+    contactNo: string;
     role: ROLE;
     isVerified: boolean;
     token?: string;
     tokenExpiry?: Date;
+    address: string
 }
 
 
@@ -20,6 +21,9 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true
         },
+        profileImage: {
+            type: String
+        },
         email: {
             type: String,
             required: true,
@@ -29,8 +33,8 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        contactNumber: {
-            type: Number,
+        contactNo: {
+            type: String,
             required: true,
         },
         role: {
@@ -48,6 +52,12 @@ const userSchema = new mongoose.Schema(
         tokenExpiry: {
             type: Date
         },
+        address: {
+            type: String
+        }
+    },
+    {
+        timestamps: true
     }
 )
 
