@@ -1,4 +1,5 @@
-"use client";
+"use client"
+
 import React from "react";
 import Avatar from "react-avatar";
 import { useState, useEffect, useRef } from "react";
@@ -6,13 +7,13 @@ import Image from "next/image";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLDivElement>(null); // Specify the correct type
 
   useEffect(() => {
-    function handleClickOutside(event: any) {
+    function handleClickOutside(event: MouseEvent) {
       if (
-        dropdownRef.current.contains &&
-        !dropdownRef.current.contains(event.targety)
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
       ) {
         setDropdownOpen(false);
       }
@@ -25,9 +26,9 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="py-2 shadow-md px-4">
+    <nav className="py-5 shadow-lg px-20 bg-white border-b border-gray-800">
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <div className="relative">
+        <div className="relative h-[4rem] w-[4rem]">
           <Image
             className="h-12 w-auto object-cover bg-cover"
             src="http://portal2.tmu.ac.in/images/rightlogo.png"
@@ -48,7 +49,7 @@ const Navbar = () => {
             {/* Dropdown menu */}
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
-                <div className="py-1">
+                <div className="py-1 bg-[#EDF6FF]">
                   {/* Dropdown items */}
                   <a
                     href="#"
