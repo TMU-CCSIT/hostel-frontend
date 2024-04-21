@@ -1,9 +1,11 @@
 
 import mongoose, { Document } from 'mongoose';
-import { IUser } from '@/models/user.model';
+import { string } from 'zod';
+import {IUser} from "@/models/User.model";
 
 
 export interface IStudent extends Document {
+    
     enrollmentNo: string;
     parentName: string;
     parentContactNo: string;
@@ -39,7 +41,10 @@ const studentSchema = new mongoose.Schema(
         },
         contactNo: {
             type: Number,
+        enrollmentNumber: {
+            type: String,  
             required: true,
+            unique: true,
         },
         course: {
             type: String,
