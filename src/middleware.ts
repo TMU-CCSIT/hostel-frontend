@@ -12,7 +12,9 @@ export function middleware(req: CustomNextRequest) {
     const path = req.nextUrl.pathname;
     let isLoggedIn = req.cookies.get("token")?.value || "";
 
+        
     if (isLoggedIn) {
+      
         console.log("count")
         const userId = getDataFromToken(req);
         req.user = userId;
