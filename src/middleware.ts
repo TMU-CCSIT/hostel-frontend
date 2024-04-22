@@ -6,12 +6,27 @@ interface CustomNextRequest extends NextRequest {
 }
 
 export function middleware(req: CustomNextRequest) {
+
     const path = req.nextUrl.pathname;
 
-    const isPublicPath = path === "/login" || path === "/signup" || path === "verifyemail";
+    console.log("current path ",path);
+
+    const isPublicPath = path === "auth/login" || path === "auth/signup" || path === "auth/verifyemail" || path === "/";
 
     let token = req.cookies.get("token")?.value || "";
 
+    console.log("token ",token);
+
+    
+    
+    if (token) {
+        
+        const userId = getDataFromToken(req);
+
+        req.user = userId;
+
+    }
+    
     if (isPublicPath && token) {
 
         return NextResponse.redirect(new URL("/", req.nextUrl));
@@ -19,16 +34,12 @@ export function middleware(req: CustomNextRequest) {
     }
     else {
 
-        return NextResponse.redirect(new URL("/signup", req.nextUrl));
-    }
+        console.log("heloow");
 
-    const userId = getDataFromToken(req);
-
-    if (userId) {
-
-        req.user = userId;
+        return NextResponse.redirect(new URL("/auth/signup", req.nextUrl));
 
     }
+
 
     return NextResponse.next();
 
