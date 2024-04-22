@@ -83,7 +83,6 @@ const Signup = () => {
       });
 
       console.log(userSignupReponse);
-
       toast.success("Signup successfully");
       toast("Please verify your email!", {
         icon: "👏",
@@ -127,6 +126,7 @@ const Signup = () => {
             <div className="flex flex-col ">
               {/* drop down  */}
               <DropDown name={COLLEGES} label="Select College:"></DropDown>
+
             </div>
           </div>
 

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 
 // logic for saving login details
 const LoginPage = () => {
+
   const router = useRouter();
 
   // hook for reading different email and password values
@@ -24,8 +25,10 @@ const LoginPage = () => {
 
   async function loginHandler() {
     try {
+
       const resposne = await axios.post("/api/auth/login", data);
       toast.success("Login successfully");
+      router.push("/");
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.message || "Login failed");

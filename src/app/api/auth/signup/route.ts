@@ -25,8 +25,8 @@ const userSchema = z.object({
     password: z.string(),
     contactNo: z.string(),
     address: z.string(),
-    role: z.string(),
-
+    role:z.string(),
+    
 });
 
 
@@ -35,14 +35,21 @@ export async function POST(req: NextRequest) {
     try {
 
         // fetch data 
+
+        console.log("hellow ");
+
         const body = await req.json();
 
         // Validate request body
 
         try {
-            userSchema.safeParse(body);
+
+            userSchema.parse(body);
+
         } catch (error: any) {
+
             // If validation fails, return error response
+
             return NextResponse
                 .json(
                     {
@@ -58,17 +65,21 @@ export async function POST(req: NextRequest) {
 
 
         const {
+
             fullName,
             email,
             password,
             contactNo,
             address,
-            role
+            role,
+
         } = body;
 
         // check the user is already exists 
 
         const isUserExists = await isEmailAlreadyExist(email);
+
+        console.log("is user exists ",isUserExists);
 
         if (isUserExists) {
 
@@ -89,11 +100,12 @@ export async function POST(req: NextRequest) {
 
         let hashPassword = await bcrypt.hash(password, 10);
 
-        console.log("hshsed password", hashPassword);
-
+        console.log("hshsed password",hashPassword);
+        
 
         // push this additional information to the userAddtional info field
         // create new user enrty in DB 
+
 
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
 
@@ -106,11 +118,12 @@ export async function POST(req: NextRequest) {
             email,
             contactNo,
             address,
-            role,
+            role:role,
             password: hashPassword,
-            profileImage: imageUrl,
-            isVerified: false,
+            profileImage:imageUrl,
+            isVerified:true,
         })
+    
 
         // send the mail to the user 
         // await sendEmail(email, "verify", newStudent._id);
