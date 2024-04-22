@@ -5,53 +5,32 @@ interface CustomNextRequest extends NextRequest {
     user?: any;
 }
 
+const PublicPaths = ['/auth/login', '/auth/signup']
+
 export function middleware(req: CustomNextRequest) {
 
     const path = req.nextUrl.pathname;
+    let isLoggedIn = req.cookies.get("token")?.value || "";
 
-    console.log("current path ",path);
-
-    const isPublicPath = path === "auth/login" || path === "auth/signup" || path === "auth/verifyemail" || path === "/";
-
-    let token = req.cookies.get("token")?.value || "";
-
-    console.log("token ",token);
-
-    
-    
-    if (token) {
-        
+    if (isLoggedIn) {
+        console.log("count")
         const userId = getDataFromToken(req);
-
         req.user = userId;
-
-    }
-    
-    if (isPublicPath && token) {
-
-        return NextResponse.redirect(new URL("/", req.nextUrl));
-
-    }
-    else {
-
-        console.log("heloow");
-
-        return NextResponse.redirect(new URL("/auth/signup", req.nextUrl));
-
     }
 
+    const isPublicPath = PublicPaths.includes(path);
 
-    return NextResponse.next();
+    if (isLoggedIn && isPublicPath) {
+        return NextResponse.redirect(new URL('/', req.url));
+    }
+
+    if (!isLoggedIn && !isPublicPath) {
+        return NextResponse.redirect(new URL('/auth/login', req.url));
+    }
 
 }
 
 export const config = {
-    matcher: [
-        "/",
-        "/profile",
-        "/login",
-        "/signup",
-        "/verifyemail",
-    ],
+    matcher: '/((?!api|static|.*\\..*|_next).*)',
 };
 
