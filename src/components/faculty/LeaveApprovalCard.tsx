@@ -14,7 +14,7 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
       const res = await axios.patch("/api/faculty/leave-form", {
         formId: userInfo._id,
         result,
-        userId: "",
+        userId: "662655711e369fbbed75a4ff",
       });
       console.log("res: ", res);
       toast.success("Response Submitted");

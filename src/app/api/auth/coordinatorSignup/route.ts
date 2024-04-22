@@ -6,13 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 import Coordinator from "@/models/coordinator.model";
 
 let coordinatorSchema = z.object({
-
     college: z.string(),
     course: z.string(),
     userId: z.string(),
     programe: z.string(),
-
-
 })
 
 
@@ -23,15 +20,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         let body = await req.json();
 
         try {
-
             coordinatorSchema.parse(body);
-
-
         } catch (error: any) {
-
-
             console.log(error.message);
-
             return NextResponse
                 .json(
                     {
@@ -44,28 +35,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
                         status: 401
                     }
                 );
-
         }
 
 
 
         const { college, course, userId, programe } = body;
 
-
         //create the new entry in Db 
-
-
         const newUser = await Coordinator.create({
-
             college,
             course,
             user: userId,
             programe,
-        })
+        });
 
         // successfully return the resposne 
-
-
         return NextResponse
             .json(
                 {
@@ -135,17 +119,17 @@ export async function GET(req: NextRequest, res: NextResponse) {
         if (!coordinator) {
 
             return NextResponse
-            .json(
-                {
-                    message: "no coordinator found with id '" + userId ,
-                    error: "",
-                    data: null,
-                    success: false,
-                },
-                {
-                    status: 401
-                }
-            );
+                .json(
+                    {
+                        message: "no coordinator found with id '" + userId,
+                        error: "",
+                        data: null,
+                        success: false,
+                    },
+                    {
+                        status: 401
+                    }
+                );
         }
 
 

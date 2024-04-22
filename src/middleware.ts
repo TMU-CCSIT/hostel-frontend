@@ -12,10 +12,8 @@ export async function middleware(req: CustomNextRequest) {
     const path = req.nextUrl.pathname;
     let isLoggedIn = req.cookies.get("token")?.value || "";
 
-        
+
     if (isLoggedIn) {
-      
-        console.log("count")
         const decodedToken = await getDataFromToken(req);
         console.log("token : ", decodedToken)
         req.user = decodedToken.id;
