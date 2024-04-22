@@ -12,9 +12,9 @@ export const getDataFromToken = (req: NextRequest)=>{
         const token = req.cookies.get('token')?.value ||"";
 
 
-        const decodeToken:any =  jwt.verify(token,process.env.token_secret!);
+        const decodeToken:any =  jwt.verify(token,process.env.NEXT_PUBLIC_JWT_SECRET_KEY!);
 
-        console.log(decodeToken);
+        // console.log(decodeToken);
 
         return decodeToken.id;
          
@@ -25,5 +25,8 @@ export const getDataFromToken = (req: NextRequest)=>{
 
     }
 }
+
+
+
 
 

@@ -18,7 +18,6 @@ export function middleware(req: CustomNextRequest) {
     console.log("token ",token);
 
     
-    
     if (token) {
         
         const userId = getDataFromToken(req);
