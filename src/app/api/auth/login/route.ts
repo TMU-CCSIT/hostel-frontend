@@ -60,7 +60,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             return NextResponse.json({
 
                 message: "this user is not exists with this email address",
-                data: "null",
+                data: null,
                 error: null,
                 success: false,
 
@@ -69,8 +69,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
 
-        let isStudentExists = await Student.findOne({ user:isUserExists._id });
-        
+        let isStudentExists = await Student.findOne({ user: isUserExists._id });
+
 
         // user exists but he is not verified 
 
@@ -109,18 +109,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
         // create token
 
         let tokenValue = {
-
             id: isUserExists?._id,
             email: isUserExists?.email,
 
         }
 
-
         const token = jwt.sign(tokenValue, process.env.NEXT_PUBLIC_JWT_SECRET_KEY as string, {
-
             expiresIn: "24h",
-
-
         });
 
         const response = NextResponse.json({

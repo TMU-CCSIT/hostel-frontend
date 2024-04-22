@@ -6,6 +6,7 @@ import InputField from "../common/InputField";
 // import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 // logic for saving login details
 const LoginPage = () => {
@@ -24,18 +25,13 @@ const LoginPage = () => {
 
   async function loginHandler() {
     try {
-      console.log("hellow");
 
-      let resposne = await axios.post(
-        "http://localhost:3000/api/auth/login",
-        data
-      );
-
+      const resposne = await axios.post("/api/auth/login", data);
+      toast.success("Login successfully");
       router.push("/");
-
-      console.log(resposne.data);
     } catch (error: any) {
       console.log(error);
+      toast.error(error?.response?.data?.message || "Login failed");
     }
   }
 

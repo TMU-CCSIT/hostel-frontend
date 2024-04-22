@@ -11,6 +11,7 @@ import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // interface
 interface FormData {
@@ -32,6 +33,7 @@ interface FormData {
 const Signup = () => {
   // hooks for reading different values
 
+  const router = useRouter();
   const [data, setData] = useState<FormData>({
     fullName: "",
     email: "",
@@ -82,8 +84,12 @@ const Signup = () => {
 
       console.log(userSignupReponse);
       toast.success("Signup successfully");
-    } catch (error) {
-      toast.error("Signup failed");
+      toast("Please verify your email!", {
+        icon: "👏",
+      });
+      router.push("/auth/login");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Signup failed");
     }
   }
 

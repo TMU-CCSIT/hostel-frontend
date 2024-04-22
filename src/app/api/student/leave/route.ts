@@ -53,7 +53,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             addressDuringLeave
         } = body;
 
-        const userId = '6624f8bba3a6bb07d79a2028';
+        const userId = '66250b9022e59a1b4012a59d';
 
         // // validating the dates
         // const isDateFromValid = validateDate(dateFrom, new Date());
