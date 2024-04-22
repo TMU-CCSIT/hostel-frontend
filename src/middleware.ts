@@ -7,15 +7,16 @@ interface CustomNextRequest extends NextRequest {
 
 const PublicPaths = ['/auth/login', '/auth/signup']
 
-export function middleware(req: CustomNextRequest) {
+export async function middleware(req: CustomNextRequest) {
 
     const path = req.nextUrl.pathname;
     let isLoggedIn = req.cookies.get("token")?.value || "";
 
     if (isLoggedIn) {
         console.log("count")
-        const userId = getDataFromToken(req);
-        req.user = userId;
+        const decodedToken = await getDataFromToken(req);
+        console.log("token : ", decodedToken)
+        req.user = decodedToken.id;
     }
 
     const isPublicPath = PublicPaths.includes(path);
