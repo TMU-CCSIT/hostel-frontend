@@ -17,6 +17,8 @@ import { getDataFromToken } from "@/helper/getDataFromToken";
 
 import User from "@/models/User.model";
 
+import { ROLE } from "@/constants/constant";
+
 
 const loginSchema = z.object({
 
@@ -52,6 +54,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         const isUserExists = await isEmailAlreadyExist(email);
 
+        console.log("is user exists", isUserExists);
+
         if (!isUserExists) {
             return NextResponse.json(
                 {
@@ -68,6 +72,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         // user exists but he is not verified 
+        
         if (isUserExists && !isUserExists.isVerified) {
 
             return NextResponse.json({
@@ -100,9 +105,11 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // create token
         const tokenValue = {
+
             id: isUserExists._id,
             email: isUserExists.email,
-            profileImage: isUserExists.profileImage
+            profileImage: isUserExists.profileImage,
+            role:isUserExists.role,
         }
 
         const token = jwt.sign(
@@ -120,7 +127,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const response = NextResponse.json({
             message: "User loggedin successfully",
             status: 200,
-            data: user,
+            data: isUserExists,
             error: null,
         });
 

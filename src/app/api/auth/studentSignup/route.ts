@@ -13,8 +13,10 @@ dbConnection();
 
 interface CustomNextRequest extends NextRequest {
 
-    user: string;
+    id: string,
 }
+
+
 
 const signupSchema = z.object({
     enrollmentNo: z.string(),
@@ -125,7 +127,7 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
 
         await middleware(req);
 
-        let userId = req.user;
+        let userId = req.id;
 
         // console.log(req);
 
