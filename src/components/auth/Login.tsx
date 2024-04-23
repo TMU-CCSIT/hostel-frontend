@@ -31,13 +31,12 @@ const LoginPage = () => {
       setUser(resposne.data.data);
       toast.success("Login successfully");
       const role = (resposne?.data?.data?.role).toLowerCase();
-      console.log(role);
-      router.push(`/dashboard/${role}`);
+      router.push(`/${role}`);
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.message || "Login failed");
     }
-  }s
+  }
 
   // frontend of login page
   return (

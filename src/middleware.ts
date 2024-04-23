@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDataFromToken } from "./helper/getDataFromToken";
-import { ROLE } from "./constants/constant";
+import { getDataFromToken } from "@/helper/getDataFromToken";
+import { ROLE } from "@/constants/constant";
 
 interface CustomNextRequest extends NextRequest {
-    id: string,
+    user: string,
 }
 
+
 const PublicPaths = ['/auth/login', '/auth/signup'];
+const DefaultPage = ["/", "/unauthorized"];
 
 export async function middleware(req: CustomNextRequest) {
 
@@ -18,13 +20,17 @@ export async function middleware(req: CustomNextRequest) {
 
     if (isLoggedIn) {
         decodedToken = await getDataFromToken(req);
-        req.id = decodedToken.id;
+        req.user = decodedToken.id;
+    }
+
+    if (DefaultPage.includes(path)) {
+        return NextResponse.next();
     }
 
     const isPublicPath = PublicPaths.includes(path);
 
     if (isLoggedIn && isPublicPath) {
-        return NextResponse.redirect(new URL('/', req.url));
+        return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
     }
 
     if (!isLoggedIn && !isPublicPath) {
@@ -33,22 +39,21 @@ export async function middleware(req: CustomNextRequest) {
 
     if (isLoggedIn) {
         // If the user is logged in, check permission based on their role
+
         const hasPermission = checkPermission(decodedToken.role, path);
         if (!hasPermission) {
-
-            return NextResponse.redirect(new URL('/unauthorized', req.url)); // Redirect to unauthorized page
+            return NextResponse.redirect(new URL('/unauthorized', req.url));
         }
     }
     return NextResponse.next();
 }
 
-// Logic to check if the user has permission to access the given path based on their role
 function checkPermission(role: ROLE, path: string): boolean {
-
     switch (role) {
 
         case "Student":
-            return path.includes('student');
+            return path.includes('student')
+
         case "Principal":
             return path.includes('principal');
         case "Coordinator":
@@ -57,6 +62,7 @@ function checkPermission(role: ROLE, path: string): boolean {
             return false;
     }
 }
+
 
 export const config = {
     matcher: '/((?!api|static|.*\\..*|_next).*)',
