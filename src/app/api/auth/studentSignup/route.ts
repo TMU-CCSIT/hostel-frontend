@@ -12,7 +12,6 @@ import { middleware } from "@/middleware";
 dbConnection();
 
 interface CustomNextRequest extends NextRequest {
-
     id: string,
 }
 
@@ -178,7 +177,7 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
                 {
                     message: "Sucessfully find Student details  '" + userId,
                     error: "",
-                    data: {studentDetails,userDetails},
+                    data: { studentDetails, userDetails },
                     success: true,
                 },
                 {
