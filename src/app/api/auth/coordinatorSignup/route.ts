@@ -5,6 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 import Coordinator from "@/models/coordinator.model";
 
+interface CustomNextRequest extends NextRequest {
+
+    user: string;
+}
+
 let coordinatorSchema = z.object({
     college: z.string(),
     course: z.string(),
@@ -86,16 +91,16 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
 
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: CustomNextRequest, res: NextResponse) {
 
     try {
 
         // const { userId } = body;
 
-        let userId; // fetch from the req.user
+        let userId = req.user;
 
 
-        if (userId) {
+        if (!userId) {
 
             return NextResponse
                 .json(
@@ -114,8 +119,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
 
         const coordinator = await Coordinator.findOne({ user: userId });
 
-
-
         if (!coordinator) {
 
             return NextResponse
@@ -132,7 +135,18 @@ export async function GET(req: NextRequest, res: NextResponse) {
                 );
         }
 
-
+        return NextResponse
+            .json(
+                {
+                    message: "Sucessfully find coordinator details  '" + userId,
+                    error: "",
+                    data: coordinator,
+                    success: false,
+                },
+                {
+                    status: 200
+                }
+            );
 
     } catch (error: any) {
 
