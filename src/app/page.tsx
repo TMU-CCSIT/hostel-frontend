@@ -1,22 +1,20 @@
 "use client"
 
 import Navbar from "@/components/common/Navbar";
-import { useEffect } from "react";
-import axios from "axios";
 
 export default function Home() {
-  async function userDetails() {
-    try {
-      let response = await axios.get("/api/auth/studentSignup");
-      console.log("user details ", response.data);
-    } catch (error:any) {
-      console.log(error.message);
-    }
-  }
+  // async function userDetails() {
+  //   try {
+  //     let response = await axios.get("/api/auth/studentSignup");
+  //     console.log("user details ", response.data);
+  //   } catch (error:any) {
+  //     console.log(error.message);
+  //   }
+  // }
 
-  useEffect(() => {
-    userDetails();
-  }, []);
+  // useEffect(() => {
+  //   userDetails();
+  // }, []);
 
   return (
     <>
@@ -30,3 +28,5 @@ export default function Home() {
     </>
   );
 }
+
+

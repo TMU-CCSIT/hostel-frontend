@@ -1,15 +1,19 @@
 import { z } from "zod";
 import { dbConnection } from "@/config/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
+
+import User from "@/models/User.model";
+
 import Student from "@/models/Student.model";
 
-import {middleware} from "@/middleware";
+import { middleware } from "@/middleware";
+
 
 dbConnection();
 
-interface CustomNextRequest extends NextRequest{
+interface CustomNextRequest extends NextRequest {
 
-    user:string;
+    user: string;
 }
 
 const signupSchema = z.object({
@@ -115,9 +119,9 @@ export async function POST(req: NextRequest) {
 
 
 
-export async function  GET(req:CustomNextRequest, res: NextResponse){
+export async function GET(req: CustomNextRequest, res: NextResponse) {
 
-    try{
+    try {
 
         await middleware(req);
 
@@ -146,6 +150,9 @@ export async function  GET(req:CustomNextRequest, res: NextResponse){
 
         const studentDetails = await Student.findOne({ user: userId });
 
+
+        // console.log("student : ",studentDetails)
+
         if (!studentDetails) {
 
             return NextResponse
@@ -162,13 +169,14 @@ export async function  GET(req:CustomNextRequest, res: NextResponse){
                 );
         }
 
+        const userDetails = await User.findOne({ _id: userId });
 
         return NextResponse
             .json(
                 {
                     message: "Sucessfully find Student details  '" + userId,
                     error: "",
-                    data: studentDetails,
+                    data: {studentDetails,userDetails},
                     success: true,
                 },
                 {
@@ -176,9 +184,7 @@ export async function  GET(req:CustomNextRequest, res: NextResponse){
                 }
             );
 
-
-
-    }catch(error:any){
+    } catch (error: any) {
 
 
         console.log(error.message);

@@ -1,6 +1,10 @@
 
-import mongoose, { Document, Schema, Types } from 'mongoose';
+import User from '@/models/User.model';
 import { IUser } from "@/models/User.model";
+
+import mongoose, { Document, Schema, Types } from 'mongoose';
+
+
 
 export interface IStudent extends Document {
     enrollmentNo: string;
@@ -19,7 +23,7 @@ export interface IStudent extends Document {
 const studentSchema: Schema = new Schema(
     {
         user: {
-            type: Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true,
         },
