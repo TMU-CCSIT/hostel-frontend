@@ -1,110 +1,69 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDataFromToken } from "./helper/getDataFromToken";
-
-import { ROLE } from "./constants/constant";
+import { getDataFromToken } from "@/helper/getDataFromToken";
+import { ROLE } from "@/constants/constant";
 
 interface CustomNextRequest extends NextRequest {
-
-
     user: string,
 }
 
-const PublicPaths = ['/auth/login', '/auth/signup',"/"];
 
-const defaultPath = ["/"];
+const PublicPaths = ['/auth/login', '/auth/signup'];
+const DefaultPage = ["/", "/unauthorized"];
 
 export async function middleware(req: CustomNextRequest) {
 
     const path = req.nextUrl.pathname;
 
-    console.log("path is ", path);
-
     let isLoggedIn = req.cookies.get("token")?.value || "";
-
-    console.log("token value ", isLoggedIn);
 
     let decodedToken;
 
     if (isLoggedIn) {
-
         decodedToken = await getDataFromToken(req);
-        console.log("token : ", decodedToken)
         req.user = decodedToken.id;
+    }
+
+    if (DefaultPage.includes(path)) {
+        return NextResponse.next();
     }
 
     const isPublicPath = PublicPaths.includes(path);
 
     if (isLoggedIn && isPublicPath) {
-
         return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
     }
 
     if (!isLoggedIn && !isPublicPath) {
-
         return NextResponse.redirect(new URL('/auth/login', req.url));
     }
 
-    console.log("path is ", path);
-
     if (isLoggedIn) {
-
-        console.log(decodedToken.role);
-
-
         // If the user is logged in, check permission based on their role
 
         const hasPermission = checkPermission(decodedToken.role, path);
-
-        console.log(hasPermission)
-
         if (!hasPermission) {
-
-            return NextResponse.redirect(new URL('/unauthorized', req.url)); // Redirect to unauthorized page
+            return NextResponse.redirect(new URL('/unauthorized', req.url));
         }
-        // else{
-
-        //     return NextResponse.redirect(new URL(`http://localhost:3000/${path}`, req.url));
-        // }
-
-
     }
-
     return NextResponse.next();
-
 }
 
-
-
-
 function checkPermission(role: ROLE, path: string): boolean {
-
-    // Logic to check if the user has permission to access the given path based on their role
-
-    console.log(role, path);
-
     switch (role) {
 
         case "Student":
-            // Allow access to student-specific paths
             return path.includes('student')
 
         case "Principal":
-            // Allow access to principal-specific paths
             return path.includes('principal');
         case "Coordinator":
-            // Allow access to coordinator-specific paths
             return path.includes('coordinator');
-
         default:
-            // For other roles or unknown roles, deny access
             return false;
     }
 }
 
 
 export const config = {
-
     matcher: '/((?!api|static|.*\\..*|_next).*)',
-
 };
-

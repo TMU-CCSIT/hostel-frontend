@@ -1,23 +1,6 @@
-"use client";
-
 import Navbar from "@/components/common/Navbar";
 
-import { useEffect } from "react";
-import axios from "axios";
-import { useSetRecoilState } from "recoil";
-import { userAtom } from "./store/atoms/user";
-
 export default function Home() {
-  const setUser = useSetRecoilState(userAtom);
-  async function userDetails() {
-    try {
-      let response = await axios.get("/api/auth/user");
-      setUser(response.data.data);
-    } catch (error: any) {
-      console.log(error.message);
-    }
-  }
-
   return (
     <>
       <Navbar />
@@ -30,5 +13,3 @@ export default function Home() {
     </>
   );
 }
-
-

@@ -28,12 +28,10 @@ const LoginPage = () => {
   async function loginHandler() {
     try {
       const resposne = await axios.post("/api/auth/login", data);
-
-      console.log(resposne.data.data)
-
       setUser(resposne.data.data);
       toast.success("Login successfully");
-      router.push(`/dashboard/${resposne?.data?.data?.role}`);
+      const role = (resposne?.data?.data?.role).toLowerCase();
+      router.push(`/${role}`);
     } catch (error: any) {
       console.log(error);
       toast.error(error?.response?.data?.message || "Login failed");
@@ -41,7 +39,6 @@ const LoginPage = () => {
   }
 
   // frontend of login page
-
   return (
     // main div
     <div className="bg-white min-h-screen flex flex-col justify-center items-center text-black">
