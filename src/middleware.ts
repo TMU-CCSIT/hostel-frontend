@@ -4,23 +4,24 @@ import { getDataFromToken } from "./helper/getDataFromToken";
 import { ROLE } from "./constants/constant";
 
 interface CustomNextRequest extends NextRequest {
-    user: {
 
-        id: string,
-    };
+
+    user: string,
 }
 
-const PublicPaths = ['/auth/login', '/auth/signup']
+const PublicPaths = ['/auth/login', '/auth/signup',"/"];
+
+const defaultPath = ["/"];
 
 export async function middleware(req: CustomNextRequest) {
 
     const path = req.nextUrl.pathname;
 
-    console.log("path is ",path);
+    console.log("path is ", path);
 
     let isLoggedIn = req.cookies.get("token")?.value || "";
 
-    console.log("token value ",isLoggedIn);
+    console.log("token value ", isLoggedIn);
 
     let decodedToken;
 
@@ -28,14 +29,14 @@ export async function middleware(req: CustomNextRequest) {
 
         decodedToken = await getDataFromToken(req);
         console.log("token : ", decodedToken)
-        req.user = decodedToken;
+        req.user = decodedToken.id;
     }
 
     const isPublicPath = PublicPaths.includes(path);
 
     if (isLoggedIn && isPublicPath) {
-        
-        return NextResponse.redirect(new URL('/', req.url));
+
+        return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
     }
 
     if (!isLoggedIn && !isPublicPath) {
@@ -43,7 +44,7 @@ export async function middleware(req: CustomNextRequest) {
         return NextResponse.redirect(new URL('/auth/login', req.url));
     }
 
-    console.log("path is ",path);
+    console.log("path is ", path);
 
     if (isLoggedIn) {
 
@@ -51,6 +52,7 @@ export async function middleware(req: CustomNextRequest) {
 
 
         // If the user is logged in, check permission based on their role
+
         const hasPermission = checkPermission(decodedToken.role, path);
 
         console.log(hasPermission)
@@ -72,24 +74,26 @@ export async function middleware(req: CustomNextRequest) {
 }
 
 
+
+
 function checkPermission(role: ROLE, path: string): boolean {
 
     // Logic to check if the user has permission to access the given path based on their role
 
-    console.log(role,path);
+    console.log(role, path);
 
     switch (role) {
 
         case "Student":
             // Allow access to student-specific paths
-            return path.includes('Student');
+            return path.includes('student')
 
         case "Principal":
             // Allow access to principal-specific paths
-            return path.includes('/Principal/');
+            return path.includes('principal');
         case "Coordinator":
             // Allow access to coordinator-specific paths
-            return path.includes('/Coordinator/');
+            return path.includes('coordinator');
 
         default:
             // For other roles or unknown roles, deny access
