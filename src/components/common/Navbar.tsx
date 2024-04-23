@@ -4,10 +4,13 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { DropdownList } from "@/constants/dropdown";
+import { useRecoilValue } from "recoil";
+import { userAtom } from "@/app/store/atoms/user";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null); // Specify the correct type
+  const user: any = useRecoilValue(userAtom);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -38,35 +41,40 @@ const Navbar = () => {
           />
         </Link>
 
-        {/* user profile */}
         <div className="flex items-center">
-          <div className="relative h-14 w-14 cursor-pointer" ref={dropdownRef}>
-            <div onClick={() => setDropdownOpen(!dropdownOpen)}>
-              <Image
-                className="w-auto object-cover bg-cover"
-                src={`http://portal2.tmu.ac.in/images/rightlogo.png`}
-                alt="Logo"
-                fill
-              />
-            </div>
-            {/* Dropdown menu */}
-            {dropdownOpen && (
-              <div className="absolute right-0 top-10 w-48 bg-white rounded-md shadow-lg z-10">
-                <div className="py-1 bg-[#EDF6FF]">
-                  {/* Dropdown items */}
-                  {DropdownList.map((dropdown: any) => (
-                    <Link
-                      key={dropdown.id}
-                      href={dropdown.path}
-                      className="block px-4 py-2 text-gray-800 hover:bg-gray-300"
-                    >
-                      {dropdown.text}
-                    </Link>
-                  ))}
-                </div>
+          {/* user profile */}
+          {user && (
+            <div
+              className="relative h-14 w-14 cursor-pointer"
+              ref={dropdownRef}
+            >
+              <div onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <Image
+                  className="w-auto object-cover bg-cover"
+                  src={user?.profileImage}
+                  alt="Logo"
+                  fill
+                />
               </div>
-            )}
-          </div>
+              {/* Dropdown menu */}
+              {dropdownOpen && (
+                <div className="absolute right-0 top-10 w-48 bg-white rounded-md shadow-lg z-10">
+                  <div className="py-1 bg-[#EDF6FF]">
+                    {/* Dropdown items */}
+                    {DropdownList.map((dropdown: any) => (
+                      <Link
+                        key={dropdown.id}
+                        href={dropdown.path}
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-300"
+                      >
+                        {dropdown.text}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </nav>

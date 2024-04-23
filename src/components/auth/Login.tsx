@@ -7,10 +7,11 @@ import InputField from "../common/InputField";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useSetRecoilState } from "recoil";
+import { userAtom } from "@/app/store/atoms/user";
 
 // logic for saving login details
 const LoginPage = () => {
-
   const router = useRouter();
 
   // hook for reading different email and password values
@@ -19,14 +20,21 @@ const LoginPage = () => {
     password: "",
   });
 
+  const setUser = useSetRecoilState(userAtom);
+
   const handleChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
   async function loginHandler() {
     try {
-
       const resposne = await axios.post("/api/auth/login", data);
+
+      console.log("resposne: ", resposne);
+
+      // setUser(resposne);
+      // const todoList = useRecoilValue(todoListState);
+
       toast.success("Login successfully");
       router.push("/");
     } catch (error: any) {
@@ -107,6 +115,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
-

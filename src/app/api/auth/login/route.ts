@@ -114,9 +114,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         }
 
-        const token = jwt.sign(tokenValue, process.env.NEXT_PUBLIC_JWT_SECRET_KEY as string, {
-            expiresIn: "24h",
-        });
+        const token = jwt.sign(
+            tokenValue,
+            process.env.NEXT_PUBLIC_JWT_SECRET_KEY as string,
+            {
+                expiresIn: "24h",
+            }
+        );
 
         const response = NextResponse.json({
 
@@ -125,14 +129,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         });
 
-
-        console.log("");
-
-        response.cookies.set("token", token, {
-
-            httpOnly: true,
-
-        });
+        response.cookies.set(
+            "token",
+            token,
+            {
+                httpOnly: true,
+                secure: true,
+                expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+            }
+        );
 
         return response;
 
