@@ -26,10 +26,12 @@ export async function middleware(req: CustomNextRequest) {
     const isPublicPath = PublicPaths.includes(path);
 
     if (isLoggedIn && isPublicPath) {
+        
         return NextResponse.redirect(new URL('/', req.url));
     }
 
     if (!isLoggedIn && !isPublicPath) {
+
         return NextResponse.redirect(new URL('/auth/login', req.url));
     }
 }

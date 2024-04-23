@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import Coordinator from "@/models/coordinator.model";
 
+import { middleware } from "@/middleware";
+
 interface CustomNextRequest extends NextRequest {
 
     user: string;
@@ -97,8 +99,9 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
 
         // const { userId } = body;
 
-        let userId = req.user;
+        await middleware(req);
 
+        let userId = req.user;
 
         if (!userId) {
 

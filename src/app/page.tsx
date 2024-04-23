@@ -1,6 +1,18 @@
 "use client";
 
 import Navbar from "@/components/common/Navbar";
+<<<<<<< HEAD
+
+export default function Home() {
+  // async function userDetails() {
+  //   try {
+  //     let response = await axios.get("/api/auth/studentSignup");
+  //     console.log("user details ", response.data);
+  //   } catch (error:any) {
+  //     console.log(error.message);
+  //   }
+  // }
+=======
 import { useEffect } from "react";
 import axios from "axios";
 import { useSetRecoilState } from "recoil";
@@ -16,10 +28,11 @@ export default function Home() {
       console.log(error.message);
     }
   }
+>>>>>>> 601ab0f094f5606f11240f0c4dc1dfacbb514f10
 
-  useEffect(() => {
-    userDetails();
-  }, []);
+  // useEffect(() => {
+  //   userDetails();
+  // }, []);
 
   return (
     <>
@@ -33,3 +46,5 @@ export default function Home() {
     </>
   );
 }
+
+
