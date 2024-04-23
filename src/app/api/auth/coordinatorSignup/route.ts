@@ -13,13 +13,10 @@ interface CustomNextRequest extends NextRequest {
 }
 
 let coordinatorSchema = z.object({
-
     college: z.string(),
     course: z.string(),
     userId: z.string(),
     programe: z.string(),
-
-
 })
 
 
@@ -30,15 +27,9 @@ export async function POST(req: NextRequest, res: NextResponse) {
         let body = await req.json();
 
         try {
-
             coordinatorSchema.parse(body);
-
-
         } catch (error: any) {
-
-
             console.log(error.message);
-
             return NextResponse
                 .json(
                     {
@@ -51,28 +42,21 @@ export async function POST(req: NextRequest, res: NextResponse) {
                         status: 401
                     }
                 );
-
         }
 
 
 
         const { college, course, userId, programe } = body;
 
-
         //create the new entry in Db 
-
-
         const newUser = await Coordinator.create({
-
             college,
             course,
             user: userId,
             programe,
-        })
+        });
 
         // successfully return the resposne 
-
-
         return NextResponse
             .json(
                 {
@@ -154,7 +138,6 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
                 );
         }
 
-
         return NextResponse
             .json(
                 {
@@ -167,8 +150,6 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
                     status: 200
                 }
             );
-
-
 
     } catch (error: any) {
 

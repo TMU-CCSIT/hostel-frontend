@@ -11,7 +11,7 @@ export async function isEmailAlreadyExist(email: string) {
     } catch (error: any) {
 
         console.log("Error: ", error.message)
-        
+
         throw new Error("Server failed to findout user by email");
 
     }
