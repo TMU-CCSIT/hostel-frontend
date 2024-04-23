@@ -50,30 +50,24 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         const { email, password } = body;
 
-        // let isUserExists = await isEmailAlreadyExist(email);
-
-        let isUserExists = await User.findOne({ email: email });
-
+        const isUserExists = await isEmailAlreadyExist(email);
 
         if (!isUserExists) {
+            return NextResponse.json(
+                {
+                    message: "this user is not exists with this email address",
+                    data: null,
+                    error: null,
+                    success: false,
 
-            return NextResponse.json({
-
-                message: "this user is not exists with this email address",
-                data: null,
-                error: null,
-                success: false,
-
-            }, { status: 400 }
+                },
+                {
+                    status: 400
+                }
             )
         }
 
-
-        let isStudentExists = await Student.findOne({ user: isUserExists._id });
-
-
         // user exists but he is not verified 
-
         if (isUserExists && !isUserExists.isVerified) {
 
             return NextResponse.json({
@@ -89,8 +83,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         // compare the password
-
-        let isPasswordMatch = await bcrypt.compare(password, isUserExists?.password);
+        const isPasswordMatch = await bcrypt.compare(password, isUserExists?.password);
 
         if (!isPasswordMatch) {
 
@@ -103,15 +96,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
             }, { status: 400 }
             )
-
         }
 
         // create token
-
-        let tokenValue = {
-            id: isUserExists?._id,
-            email: isUserExists?.email,
-
+        const tokenValue = {
+            id: isUserExists._id,
+            email: isUserExists.email,
+            profileImage: isUserExists.profileImage
         }
 
         const token = jwt.sign(
@@ -122,11 +113,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
             }
         );
 
+        const user = await User
+            .findById(isUserExists._id)
+            .select("_id email profileImage fullName");
+
         const response = NextResponse.json({
-
-            message: "Authentication successful",
-            status: 200
-
+            message: "User loggedin successfully",
+            status: 200,
+            data: user,
+            error: null,
         });
 
         response.cookies.set(

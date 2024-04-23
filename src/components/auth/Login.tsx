@@ -3,7 +3,6 @@
 // importing necessities
 import React, { useState } from "react";
 import InputField from "../common/InputField";
-// import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -29,12 +28,7 @@ const LoginPage = () => {
   async function loginHandler() {
     try {
       const resposne = await axios.post("/api/auth/login", data);
-
-      console.log("resposne: ", resposne);
-
-      // setUser(resposne);
-      // const todoList = useRecoilValue(todoListState);
-
+      setUser(resposne.data.data);
       toast.success("Login successfully");
       router.push("/");
     } catch (error: any) {
