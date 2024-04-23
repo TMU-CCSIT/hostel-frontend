@@ -6,30 +6,29 @@ export enum COLLEGES {
 }
 
 export enum CCSIT {
-    Btech,
-    BcA,
-    Bsc,
+    Btech = "Btech",
+    Bca = "Bca",
+    Bsc = "Bsc",
 }
 
 export enum ROLE {
-    Admin,
-    Principal,
-    Coordinator,
-    Warden,
-    Gatekeeper,
-    Student,
+    Admin = "Admin",
+    Principal = "Principal",
+    Coordinator = "Coordinator",
+    Warden = "Warden",
+    Gatekeeper = "Gatekeeper",
+    Student = "Student",
 }
 
 export enum STATUS {
-    Accepted,
-    Rejected,
-    Pending
+    Accepted = "Accepted",
+    Rejected = "Rejected",
+    Pending = "Pending"
 }
 
-
 export enum FILTER {
-    Lastes,
-    Oldest,
-    AtoZ,
-    ZtoA,
+    Lastes = "Lastes",
+    Oldest = "Oldest",
+    AtoZ = "AtoZ",
+    ZtoA = "ZtoA",
 }

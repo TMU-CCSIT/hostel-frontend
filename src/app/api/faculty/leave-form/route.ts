@@ -3,7 +3,6 @@ import LeaveForm from "@/models/form.model";
 import User, { IUser } from "@/models/User.model";
 import { NextRequest, NextResponse } from "next/server";
 
-
 function queryByRole(user: IUser): string {
 
     let query = `leaveForm`;
@@ -29,6 +28,7 @@ export const PATCH = async (req: NextRequest, res: NextResponse) => {
         const { formId, result, userId } = body;
 
         const form = await LeaveForm.findById(formId);
+
         const user = await User.findById(userId);
 
         if (!form || !user) {
@@ -49,9 +49,7 @@ export const PATCH = async (req: NextRequest, res: NextResponse) => {
         }
         else if (user.role === ROLE.Warden) {
             form.status.coordinator = result ? STATUS.Accepted : STATUS.Rejected;
-
         } else {
-
             return NextResponse
                 .json(
                     {
