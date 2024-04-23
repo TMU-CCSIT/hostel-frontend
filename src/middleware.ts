@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "./helper/getDataFromToken";
 
 interface CustomNextRequest extends NextRequest {
-    user?: any;
+    user: string;
 }
 
 const PublicPaths = ['/auth/login', '/auth/signup']
@@ -31,7 +31,11 @@ export async function middleware(req: CustomNextRequest) {
         return NextResponse.redirect(new URL('/auth/login', req.url));
     }
 
+    // return NextResponse.next({ ...req, user: req.user });
+
+
 }
+
 
 export const config = {
     matcher: '/((?!api|static|.*\\..*|_next).*)',
