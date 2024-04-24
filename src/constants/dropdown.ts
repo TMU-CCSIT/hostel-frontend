@@ -1,7 +1,7 @@
 export const DropdownList = [
     {
         id: "dashboard",
-        path: "/dashboard",
+        path: "/",
         text: "Dashboard",
     },
     {
