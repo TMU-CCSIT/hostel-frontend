@@ -7,7 +7,7 @@ import User from "@/models/User.model";
 dbConnection();
 
 interface CustomNextRequest extends NextRequest {
-    id: string,
+    user: string,
 }
 
 export async function GET(req: CustomNextRequest, res: NextResponse) {
@@ -16,7 +16,7 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
 
         await middleware(req);
 
-        let userId = req.id;
+        let userId = req.user;
 
         if (!userId) {
 
