@@ -12,12 +12,9 @@ import { middleware } from "@/middleware";
 dbConnection();
 
 interface CustomNextRequest extends NextRequest {
-<<<<<<< HEAD
-    id: string,
-=======
 
     user: string,
->>>>>>> 7cbb71433269ce5dbf4de6339bab08bd4051f8be
+
 }
 
 

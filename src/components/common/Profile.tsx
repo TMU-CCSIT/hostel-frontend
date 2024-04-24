@@ -7,6 +7,8 @@ import { useEffect } from "react";
 
 import axios from "axios";
 
+import Password from "./Password";
+
 const ProfilePage = () => {
   // Dummy data for now
   // const userData = {
@@ -48,6 +50,7 @@ const ProfilePage = () => {
       console.log(error.message);
 
     }
+
   }
 
   useEffect(() => {
@@ -101,10 +104,15 @@ const ProfilePage = () => {
                     </div>
 
                   ))}
+
+                  
                 </div>
               ))
-
+              
             }
+
+            <Password></Password>
+            
           </div>
         </div>
       </div>
