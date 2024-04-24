@@ -182,6 +182,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
         // }
 
         // const query = queryByRole(user);
+
         const query = `leaveForm`;
 
         const allForms = await LeaveForm.find().populate("user").exec();
@@ -217,6 +218,9 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
             );
     }
 }
+
+
+
 
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {
@@ -311,5 +315,127 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
     }
 }
 
+
+
+
+
+
+export async function PUT(req: NextRequest, res: NextResponse) {
+
+    try {
+
+        let body = await req.json();
+        const { qrString } = body;
+
+        if (!qrString) {
+            
+            return NextResponse.json({
+
+                message: "No QR string received",
+                error: null,
+                data: null,
+                success: false,
+            }, {
+                status: 400
+            });
+        }
+
+        const { leaveformId, userId } = qrString;
+
+        // Find the user using the QR string
+
+        const userInfo = await Student.findOne({ user: userId });
+
+        // Check if the user exists
+
+        if (!userInfo) {
+
+            return NextResponse.json({
+
+                message: "User not found",
+                error: null,
+                data: null,
+                success: false,
+
+            }, {
+                status: 404,
+            });
+        }
+
+        // Check if the user is already scanned
+
+        if (userInfo.qrCode.status === false) {
+
+            const today = new Date();
+
+            const userLeaveFormData = await LeaveForm.findOne({
+                user: userInfo.user,
+                dateFrom: today,
+            });
+
+            if (!userLeaveFormData) {
+
+                return NextResponse.json({
+
+                    message: "The leaving date in the form does not match the current date",
+                    error: null,
+                    data: null,
+                    success: false,
+                }, {
+                    status: 400,
+                });
+            }
+
+            // Set the status of the student as "out"
+
+            userInfo.qrCode.status = true;
+
+        } else {
+
+            // Set the student status as "false"
+
+            userInfo.qrCode.status = false;
+
+            userInfo.qrCode.qrString = null; // Make QR code string null
+
+            // Update leave form data
+            const updateLeaveFormData = await LeaveForm.findByIdAndUpdate(leaveformId, {
+
+                arrivingDate: new Date(),
+
+            });
+
+            // Sending confirmation mail to the parents regarding the reaching of their child
+        }
+
+        // Save the updated user information
+
+        await userInfo.save();
+
+        // Respond with success message
+
+        return NextResponse.json({
+
+            message: "QR code status updated successfully",
+            error: null,
+            data: null,
+            success: true,
+        });
+
+    } catch (error: any) {
+
+        console.log(error.message);
+
+        return NextResponse.json({
+
+            message: "An error occurred while processing the request",
+            error: error.message,
+            data: null,
+            success: false,
+        }, {
+            status: 500,
+        });
+    }
+}
 
 

@@ -68,6 +68,7 @@ const studentSchema: Schema = new Schema(
                 default: "",
             },
             status: {
+                
                 type: Boolean,
                 default: false,
             }
@@ -82,3 +83,5 @@ const studentSchema: Schema = new Schema(
 const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
 
 export default Student;
+
+
