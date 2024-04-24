@@ -41,14 +41,27 @@ const Leave = () => {
   async function submitHandler(e: any) {
     try {
       e.preventDefault();
+
+      // validation for date
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      if (data.dateFrom < tomorrow || data.dateFrom > data.dateTo) {
+        toast.dismiss("Please enter a valid date");
+        return;
+      }
+
+      // send data to backer server
       const res = await axios.post("/api/leave-form", data);
+
+      // reinitialize the state
       setData({
         dateFrom: new Date(),
         dateTo: new Date(),
         reasonForLeave: "",
         addressDuringLeave: "",
       });
-      toast.success("Leave created");
+      toast.success("Leave Form created!");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
