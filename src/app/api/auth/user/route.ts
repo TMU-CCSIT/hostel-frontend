@@ -2,7 +2,7 @@ import { dbConnection } from "@/config/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 
 import { middleware } from "@/middleware";
-import User from "@/models/User.model";
+import User from "@/models/user.model";
 
 dbConnection();
 
