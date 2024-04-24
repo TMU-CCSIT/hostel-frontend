@@ -8,7 +8,7 @@ const ApplicationPage = () => {
 
   async function fetchAllPendingLeaves() {
     try {
-      const res: any = await axios.get("/api/faculty/leave-form");
+      const res: any = await axios.get("/api/leave-form");
       setData(res?.data?.data);
 
       console.log("mil gyaa");

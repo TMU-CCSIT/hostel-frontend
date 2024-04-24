@@ -1,6 +1,6 @@
 
-import User from '@/models/User.model';
-import { IUser } from "@/models/User.model";
+import User from '@/models/user.model';
+import { IUser } from "@/models/user.model";
 
 import mongoose, { Document, Schema, Types } from 'mongoose';
 
@@ -17,8 +17,7 @@ export interface IStudent extends Document {
     roomNo: string;
     user: Types.ObjectId | IUser;
     programe: string;
-    createdAt: Date;
-    updatedAt: Date;
+    qrCodeString: string
 }
 
 const studentSchema: Schema = new Schema(
@@ -63,11 +62,22 @@ const studentSchema: Schema = new Schema(
             type: String,
             required: true
         },
+        qrCode: {
+            qrString: {
+                type: String,
+                default: "",
+            },
+            status: {
+                type: Boolean,
+                default: false,
+            }
+        }
     },
     {
         timestamps: true
     }
 );
+
 
 const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
 

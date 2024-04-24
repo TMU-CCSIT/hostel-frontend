@@ -2,9 +2,9 @@ import { z } from "zod";
 import { dbConnection } from "@/config/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 
-import User from "@/models/User.model";
+import User from "@/models/user.model";
 
-import Student from "@/models/Student.model";
+import Student from "@/models/student.model";
 
 import { middleware } from "@/middleware";
 

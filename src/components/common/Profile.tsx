@@ -10,20 +10,7 @@ import axios from "axios";
 import Password from "./Password";
 
 const ProfilePage = () => {
-  // Dummy data for now
-  // const userData = {
-  //   Name: "Adarsh Jain",
-  //   Email: "oyoKaMalik@gmail.com",
-  //   DOB: "1890-01-01",
-  //   Address: "tent",
-  //   EnrollmentNo: "TCA2159017",
-  //   ParentName: "adarsh ke papa",
-  //   ParentContactNo: "09888",
-  //   FingerNo: "0000000",
-  //   Course: "Agriculture",
-  //   College: "none",
-  //   RoomNo: "aunty wala",
-  // };
+
 
   const [data, setData] = useState(null);
 
@@ -112,7 +99,7 @@ const ProfilePage = () => {
             }
 
             <Password></Password>
-            
+
           </div>
         </div>
       </div>

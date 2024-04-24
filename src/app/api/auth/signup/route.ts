@@ -5,11 +5,11 @@ import { isEmailAlreadyExist } from "@/helper/isEmailExists";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
-import Student from "@/models/Student.model";
+import Student from "@/models/student.model";
 
 import { model } from "mongoose";
 
-import User from "@/models/User.model";
+import User from "@/models/user.model";
 
 import { ROLE } from "@/constants/constant";
 
