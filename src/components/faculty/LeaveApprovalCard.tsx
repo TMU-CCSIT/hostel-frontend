@@ -11,12 +11,10 @@ import toast from "react-hot-toast";
 const LeaveApprovalCard = ({ userInfo }: any) => {
   async function leaveFormResponseHandler(result: Boolean) {
     try {
-      const res = await axios.patch("/api/faculty/leave-form", {
+      const res = await axios.patch("/api/leave-form", {
         formId: userInfo._id,
         result,
-        userId: "662655711e369fbbed75a4ff",
       });
-      console.log("res: ", res);
       toast.success("Response Submitted");
     } catch (error) {
       toast.error("Response Not Submitted");
