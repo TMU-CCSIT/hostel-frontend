@@ -1,10 +1,12 @@
 import { ROLE, STATUS } from "@/constants/constant";
+import { middleware } from "@/middleware";
 import LeaveForm from "@/models/form.model";
 import Student from "@/models/student.model";
 import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import QRCode from 'qrcode';
 import { z } from "zod";
+import Coordinator from '../../../models/coordinator.model';
 
 
 interface CustomNextRequest extends NextRequest {
@@ -38,7 +40,6 @@ function queryByRole(user: IUser): string {
 }
 
 
-
 const generateQRCode = async (data: string) => {
     try {
 
@@ -53,6 +54,8 @@ const generateQRCode = async (data: string) => {
 
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
+
+        await middleware(req);
 
         const body = await req.json();
         const { formId, result } = body;
@@ -76,7 +79,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
         }
 
         // if other who is not authorize
-        if (user.role !== ROLE.Coordinator || user.role !== ROLE.Warden) {
+        if (user.role !== ROLE.Coordinator && user.role !== ROLE.Warden) {
             return NextResponse
                 .json(
                     {
@@ -92,6 +95,8 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
         // if coordinator
         if (user.role === ROLE.Coordinator) {
 
+            console.log("coord")
+
             form.status.coordinator = result ? STATUS.Accepted : STATUS.Rejected;
 
         }
@@ -99,6 +104,8 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         // if hostel warden
         if (user.role === ROLE.Warden) {
+
+            console.log("ward")
             // if result is true then set status and create qr code and put into user db
             if (result) {
                 // set status
@@ -108,14 +115,11 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 const qrCodeString = await generateQRCode(`${formId}-${form.user}`);
 
                 // user
-
-                const updatedUser = await Student.findOneAndUpdate(
+                await Student.findOneAndUpdate(
                     { user: userId },
                     { $set: { "qrCode.qrString": qrCodeString } },
                     { new: true }
                 );
-
-                console.log("updated-User: ", updatedUser)
 
             } else {
                 // if not then set status
@@ -215,12 +219,14 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 }
 
 
-
 export async function POST(req: CustomNextRequest, res: NextResponse) {
 
     try {
         // initializing body
         const body = await req.json();
+
+        await middleware(req);
+
 
         const userId = req.user;
 

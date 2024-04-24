@@ -41,7 +41,7 @@ const Leave = () => {
   async function submitHandler(e: any) {
     try {
       e.preventDefault();
-      const res = await axios.post("/api/student/leave", data);
+      const res = await axios.post("/api/leave-form", data);
       setData({
         dateFrom: new Date(),
         dateTo: new Date(),
