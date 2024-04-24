@@ -1,7 +1,7 @@
 import mongoose, { Document, IfAny } from 'mongoose';
 import { STATUS } from "@/constants/constant";
 
-import { IUser } from "@/models/User.model";
+import { IUser } from "@/models/user.model";
 
 export interface IForm extends Document {
     user: IUser;

@@ -20,6 +20,13 @@ export enum ROLE {
     Student = "Student",
 }
 
+export enum LEAVE_STATUS {
+    In = "In",
+    Out = "Out"
+    
+}
+
+
 export enum STATUS {
     Accepted = "Accepted",
     Rejected = "Rejected",

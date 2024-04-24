@@ -3,7 +3,7 @@ import { EmailTemplate } from '@/helper/mailTemplates/verificationMailTemplate';
 import { Resend } from 'resend';
 import bcrypt from "bcrypt";
 
-import Student from '@/models/Student.model';
+import Student from '@/models/student.model';
 
 import { renderReactToStaticMarkup } from './renderToStaticMarkup';
 

@@ -8,7 +8,6 @@
 import axios from "axios";
 import { atom, selector } from "recoil";
 
-// Define a selector to fetch user information from the backend
 const fetchUserFromBackend = async () => {
   try {
     const response = await axios.get("/api/auth/user");

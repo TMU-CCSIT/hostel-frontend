@@ -16,8 +16,6 @@ const Navbar = () => {
   const user: any = useRecoilValue(userAtom);
   const router = useRouter();
 
-  console.log(user);
-
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
