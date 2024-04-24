@@ -5,10 +5,24 @@ import CTCButton from "../common/CTCButton";
 import Image from "next/image";
 import Link from "next/link";
 import { dateIntoReadableFormat } from "@/helper/date";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const LeaveApprovalCard = ({ userInfo }: any) => {
-  const url =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRs7HxzKKvBIkjKHsnqkVp-9MXfpoxiNKx7v6x8ks1ToA&s";
+  async function leaveFormResponseHandler(result: Boolean) {
+    try {
+      const res = await axios.patch("/api/faculty/leave-form", {
+        formId: userInfo._id,
+        result,
+        userId: "662655711e369fbbed75a4ff",
+      });
+      console.log("res: ", res);
+      toast.success("Response Submitted");
+    } catch (error) {
+      toast.error("Response Not Submitted");
+      console.log("error: ", error);
+    }
+  }
 
   return (
     <>
@@ -24,31 +38,31 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
                   alt="channel"
                   loading="lazy"
                   fill
-                  src={userInfo.profileImage || url}
+                  src={userInfo.user.profileImage || ""}
                 />
               </span>
             </>
 
             {/* username | rollno */}
             <div className="flex flex-col justify-start items-start">
-              <Link href={`/profile/${userInfo.id}`}>
+              <Link href={`/profile/${userInfo.user._id}`}>
                 <span className="hover:underline hover:text-[red] transition-all duration-300 ease-in-out">
-                  {userInfo.name || "Name"}
+                  {userInfo.user.fullName || "Name"}
                 </span>
               </Link>
-              <span>{userInfo.name || "Enrollment no."}</span>
+              <span>{userInfo.user.enrollmentNo || "Enrollment no."}</span>
             </div>
           </div>
 
           {/* course */}
           <div>
-            <span>{userInfo.course || "course"} </span>
+            <span>{userInfo.user.course || "course"} </span>
           </div>
         </div>
 
         {/* leave details */}
         <div className="w-full flex xs:flex-row flex-col pb-5 xs:mt-2 items-center justify-between gap-5 xs:gap-10">
-          <div className="w-full flex justify-between">
+          <div className="w-full gap-5 flex justify-between">
             {/* date-from */}
             <div>
               <span>
@@ -69,9 +83,7 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
             <div>
               <CTCButton
                 text={"Yes"}
-                onClickHandler={() => {
-                  console.log("Yes approved");
-                }}
+                onClickHandler={() => leaveFormResponseHandler(true)}
               />
             </div>
 
@@ -79,9 +91,7 @@ const LeaveApprovalCard = ({ userInfo }: any) => {
             <div>
               <CTCButton
                 text={"No"}
-                onClickHandler={() => {
-                  console.log("Not approved");
-                }}
+                onClickHandler={() => leaveFormResponseHandler(false)}
               />
             </div>
           </div>

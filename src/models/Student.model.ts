@@ -1,14 +1,12 @@
 
-import mongoose, { Document } from 'mongoose';
+import User from '@/models/User.model';
+import { IUser } from "@/models/User.model";
 
-import { IAdditionalDetails } from '@/models/AdditionalDetails.model';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
-import { string } from 'zod';
-import {IUser} from "@/models/User.model";
 
 
 export interface IStudent extends Document {
-    
     enrollmentNo: string;
     parentName: string;
     parentContactNo: string;
@@ -16,12 +14,13 @@ export interface IStudent extends Document {
     course: string;
     college: string;
     roomNo: string;
-    user: IUser;
+    user: Types.ObjectId | IUser;
     programe: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-
-const studentSchema = new mongoose.Schema(
+const studentSchema: Schema = new Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -41,13 +40,6 @@ const studentSchema = new mongoose.Schema(
         parentContactNo: {
             type: String,
             required: true
-        },
-        contactNo: {
-            type: Number,
-        enrollmentNumber: {
-            type: String,  
-            required: true,
-            unique: true,
         },
         course: {
             type: String,
@@ -76,9 +68,6 @@ const studentSchema = new mongoose.Schema(
     }
 );
 
-
-const Student = mongoose.models.Student<IStudent> || mongoose.model('Student', studentSchema);
+const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
 
 export default Student;
-
-

@@ -27,7 +27,9 @@ const Leave = () => {
   });
 
   // function for data matching
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     setData({
@@ -36,15 +38,20 @@ const Leave = () => {
     });
   };
 
-  // dummy function to pass
   async function submitHandler(e: any) {
     try {
       e.preventDefault();
-      console.log("date", data);
       const res = await axios.post("/api/student/leave", data);
-      console.log("res: ", res);
+      setData({
+        dateFrom: new Date(),
+        dateTo: new Date(),
+        reasonForLeave: "",
+        addressDuringLeave: "",
+      });
+      toast.success("Leave created");
     } catch (error) {
-      toast.error("submission failed");
+      console.log(error);
+      toast.error("Something went wrong");
     }
   }
 
@@ -61,8 +68,6 @@ const Leave = () => {
           className=" flex flex-col justify-center items-center"
           onSubmit={submitHandler}
         >
-
-
           {/* input field for initial date */}
           <div className="flex flex-col gap-7">
             {
@@ -72,20 +77,21 @@ const Leave = () => {
                 type="date"
                 placeholder="Date From"
                 value={data.dateFrom}
+                required={true}
                 name="dateFrom"
                 onChange={handleChange}
               ></InputField>
             }
           </div>
 
-
-            {/* input field for final date */}
+          {/* input field for final date */}
           <div className="flex flex-col gap-7">
             {
               <InputField
                 key=""
                 label="Date To"
                 type="date"
+                required={true}
                 placeholder="Date To"
                 value={data.dateTo}
                 name="dateTo"
@@ -94,40 +100,35 @@ const Leave = () => {
             }
           </div>
 
-
-
           {/* reason for leave field */}
           <div>
             {
               <TextArea
-              key=""
-              label="Reason"
-              placeholder="Enter Your Reason Here"
-              value={data.reasonForLeave}
-              name="reasonForLeave"
-              onChange={handleChange}
+                key=""
+                label="Reason"
+                placeholder="Enter Your Reason Here"
+                value={data.reasonForLeave}
+                name="reasonForLeave"
+                required={true}
+                onChange={handleChange}
               ></TextArea>
             }
           </div>
 
-
-           {/* adress field */}
-           <div>
+          {/* adress field */}
+          <div>
             {
               <TextArea
-              key=""
-              label="Adress During Leave"
-              placeholder="Enter Your Address Here"
-              value={data.addressDuringLeave}
-              name="addressDuringLeave"
-              onChange={handleChange}
+                key=""
+                label="Adress During Leave"
+                placeholder="Enter Your Address Here"
+                value={data.addressDuringLeave}
+                name="addressDuringLeave"
+                required={true}
+                onChange={handleChange}
               ></TextArea>
             }
           </div>
-
-
-
-
 
           {/* button */}
           <div className="m-12">
@@ -140,4 +141,3 @@ const Leave = () => {
 };
 
 export default Leave;
-

@@ -3,48 +3,51 @@
 // importing necessities
 import React, { useState } from "react";
 
-import InputField from "../common/InputField";
-import DropDown from "../common/DropDown";
+import InputField from "@/components/common/InputField";
+import DropDown from "@/components/common/DropDown";
 
 import { COLLEGES } from "@/constants/constant";
-
 import SignupData from "@/constants/SignupData";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 // interface
 interface FormData {
   fullName: string;
   email: string;
   password: string;
-  enrollmentNumber: string; // Assuming enrollmentNumber is a string based on your usage
-  contactNumber: number;
+  enrollmentNo: string; // Assuming enrollmentNumber is a string based on your usage
+  contactNo: string;
   course: string;
   college: string;
-  fingerNumber: number;
-  roomNumber: string;
-  fatherName: string;
-  parentContact: number;
+  fingerNo: string;
+  roomNo: string;
+  parentName: string;
+  parentContactNo: string;
   address: string; // Assuming address is a string
+  programe: string;
 }
 
 const Signup = () => {
   // hooks for reading different values
 
+  const router = useRouter();
   const [data, setData] = useState<FormData>({
     fullName: "",
     email: "",
     password: "",
-    enrollmentNumber: "",
-    contactNumber: 0,
+    enrollmentNo: "",
+    contactNo: "",
     course: "",
     college: "CCSIT",
-    fingerNumber: 0,
-    roomNumber: "",
-    fatherName: "",
-    parentContact: 0,
+    fingerNo: "",
+    roomNo: "",
+    parentName: "",
+    parentContactNo: "",
     address: "",
+    programe: "",
   });
 
   // function for data matching
@@ -58,12 +61,35 @@ const Signup = () => {
     try {
       e.preventDefault();
 
-      console.log("data is", data);
+      const userResponse = await axios.post("/api/auth/signup", {
+        email: data.email,
+        password: data.password,
+        fullName: data.fullName,
+        contactNo: data.contactNo,
+        address: data.address,
+        role: "Student",
+      });
 
-      const res = await axios.post("/api/auth/signup", data);
-      console.log("res: ", res);
-    } catch (error) {
-      toast.error("signup failed");
+      const userSignupReponse = await axios.post("/api/auth/studentSignup", {
+        enrollmentNo: data.enrollmentNo,
+        course: data.course,
+        college: data.college,
+        fingerNo: data.fingerNo,
+        programe: data.programe,
+        roomNo: data.roomNo,
+        parentName: data.parentName,
+        parentContactNo: data.parentContactNo,
+        userId: userResponse.data.data._id,
+      });
+
+      console.log(userSignupReponse);
+      toast.success("Signup successfully");
+      toast("Please verify your email!", {
+        icon: "👏",
+      });
+      router.push("/auth/login");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Signup failed");
     }
   }
 
@@ -88,6 +114,7 @@ const Signup = () => {
                   key={a.name}
                   label={a?.label}
                   type={a?.type}
+                  required={true}
                   placeholder={a.placeholder}
                   value={data[a.name as keyof FormData]}
                   name={a?.name}
@@ -99,6 +126,7 @@ const Signup = () => {
             <div className="flex flex-col ">
               {/* drop down  */}
               <DropDown name={COLLEGES} label="Select College:"></DropDown>
+
             </div>
           </div>
 

@@ -1,29 +1,24 @@
 
-import { NextRequest,NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 import jwt from "jsonwebtoken";
 
 
-export const getDataFromToken = (req: NextRequest)=>{
+export const getDataFromToken = async (req: NextRequest) => {
 
-    try{
+    try {
 
-
-        const token = req.cookies.get('token')?.value ||"";
-
-
-        const decodeToken:any =  jwt.verify(token,process.env.token_secret!);
-
-        console.log(decodeToken);
-
-        return decodeToken.id;
-         
+        const token = req.cookies.get('token')?.value || "";
+        // for dummy
+        const decodeToken: any = await jwt.decode(token);
+        return decodeToken;
     }
-    catch(error:any){
-
+    catch (error: any) {
         throw new Error(error.message);
-
     }
 }
+
+
+
 
 
