@@ -11,6 +11,11 @@ export enum CCSIT {
     Bsc = "Bsc",
 }
 
+export enum HOSTEL {
+    NewBoysHostel = "New Boys Hostel",
+    MalaBhavan = "Mala Bhavan"
+}
+
 export enum ROLE {
     Admin = "Admin",
     Principal = "Principal",
