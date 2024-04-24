@@ -16,6 +16,8 @@ const Navbar = () => {
   const user: any = useRecoilValue(userAtom);
   const router = useRouter();
 
+  console.log(user);
+
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
@@ -93,7 +95,11 @@ const Navbar = () => {
                         <>
                           <Link
                             key={dropdown.id}
-                            href={dropdown.path}
+                            href={
+                              dropdown.text === "Dashboard"
+                                ? `/${user?.role?.toLowerCase()}`
+                                : dropdown.path
+                            }
                             className="px-4 py-2 w-full items-start flex  text-gray-800 hover:bg-gray-300"
                           >
                             {dropdown.text}
