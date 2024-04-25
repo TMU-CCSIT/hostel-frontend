@@ -7,6 +7,7 @@ import mongoose, { Document, Schema, Types } from 'mongoose';
 
 
 export interface IStudent extends Document {
+    
     enrollmentNo: string;
     parentName: string;
     parentContactNo: string;
@@ -67,6 +68,7 @@ const studentSchema: Schema = new Schema(
                 default: "",
             },
             status: {
+                
                 type: Boolean,
                 default: false,
             }
@@ -81,3 +83,5 @@ const studentSchema: Schema = new Schema(
 const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
 
 export default Student;
+
+

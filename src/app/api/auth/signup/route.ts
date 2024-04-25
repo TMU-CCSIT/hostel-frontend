@@ -13,6 +13,8 @@ import User from "@/models/user.model";
 
 import { ROLE } from "@/constants/constant";
 
+import { sendEmail } from "@/helper/sendMail";
+
 // import AdditionalDetails from "@/models/additionalDetails.model";
 
 dbConnection();
@@ -126,7 +128,8 @@ export async function POST(req: NextRequest) {
     
 
         // send the mail to the user 
-        // await sendEmail(email, "verify", newStudent._id);
+
+        await sendEmail(email, "verify", newUser._id);
 
         // sucessfully return the response
 
@@ -159,5 +162,9 @@ export async function POST(req: NextRequest) {
 
     }
 }
+
+
+
+
 
 
