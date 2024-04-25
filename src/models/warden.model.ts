@@ -5,8 +5,9 @@ import { HOSTEL } from '@/constants/constant';
 
 
 export interface IWarden extends Document {
+
     user: IUser;
-    programe: string;
+    hostel: string;
 }
 
 const wardenSchema = new mongoose.Schema(
@@ -16,7 +17,7 @@ const wardenSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        hosetl: {
+        hostel: {
             type: String,
             enum: Object.values(HOSTEL),
         },
