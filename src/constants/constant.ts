@@ -12,8 +12,10 @@ export enum CCSIT {
 }
 
 export enum HOSTEL {
+
     NewBoysHostel = "New Boys Hostel",
     MalaBhavan = "Mala Bhavan"
+    
 }
 
 export enum ROLE {

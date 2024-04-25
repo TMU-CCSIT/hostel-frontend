@@ -4,6 +4,7 @@ import { IUser } from '@/models/user.model';
 
 
 export interface ICoordinator extends Document {
+    
     college: string;
     course: string;
     user: IUser;
