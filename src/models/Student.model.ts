@@ -7,7 +7,7 @@ import mongoose, { Document, Schema, Types } from 'mongoose';
 
 
 export interface IStudent extends Document {
-    
+
     enrollmentNo: string;
     parentName: string;
     parentContactNo: string;
@@ -22,11 +22,6 @@ export interface IStudent extends Document {
 
 const studentSchema: Schema = new Schema(
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
         parentName: {
             type: String,
             required: true,
@@ -68,7 +63,7 @@ const studentSchema: Schema = new Schema(
                 default: "",
             },
             status: {
-                
+
                 type: Boolean,
                 default: false,
             }

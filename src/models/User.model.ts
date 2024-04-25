@@ -17,6 +17,12 @@ export interface IUser extends Document {
 
 const userSchema = new mongoose.Schema(
     {
+
+        refId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "role",
+            required: true,
+        },
         fullName: {
             type: String,
             required: true,

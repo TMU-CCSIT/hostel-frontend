@@ -20,18 +20,46 @@ const leaveFormSchema = z.object({
     addressDuringLeave: z.string(),
 });
 
+function getStudentQuery(): string {
+
+    return ''
+}
+function getAdminQuery(): string {
+    return ''
+}
+function getCoordinatorQuery(): string {
+    return ''
+}
+function getWardenQuery(): string {
+    return ''
+}
+function getPrincipalQuery(): string {
+    return ''
+}
 
 
-function queryByRole(user: IUser): string {
 
-    let query = `leaveForm`;
+function queryByRole({ role, program = "", college = "", course = "", hostel = "" }: {
+    role: ROLE, program: string, college: string, course: string, hostel: string
+}): string {
 
-    switch (user.role) {
+    let query = ``;
+
+    switch (role) {
         case ROLE.Coordinator:
-            query = 'leaveForm.student && leaveForm.student.course === "Btech"';
+            query = getCoordinatorQuery()
             break;
         case ROLE.Principal:
-            query = 'leaveForm';
+            query = getPrincipalQuery()
+            break;
+        case ROLE.Warden:
+            query = getWardenQuery()
+            break;
+        case ROLE.Admin:
+            query = getAdminQuery()
+            break;
+        case ROLE.Student:
+            query = getStudentQuery()
             break;
         default:
             query = `leaveForm`;
@@ -160,29 +188,33 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 }
 
 
-export const GET = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
-        // const { userId } = body;
 
-        // const user = await User.findById(userId);
+        await middleware(req);
 
-        // if (!user) {
-        //     return NextResponse
-        //         .json(
-        //             {
-        //                 message: "User not found",
-        //                 error: "User not found",
-        //                 data: null,
-        //                 success: false,
-        //             }, {
-        //             status: 404
-        //         });
-        // }
+        const userId = req.user;
+
+        const user = await User.findById(userId);
+
+        // don't need this one
+        if (!user) {
+            return NextResponse
+                .json(
+                    {
+                        message: "User not found",
+                        error: "User not found",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 404
+                });
+        }
 
         // const query = queryByRole(user);
 
-        const query = `leaveForm`;
+        // const query = `leaveForm`;
 
         const allForms = await LeaveForm.find().populate("user").exec();
 
@@ -327,7 +359,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
         const { qrString } = body;
 
         if (!qrString) {
-            
+
             return NextResponse.json({
 
                 message: "No QR string received",

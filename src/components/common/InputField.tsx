@@ -1,5 +1,5 @@
 // components/InputField.tsx
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { IoEyeOffSharp } from "react-icons/io5";
 
@@ -16,12 +16,11 @@ interface InputFieldProps {
 }
 
 const InputField = (props: InputFieldProps) => {
+  const [show, setShow] = useState(props.type === "password" ? false : true);
 
-  const [show, setShow] = useState(props.type === "password"? false : true);
- 
-  const handlePasswordToggle = () =>{
-      setShow(!show)
-  }
+  const handlePasswordToggle = () => {
+    setShow(!show);
+  };
 
   return (
     <div className="flex flex-col">
@@ -31,7 +30,7 @@ const InputField = (props: InputFieldProps) => {
 
       <div className="relative">
         <input
-          type={show  ? "text" : "password"}
+          type={show ? "text" : "password"}
           id={props.label || ""}
           placeholder={props.placeholder || ""}
           value={props.value}
@@ -43,21 +42,21 @@ const InputField = (props: InputFieldProps) => {
           className="shadow border rounded py-2 px-3 text-gray-700 focus:outline-none focus:shadow-outline w-[15rem] sm:w-[30rem] lg:w-[45rem]"
         />
 
-        {props.type==='password' && (
-           <button
-           className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
-           onClick={handlePasswordToggle}>
-             {show === true? <FaEye size={24}></FaEye> : <IoEyeOffSharp size={24}></IoEyeOffSharp>}
-           </button>
+        {props.type === "password" && (
+          <button
+            className="absolute inset-y-0 right-0 flex items-center px-2 focus:outline-none"
+            onClick={handlePasswordToggle}
+          >
+            {show === true ? (
+              <FaEye size={24}></FaEye>
+            ) : (
+              <IoEyeOffSharp size={24}></IoEyeOffSharp>
+            )}
+          </button>
         )}
       </div>
-     
     </div>
   );
 };
 
 export default InputField;
-
-
-
-

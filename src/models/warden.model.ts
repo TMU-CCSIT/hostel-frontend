@@ -11,11 +11,6 @@ export interface IWarden extends Document {
 
 const wardenSchema = new mongoose.Schema(
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
         hosetl: {
             type: String,
             enum: Object.values(HOSTEL),
