@@ -2,8 +2,6 @@
 
 // importing necessities
 import React, { useEffect, useState } from "react";
-import InputField from "@/components/common/InputField";
-import studentSignupData from "@/constants/studentSignupData";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -14,14 +12,8 @@ import { COLLEGES } from "@/constants/constant";
 
 // interface
 interface FormData {
-  enrollmentNo: string;
-  parentName: string;
-  parentContactNo: string;
-  fingerNo: string;
-  course: string;
-  college: string;
-  roomNo: string;
-  programe: string;
+    college: string,
+    programe: string,
 }
 
 const Signup = () => {
@@ -30,20 +22,10 @@ const Signup = () => {
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
-    enrollmentNo: "",
-    parentName: "",
-    parentContactNo: "",
-    fingerNo: "",
-    course: "a",
     college: COLLEGES[0],
-    roomNo: "",
     programe: obj["College Of Computing Sciences And IT"][0],
   });
 
-  // function for data matching
-  const handleChange = (e: any) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
 
   const handleChangeOfDropDown = (e: any) => {
     setData({
@@ -56,18 +38,11 @@ const Signup = () => {
 
   async function submitHandler(e: any) {
     try {
-
         console.log(data);
-      e.preventDefault();
+        e.preventDefault();
 
       const userResponse = await axios.post("/api/auth/signup", {
-        enrollmentNo: data.enrollmentNo,
-        parentName: data.parentName,
-        parentContactNo: data.parentContactNo,
-        fingerNo: data.fingerNo,
-        course: data.course,
         college: data.college,
-        roomNo: data.roomNo,
         programe: data.programe,
       });
 
@@ -104,26 +79,9 @@ const Signup = () => {
 
         {/* form */}
         <form
-          className=" flex flex-col gap-7 justify-center items-center"
+          className=" flex flex-col justify-center items-center"
           onSubmit={submitHandler}
         >
-          <div className="flex flex-col gap-7">
-            {
-              // input field component
-              studentSignupData.map((a: any) => (
-                <InputField
-                  key={a.name}
-                  label={a?.label}
-                  type={a?.type}
-                  required={true}
-                  placeholder={a.placeholder}
-                  value={data[a.name as keyof FormData]}
-                  name={a?.name}
-                  onChange={handleChange}
-                ></InputField>
-              ))
-            }
-          </div>
 
           {/* dropdown for college */}
           <DropDown
@@ -136,7 +94,7 @@ const Signup = () => {
           {/* deropdown for fields related to college */}
           <DropDown
             text="programe"
-            label="Program"
+            label="programe"
             name={obj[data.college as keyof typeof obj]}
             onChange={handleChangeOfDropDown}
           ></DropDown>

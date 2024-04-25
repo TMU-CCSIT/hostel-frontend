@@ -1,6 +1,8 @@
 import mongoose, { Document } from 'mongoose';
 import { ROLE } from '@/constants/constant';
 
+const roles = Object.values(ROLE);
+
 export interface IUser extends Document {
     fullName: string;
     email: string;
@@ -44,7 +46,7 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: Object.values(ROLE),
+            enum: roles,
             required: true,
         },
         isVerified: {
