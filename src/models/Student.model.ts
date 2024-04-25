@@ -1,8 +1,6 @@
 
-import User from '@/models/user.model';
-import { IUser } from "@/models/user.model";
 
-import mongoose, { Document, Schema, Types } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 
 
@@ -15,7 +13,6 @@ export interface IStudent extends Document {
     course: string;
     college: string;
     roomNo: string;
-    user: Types.ObjectId | IUser;
     programe: string;
     qrCodeString: string
 }
