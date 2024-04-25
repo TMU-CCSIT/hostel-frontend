@@ -20,18 +20,51 @@ const leaveFormSchema = z.object({
     addressDuringLeave: z.string(),
 });
 
+function getStudentQuery(user: IUser): string {
+
+    const query = 'leaveForm.user===user._id';
+    return query;
+}
+function getAdminQuery(user: IUser): string {
+    return 'leaveForm'
+}
+
+function getCoordinatorQuery(user: IUser): string {
+    const query = 'user.refId.program===leaveForm.user.program';
+    return query;
+}
+
+function getWardenQuery(user: IUser): string {
+    const query = 'user.refId.hostel===leaveForm.user.hostel';
+    return query;
+}
+
+function getPrincipalQuery(user: IUser): string {
+    const query = 'user.refId.college===leaveForm.user.college';
+    return query;
+}
+
 
 
 function queryByRole(user: IUser): string {
 
-    let query = `leaveForm`;
+    let query = "";
 
     switch (user.role) {
         case ROLE.Coordinator:
-            query = 'leaveForm.student && leaveForm.student.course === "Btech"';
+            query = getCoordinatorQuery(user)
             break;
         case ROLE.Principal:
-            query = 'leaveForm';
+            query = getPrincipalQuery(user)
+            break;
+        case ROLE.Warden:
+            query = getWardenQuery(user)
+            break;
+        case ROLE.Admin:
+            query = getAdminQuery(user)
+            break;
+        case ROLE.Student:
+            query = getStudentQuery(user)
             break;
         default:
             query = `leaveForm`;
@@ -159,31 +192,34 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     }
 }
 
-
-export const GET = async (req: NextRequest, res: NextResponse) => {
+export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
-        // const { userId } = body;
 
-        // const user = await User.findById(userId);
+        await middleware(req);
 
-        // if (!user) {
-        //     return NextResponse
-        //         .json(
-        //             {
-        //                 message: "User not found",
-        //                 error: "User not found",
-        //                 data: null,
-        //                 success: false,
-        //             }, {
-        //             status: 404
-        //         });
-        // }
+        const userId = req.user;
 
-        // const query = queryByRole(user);
+        // TODO: populate the refId
+        const user = await User.findById(userId).populate("refId").exec();
 
-        const query = `leaveForm`;
+        // don't need this one
+        if (!user) {
+            return NextResponse
+                .json(
+                    {
+                        message: "User not found",
+                        error: "User not found",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 404
+                });
+        }
 
+        const query = queryByRole(user);
+
+        // populate all forms
         const allForms = await LeaveForm.find().populate("user").exec();
 
         const filteredLeaveForms = allForms.filter((leaveForm: any) => {
@@ -217,9 +253,6 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
             );
     }
 }
-
-
-
 
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {
@@ -315,10 +348,6 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
 }
 
 
-
-
-
-
 export async function PUT(req: NextRequest, res: NextResponse) {
 
     try {
@@ -327,7 +356,7 @@ export async function PUT(req: NextRequest, res: NextResponse) {
         const { qrString } = body;
 
         if (!qrString) {
-            
+
             return NextResponse.json({
 
                 message: "No QR string received",

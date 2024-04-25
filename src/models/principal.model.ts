@@ -1,25 +1,20 @@
 
 import mongoose, { Document } from 'mongoose';
 import { IUser } from '@/models/user.model';
-import { COLLEGES, HOSTEL } from '@/constants/constant';
+import { COLLEGES } from '@/constants/constant';
 
 
 export interface IPrincipal extends Document {
     user: IUser;
-    college: COLLEGES
+    college: string
 }
 
 const principalSchema = new mongoose.Schema(
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
-        hosetl: {
+        college: {
             type: String,
-            enum: Object.values(COLLEGES),
-            reduired: true
+            enum: COLLEGES,
+            required: true
         },
     },
     {

@@ -13,11 +13,6 @@ export interface IWarden extends Document {
 
 const wardenSchema = new mongoose.Schema(
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
-            required: true,
-        },
         hostel: {
             type: String,
             enum: Object.values(HOSTEL),
