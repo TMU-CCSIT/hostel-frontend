@@ -1,15 +1,15 @@
 
 import mongoose, { Document } from 'mongoose';
 import { IUser } from '@/models/user.model';
-import { HOSTEL } from '@/constants/constant';
+import { COLLEGES, HOSTEL } from '@/constants/constant';
 
 
-export interface IWarden extends Document {
+export interface IPrincipal extends Document {
     user: IUser;
-    hosetl: HOSTEL
+    college: COLLEGES
 }
 
-const wardenSchema = new mongoose.Schema(
+const principalSchema = new mongoose.Schema(
     {
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -18,7 +18,7 @@ const wardenSchema = new mongoose.Schema(
         },
         hosetl: {
             type: String,
-            enum: Object.values(HOSTEL),
+            enum: Object.values(COLLEGES),
             reduired: true
         },
     },
@@ -28,7 +28,7 @@ const wardenSchema = new mongoose.Schema(
 );
 
 
-const Warden = mongoose.models.Warden<IWarden> || mongoose.model('Warden', wardenSchema);
-export default Warden;
+const Principal = mongoose.models.Principal<IPrincipal> || mongoose.model('Principal', principalSchema);
+export default Principal;
 
 
