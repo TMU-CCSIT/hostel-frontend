@@ -20,46 +20,51 @@ const leaveFormSchema = z.object({
     addressDuringLeave: z.string(),
 });
 
-function getStudentQuery(): string {
+function getStudentQuery(user: IUser): string {
 
-    return ''
+    const query = 'leaveForm.user===user._id';
+    return query;
 }
-function getAdminQuery(): string {
-    return ''
-}
-function getCoordinatorQuery(): string {
-    return ''
-}
-function getWardenQuery(): string {
-    return ''
-}
-function getPrincipalQuery(): string {
-    return ''
+function getAdminQuery(user: IUser): string {
+    return 'leaveForm'
 }
 
+function getCoordinatorQuery(user: IUser): string {
+    const query = 'user.refId.program===leaveForm.user.program';
+    return query;
+}
+
+function getWardenQuery(user: IUser): string {
+    const query = 'user.refId.hostel===leaveForm.user.hostel';
+    return query;
+}
+
+function getPrincipalQuery(user: IUser): string {
+    const query = 'user.refId.college===leaveForm.user.college';
+    return query;
+}
 
 
-function queryByRole({ role, program = "", college = "", course = "", hostel = "" }: {
-    role: ROLE, program: string, college: string, course: string, hostel: string
-}): string {
 
-    let query = ``;
+function queryByRole(user: IUser): string {
 
-    switch (role) {
+    let query = "";
+
+    switch (user.role) {
         case ROLE.Coordinator:
-            query = getCoordinatorQuery()
+            query = getCoordinatorQuery(user)
             break;
         case ROLE.Principal:
-            query = getPrincipalQuery()
+            query = getPrincipalQuery(user)
             break;
         case ROLE.Warden:
-            query = getWardenQuery()
+            query = getWardenQuery(user)
             break;
         case ROLE.Admin:
-            query = getAdminQuery()
+            query = getAdminQuery(user)
             break;
         case ROLE.Student:
-            query = getStudentQuery()
+            query = getStudentQuery(user)
             break;
         default:
             query = `leaveForm`;
@@ -187,7 +192,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     }
 }
 
-
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -196,7 +200,8 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 
         const userId = req.user;
 
-        const user = await User.findById(userId);
+        // TODO: populate the refId
+        const user = await User.findById(userId).populate("refId").exec();
 
         // don't need this one
         if (!user) {
@@ -212,10 +217,9 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
                 });
         }
 
-        // const query = queryByRole(user);
+        const query = queryByRole(user);
 
-        // const query = `leaveForm`;
-
+        // populate all forms
         const allForms = await LeaveForm.find().populate("user").exec();
 
         const filteredLeaveForms = allForms.filter((leaveForm: any) => {
@@ -249,9 +253,6 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
             );
     }
 }
-
-
-
 
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {
@@ -345,10 +346,6 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
         );
     }
 }
-
-
-
-
 
 
 export async function PUT(req: NextRequest, res: NextResponse) {

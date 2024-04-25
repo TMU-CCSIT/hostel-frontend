@@ -11,7 +11,7 @@ export interface IPrincipal extends Document {
 
 const principalSchema = new mongoose.Schema(
     {
-        hosetl: {
+        college: {
             type: String,
             enum: COLLEGES,
             required: true
