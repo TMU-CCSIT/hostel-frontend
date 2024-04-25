@@ -2,26 +2,16 @@
 
 // importing necessities
 import React, { useEffect, useState } from "react";
-import InputField from "@/components/common/InputField";
-import studentSignupData from "@/constants/studentSignupData";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
-import { obj } from "@/constants/constant";
-import { COLLEGES } from "@/constants/constant";
+import { HOSTEL } from "@/constants/constant";
 
 // interface
 interface FormData {
-  enrollmentNo: string;
-  parentName: string;
-  parentContactNo: string;
-  fingerNo: string;
-  course: string;
-  college: string;
-  roomNo: string;
-  programe: string;
+  hostel: string;
 }
 
 const Signup = () => {
@@ -30,27 +20,15 @@ const Signup = () => {
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
-    enrollmentNo: "",
-    parentName: "",
-    parentContactNo: "",
-    fingerNo: "",
-    course: "a",
-    college: COLLEGES[0],
-    roomNo: "",
-    programe: obj["College Of Computing Sciences And IT"][0],
+      hostel: HOSTEL[0]
   });
 
   // function for data matching
   const handleChange = (e: any) => {
     setData({ ...data, [e.target.name]: e.target.value });
+    console.log(e.target.value);
   };
 
-  const handleChangeOfDropDown = (e: any) => {
-    setData({
-      ...data,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   // dummy function to pass
 
@@ -61,14 +39,7 @@ const Signup = () => {
       e.preventDefault();
 
       const userResponse = await axios.post("/api/auth/signup", {
-        enrollmentNo: data.enrollmentNo,
-        parentName: data.parentName,
-        parentContactNo: data.parentContactNo,
-        fingerNo: data.fingerNo,
-        course: data.course,
-        college: data.college,
-        roomNo: data.roomNo,
-        programe: data.programe,
+        hostel: data.hostel,
       });
 
       //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
@@ -100,46 +71,23 @@ const Signup = () => {
       {/* inner div */}
       <div className="bg-[#EDF6FF] flex flex-col p-8 rounded-md shadow-xl justify-center items-center gap-4 ">
         {/* heading */}
-        <h1 className="text-2xl font-bold">SIGN UP</h1>
+        <h1 className="text-2xl font-bold">WARDEN SIGN UP</h1>
 
         {/* form */}
         <form
-          className=" flex flex-col gap-7 justify-center items-center"
+          className=" flex flex-col justify-center items-center"
           onSubmit={submitHandler}
         >
-          <div className="flex flex-col gap-7">
-            {
-              // input field component
-              studentSignupData.map((a: any) => (
-                <InputField
-                  key={a.name}
-                  label={a?.label}
-                  type={a?.type}
-                  required={true}
-                  placeholder={a.placeholder}
-                  value={data[a.name as keyof FormData]}
-                  name={a?.name}
-                  onChange={handleChange}
-                ></InputField>
-              ))
-            }
-          </div>
 
-          {/* dropdown for college */}
+
+          {/* dropdown for hostel */}
           <DropDown
-            text="college"
-            label="Select College:"
-            name={COLLEGES}
-            onChange={handleChangeOfDropDown}
+            text="hostel"
+            label="Select Hostel:"
+            name={HOSTEL}
+            onChange={handleChange}
           ></DropDown>
 
-          {/* deropdown for fields related to college */}
-          <DropDown
-            text="programe"
-            label="Program"
-            name={obj[data.college as keyof typeof obj]}
-            onChange={handleChangeOfDropDown}
-          ></DropDown>
 
           {/* button */}
           <div className="m-12">
