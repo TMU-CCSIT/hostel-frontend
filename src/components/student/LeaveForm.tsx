@@ -85,7 +85,7 @@ const Leave = () => {
           <div className="flex flex-col gap-7">
             {
               <InputField
-                key=""
+                key="dareFrom"
                 label="Date From"
                 type="date"
                 placeholder="Date From"
@@ -101,7 +101,7 @@ const Leave = () => {
           <div className="flex flex-col gap-7">
             {
               <InputField
-                key=""
+                key="dateTo"
                 label="Date To"
                 type="date"
                 required={true}

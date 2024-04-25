@@ -30,7 +30,7 @@ const InputField = (props: InputFieldProps) => {
 
       <div className="relative">
         <input
-          type={show ? "text" : "password"}
+          type={show ? props.type : "text"}
           id={props.label || ""}
           placeholder={props.placeholder || ""}
           value={props.value}

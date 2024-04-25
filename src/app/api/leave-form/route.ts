@@ -87,6 +87,69 @@ const generateQRCode = async (data: string) => {
 }
 
 
+export const GET = async (req: CustomNextRequest, res: NextResponse) => {
+    try {
+
+
+        await middleware(req);
+
+        const userId = req.user;
+
+        //  populate the refId
+        const user = await User.findById(userId).populate("refId").exec();
+
+        // don't need this one
+        if (!user) {
+            return NextResponse
+                .json(
+                    {
+                        message: "User not found",
+                        error: "User not found",
+                        data: null,
+                        success: false,
+                    }, {
+                    status: 404
+                });
+        }
+
+        const query = queryByRole(user);
+
+        // populate all forms
+        const allForms = await LeaveForm.find().populate("user").exec();
+
+        const filteredLeaveForms = allForms.filter((leaveForm: any) => {
+            return eval(query);
+        });
+
+        return NextResponse
+            .json(
+                {
+                    message: "Fetch all leave form successfully",
+                    error: null,
+                    data: filteredLeaveForms,
+                    success: true,
+                }, {
+                status: 200
+            });
+
+    } catch (error: any) {
+
+        return NextResponse
+            .json(
+                {
+                    message: "Server failed to fetch all form, try again later",
+                    error: error.message,
+                    data: null,
+                    success: false,
+                },
+                {
+                    status: 500
+                }
+            );
+    }
+}
+
+
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -194,67 +257,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     }
 }
 
-export const GET = async (req: CustomNextRequest, res: NextResponse) => {
-    try {
-
-
-        await middleware(req);
-
-        const userId = req.user;
-
-        // TODO: populate the refId
-        const user = await User.findById(userId).populate("refId").exec();
-
-        // don't need this one
-        if (!user) {
-            return NextResponse
-                .json(
-                    {
-                        message: "User not found",
-                        error: "User not found",
-                        data: null,
-                        success: false,
-                    }, {
-                    status: 404
-                });
-        }
-
-        const query = queryByRole(user);
-
-        // populate all forms
-        const allForms = await LeaveForm.find().populate("user").exec();
-
-        const filteredLeaveForms = allForms.filter((leaveForm: any) => {
-            return eval(query);
-        });
-
-        return NextResponse
-            .json(
-                {
-                    message: "Fetch all leave form successfully",
-                    error: null,
-                    data: filteredLeaveForms,
-                    success: true,
-                }, {
-                status: 200
-            });
-
-    } catch (error: any) {
-
-        return NextResponse
-            .json(
-                {
-                    message: "Server failed to fetch all form, try again later",
-                    error: error.message,
-                    data: null,
-                    success: false,
-                },
-                {
-                    status: 500
-                }
-            );
-    }
-}
 
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {

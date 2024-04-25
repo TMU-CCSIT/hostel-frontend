@@ -1,12 +1,12 @@
 export const COLLEGES = ["College Of Computing Sciences And IT", "Dental", "Faculty of Engineering", "Medical"];
 
-export const obj ={
+export const obj = {
     "College Of Computing Sciences And IT": [
         "Btech",
         "Bca",
-       "Bsc",
+        "Bsc",
     ],
-    
+
     "Dental": [
         "Bachelor of Dental Surgery"
     ],
@@ -14,13 +14,14 @@ export const obj ={
         "Civil Engineering",
         "Mechanical Engineering"
     ],
-    "Medical":[
+    "Medical": [
         "Bachelor of Medicine, Bachelor of Surgery"
     ]
 }
 
 
 export const HOSTEL =  ["New Boys Hostel", "Mala Bhawan" , "Gyan Bhawan", "Girls Hostel"]
+
 
 export enum ROLE {
     Admin = "Admin",
