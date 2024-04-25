@@ -20,6 +20,7 @@ const leaveFormSchema = z.object({
     addressDuringLeave: z.string(),
 });
 
+
 function getStudentQuery(user: IUser): string {
 
     const query = 'leaveForm.user===user._id';
@@ -71,6 +72,7 @@ function queryByRole(user: IUser): string {
     }
     return query;
 }
+
 
 
 const generateQRCode = async (data: string) => {
