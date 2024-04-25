@@ -18,6 +18,8 @@ export const userAtom = atom({
 //   }
 // };
 
+
+
 // Atom for storing user information
 // export const userAtom = atom({
 //   key: "userAtom",
@@ -29,3 +31,4 @@ export const userAtom = atom({
 //     },
 //   }),
 // });
+

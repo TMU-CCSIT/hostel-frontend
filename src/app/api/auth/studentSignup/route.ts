@@ -2,11 +2,15 @@ import { z } from "zod";
 import { dbConnection } from "@/config/dbConfig";
 import { NextRequest, NextResponse } from "next/server";
 
+import mongoose from "mongoose";
+
 import User from "@/models/user.model";
 
 import Student from "@/models/student.model";
 
 import { middleware } from "@/middleware";
+
+import { createUserAndSetSession } from "@/action/userSignup";
 
 
 dbConnection();
@@ -20,6 +24,7 @@ interface CustomNextRequest extends NextRequest {
 
 
 const signupSchema = z.object({
+
     enrollmentNo: z.string(),
     course: z.string(),
     college: z.string(),
@@ -28,97 +33,182 @@ const signupSchema = z.object({
     roomNo: z.string(),
     parentName: z.string(),
     parentContactNo: z.string(),
+
 });
+
+
+
+
+async function createStudentAndSetSession(student: any, session: any) {
+
+    try {
+
+        // Validate student data
+
+        try {
+
+            signupSchema.parse(student);
+
+        } catch (error: any) {
+
+            // If validation fails, throw error
+            console.error('Validation error:', error.errors);
+            throw new Error('Validation error');
+
+        }
+
+        const {
+
+            enrollmentNo,
+            course,
+            college,
+            fingerNo,
+            programe,
+            roomNo,
+            parentName,
+            parentContactNo,
+
+        } = student;
+
+        // Create a new student instance
+        const newStudent = new Student({
+
+            enrollmentNo,
+            course,
+            college,
+            fingerNo,
+            programe,
+            roomNo,
+            parentName,
+            parentContactNo,
+
+        });
+
+        // Save the student to the database within the provided session
+
+        const savedStudent = await newStudent.save({ session });
+
+        return savedStudent;
+
+    } catch (error: any) {
+
+        console.error('Error creating student:', error.message);
+
+        throw error;
+    }
+}
+
+
+
+
+
 
 
 export async function POST(req: NextRequest) {
 
     try {
-        // fetch data 
+
+        const session = await mongoose.startSession();
+
+        session.startTransaction();
+
+        // Parse request body
         const body = await req.json();
 
 
-        // Validate request body
+        const { user, student } = body;
+
+        let savedUser;
+
+        let savedStudent;
+
+        // Create user and student within the same transaction
+
         try {
+            // Create user and set session
 
-            signupSchema.parse(body);
+            savedStudent = await createStudentAndSetSession(student, session);
 
-        } catch (error: any) {
+            savedUser = await createUserAndSetSession(user, session,savedStudent._id);
 
-            // If validation fails, return error response
-            console.log(error.message);
+            // Create student within the same session
 
-            return NextResponse
-                .json(
-                    {
-                        message: "validation error ",
-                        error: "",
-                        data: null,
-                        success: false,
-                    },
-                    {
-                        status: 401
-                    }
-                );
-        }
+            // Commit transaction
+            await session.commitTransaction();
+            session.endSession();
 
-        const {
-            enrollmentNo,
-            course,
-            college,
-            fingerNo,
-            programe,
-            roomNo,
-            parentName,
-            parentContactNo,
-            userId,
+            // Return success response
+            return NextResponse.json({
 
-        } = body;
+                message: "Student Signup Successfully",
+                error: "",
+                data: { user: savedUser, student: savedStudent },
+                success: true,
 
-
-        const newStudent = await Student.create({
-            enrollmentNo,
-            course,
-            college,
-            fingerNo,
-            programe,
-            roomNo,
-            parentName,
-            parentContactNo,
-            user: userId,
-        })
-
-        // sucessfully return the response
-
-        return NextResponse
-            .json(
-                {
-                    message: "Student Signup Successfully",
-                    error: "",
-                    data: newStudent,
-                    success: true,
-                }, {
+            }, {
                 status: 200
             });
+        } catch (error: any) {
 
+            console.error(error.message);
+
+            // Rollback transaction if an error occurs
+            await session.abortTransaction();
+            session.endSession();
+
+            return NextResponse.json({
+                message: "Some error occurred while creating a student",
+                error: error.message,
+                data: null,
+                success: false,
+            }, {
+                status: 500
+            });
+        }
+
+        // Commit transaction
+
+        await session.commitTransaction();
+
+        session.endSession();
+
+        // Return success response
+        return NextResponse.json({
+
+            message: "Student Signup Successfully",
+            error: "",
+            data: { user: savedUser, student: savedStudent },
+            success: true,
+
+        }, {
+
+            status: 200
+
+        });
 
     } catch (error: any) {
 
-        console.log(error.message);
+        console.error(error.message);
 
-        return NextResponse
-            .json(
-                {
-                    message: "some error occurred while creating a Student",
-                    error: error.message,
-                    data: null,
-                    success: false,
-                }, {
-                status: 500
-            });
-
+        return NextResponse.json({
+            message: "Some error occurred while creating a student",
+            error: error.message,
+            data: null,
+            success: false,
+        }, {
+            status: 500
+        });
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
