@@ -20,17 +20,7 @@ export const obj ={
 }
 
 
-export enum HOSTEL {
-    NewBoysHostel = "New Boys Hostel",
-    MalaBhavan = "Mala Bhavan"
-}
-
-export enum HOSTEL {
-
-    NewBoysHostel = "New Boys Hostel",
-    MalaBhavan = "Mala Bhavan"
-    
-}
+export const HOSTEL =  ["New Boys Hostel", "Mala Bhawan" , "Gyan Bhawan", "Girls Hostel"]
 
 export enum ROLE {
     Admin = "Admin",
@@ -53,6 +43,13 @@ export enum FILTER {
     Oldest = "Oldest",
     AtoZ = "AtoZ",
     ZtoA = "ZtoA",
+}
+
+export const ADMINDATA = {
+    b1:"Sign Up Main",
+    b2:"Sign Up Student",
+    b3:"Sign Up Coordinator",
+    b4:"Sign Up Warden"
 }
 
 
