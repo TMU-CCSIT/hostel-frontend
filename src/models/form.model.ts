@@ -13,6 +13,8 @@ export interface IForm extends Document {
         coordinator: STATUS;
         hostelWarden: STATUS;
     };
+    leavingTime?: Date;
+    arrivingTime?: Date;
 }
 
 
@@ -49,6 +51,14 @@ const leaveFormSchema = new mongoose.Schema(
                 enum: Object.values(STATUS),
                 default: STATUS.Pending
             }
+        },
+        leavingTime: {
+            type: Date,
+            default: null,
+        },
+        arrivingTime: {
+            type: Date,
+            default: null,
         }
     },
     {
