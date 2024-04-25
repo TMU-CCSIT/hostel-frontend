@@ -77,7 +77,7 @@ function queryByRole(user: IUser): string {
 const generateQRCode = async (data: string) => {
     try {
 
-        return await QRCode.toString(data);
+        return await QRCode.toDataURL(data);
 
     } catch (error: any) {
         console.log("Error when generating qr code: ", error.message)

@@ -16,10 +16,14 @@ const StudentPage = () => {
 
           {/* view all applications */}
           <CTCButton
-          
             onClickHandler={() => router.push("/student/history")}
-
             text="View History"
+          />
+
+          {/* view qr code */}
+          <CTCButton
+            onClickHandler={() => router.push("/student/qr-code")}
+            text="View Qrcode"
           />
         </div>
       </div>
@@ -28,7 +32,3 @@ const StudentPage = () => {
 };
 
 export default StudentPage;
-
-
-
-
