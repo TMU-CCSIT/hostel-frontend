@@ -5,8 +5,10 @@ import { HOSTEL } from '@/constants/constant';
 
 
 export interface IWarden extends Document {
+
     user: IUser;
-    hosetl: HOSTEL
+    hostel: HOSTEL;
+
 }
 
 const wardenSchema = new mongoose.Schema(
@@ -16,7 +18,7 @@ const wardenSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        hosetl: {
+        hostel: {
             type: String,
             enum: Object.values(HOSTEL),
             reduired: true
@@ -30,5 +32,6 @@ const wardenSchema = new mongoose.Schema(
 
 const Warden = mongoose.models.Warden<IWarden> || mongoose.model('Warden', wardenSchema);
 export default Warden;
+
 
 
