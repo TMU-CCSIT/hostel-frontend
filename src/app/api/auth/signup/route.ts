@@ -27,8 +27,7 @@ const userSchema = z.object({
     password: z.string(),
     contactNo: z.string(),
     address: z.string(),
-    role:z.string(),
-    
+    role: z.string(),
 });
 
 
@@ -81,8 +80,6 @@ export async function POST(req: NextRequest) {
 
         const isUserExists = await isEmailAlreadyExist(email);
 
-        console.log("is user exists ",isUserExists);
-
         if (isUserExists) {
 
             return NextResponse
@@ -100,36 +97,30 @@ export async function POST(req: NextRequest) {
 
         // hash the passowrd
 
-        let hashPassword = await bcrypt.hash(password, 10);
-
-        console.log("hshsed password",hashPassword);
-        
-
-        // push this additional information to the userAddtional info field
-        // create new user enrty in DB 
-
+        const hashPassword = await bcrypt.hash(password, 10);
 
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
 
+        // TODO: Get user Id from previous controller  and put it here
 
         // newly created user 
-
         const newUser = await User.create({
 
             fullName,
             email,
             contactNo,
             address,
-            role:role,
+            role: role,
             password: hashPassword,
-            profileImage:imageUrl,
-            isVerified:true,
+            profileImage: imageUrl,
+            isVerified: true,
+            refId: "662a40d395542a09c752ce03"
         })
-    
+
 
         // send the mail to the user 
 
-        await sendEmail(email, "verify", newUser._id);
+        // await sendEmail(email, "verify", newUser._id);
 
         // sucessfully return the response
 
