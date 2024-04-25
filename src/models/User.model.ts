@@ -1,4 +1,3 @@
-
 import mongoose, { Document } from 'mongoose';
 import { ROLE } from '@/constants/constant';
 
@@ -17,10 +16,9 @@ export interface IUser extends Document {
 
 const userSchema = new mongoose.Schema(
     {
-
         refId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "role",
+            refPath: "role",
             required: true,
         },
         fullName: {

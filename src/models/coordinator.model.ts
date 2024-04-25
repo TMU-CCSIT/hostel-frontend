@@ -8,9 +8,9 @@ export interface ICoordinator extends Document {
 
     college: string;
     course: string;
-    user: IUser;
     programe: string;
 }
+
 
 const coordinatorSchema = new mongoose.Schema(
     {
@@ -34,5 +34,3 @@ const coordinatorSchema = new mongoose.Schema(
 
 const Coordinator = mongoose.models.Coordinator<ICoordinator> || mongoose.model('Coordinator', coordinatorSchema);
 export default Coordinator;
-
-

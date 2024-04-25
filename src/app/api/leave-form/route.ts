@@ -6,7 +6,6 @@ import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import QRCode from 'qrcode';
 import { z } from "zod";
-import Coordinator from '../../../models/coordinator.model';
 
 
 interface CustomNextRequest extends NextRequest {
@@ -95,8 +94,11 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 
         const userId = req.user;
 
-        //  populate the refId
-        const user = await User.findById(userId).populate("refId").exec();
+        //  TODO: populate the refId
+        // const user = await User.findById(userId).populate("refId").exec();
+        const user = await User.findById(userId);
+
+        console.log(user)
 
         // don't need this one
         if (!user) {
@@ -193,8 +195,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
         // if coordinator
         if (user.role === ROLE.Coordinator) {
 
-            console.log("coord")
-
             form.status.coordinator = result ? STATUS.Accepted : STATUS.Rejected;
 
         }
@@ -202,19 +202,18 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         // if hostel warden
         if (user.role === ROLE.Warden) {
-
-            console.log("ward")
             // if result is true then set status and create qr code and put into user db
             if (result) {
                 // set status
                 form.status.hostelWarden = STATUS.Accepted;
 
                 // create qr code
-                const qrCodeString = await generateQRCode(`${formId}-${form.user}`);
-
+                const qrCodeString: string = await generateQRCode(`${formId}-${form.user}`);
                 // user
-                await Student.findOneAndUpdate(
-                    { user: userId },
+                const user = await User.findById(form.user);
+
+                await Student.findByIdAndUpdate(
+                    user.refId,
                     { $set: { "qrCode.qrString": qrCodeString } },
                     { new: true }
                 );
@@ -469,11 +468,4 @@ export async function PUT(req: NextRequest, res: NextResponse) {
         });
     }
 }
-
-
-
-
-
-
-
 

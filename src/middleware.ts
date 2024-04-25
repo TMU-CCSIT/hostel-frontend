@@ -57,8 +57,16 @@ function checkPermission(role: ROLE, path: string): boolean {
 
         case "Principal":
             return path.includes('principal');
+
+        case "Gatekeeper":
+            return path.includes('gatekeeper');
+
+        case "Warden":
+            return path.includes('warden');
+
         case "Coordinator":
             return path.includes('coordinator');
+
         default:
             return false;
     }
