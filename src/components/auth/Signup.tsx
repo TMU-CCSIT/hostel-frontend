@@ -9,46 +9,76 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+
+import { signupAtom, } from "@/app/store/atoms/signup";
+
 // interface
 interface FormData {
+
   fullName: string;
   email: string;
   password: string;
   contactNo: string;
   address: string; // Assuming address is a string
+
 }
 
 const Signup = () => {
+
   // hooks for reading different values
 
+  const [signUpData, setSignUpData] = useRecoilState(signupAtom);
+
   const router = useRouter();
-  const [data, setData] = useState<FormData>({
+
+  const [data, setData] = useState<any>({
+
     fullName: "",
     email: "",
     password: "",
     contactNo: "",
     address: "",
+
   });
 
-  // function for data matching
+  const setSignupData = useSetRecoilState(signupAtom);
+  const signupValues = useRecoilValue(signupAtom);
+
+
+  // Function to handle input change
   const handleChange = (e: any) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value,
+    });
   };
 
-  // dummy function to pass
 
   async function submitHandler(e: any) {
+
     try {
+
       e.preventDefault();
 
-      const userResponse = await axios.post("/api/auth/signup", {
-        email: data.email,
-        password: data.password,
-        fullName: data.fullName,
-        contactNo: data.contactNo,
-        address: data.address,
-        role: "Student",
-      });
+      console.log(signupAtom);
+
+
+      setSignupData(data);
+
+      console.log(signupValues)
+
+
+      // const userResponse = await axios.post("/api/auth/signup", {
+      //   email: data.email,
+      //   password: data.password,
+      //   fullName: data.fullName,
+      //   contactNo: data.contactNo,
+      //   address: data.address,
+      //   role: "Student",
+      // });
 
       // const userSignupReponse = await axios.post("/api/auth/studentSignup", {
       //   enrollmentNo: data.enrollmentNo,
@@ -62,18 +92,24 @@ const Signup = () => {
       //   userId: userResponse.data.data._id,
       // });
 
-  //     console.log(userSignupReponse);
-  //     toast.success("Signup successfully");
-  //     toast("Please verify your email!", {
-  //       icon: "👏",
-  //     });
-  //     router.push("/auth/login");
+      //     console.log(userSignupReponse);
+      //     toast.success("Signup successfully");
+      //     toast("Please verify your email!", {
+      //       icon: "👏",
+      //     });
+      //     router.push("/auth/login");
+
     } catch (error: any) {
+
       toast.error(error?.response?.data?.message || "Signup failed");
+
     }
   }
 
+  console.log(signupValues)
+
   return (
+
     // main div
     <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
       {/* inner div */}
@@ -114,7 +150,7 @@ const Signup = () => {
 
           {/* return to login button */}
           <div className="text-sm text-center">
-          {"Already have a account?"}
+            {"Already have a account?"}
             <div
               onClick={() => {
                 router.push("/auth/login");

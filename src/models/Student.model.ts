@@ -8,7 +8,7 @@ import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IStudent extends Document {
 
-    enrollmentNo: string;
+    enrollmentNo: string; 
     parentName: string;
     parentContactNo: string;
     fingerNo: string;

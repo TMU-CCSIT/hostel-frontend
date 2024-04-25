@@ -115,6 +115,7 @@ export async function POST(req: NextRequest) {
             profileImage: imageUrl,
             isVerified: true,
             refId: "662a40d395542a09c752ce03"
+            
         })
 
 
