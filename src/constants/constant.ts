@@ -1,14 +1,28 @@
-export enum COLLEGES {
-    CCSIT = "College Of Computing Sciences And IT",
-    FOE = "Faculty Of Engineering",
-    MBBS = "Bachelor of Medicine, Bachelor of Surgery",
-    Dental = "Dental"
+export const COLLEGES = ["College Of Computing Sciences And IT", "Dental", "Faculty of Engineering", "Medical"];
+
+export const obj ={
+    "College Of Computing Sciences And IT": [
+        "Btech",
+        "Bca",
+       "Bsc",
+    ],
+    
+    "Dental": [
+        "Bachelor of Dental Surgery"
+    ],
+    "Faculty of Engineering": [
+        "Civil Engineering",
+        "Mechanical Engineering"
+    ],
+    "Medical":[
+        "Bachelor of Medicine, Bachelor of Surgery"
+    ]
 }
 
-export enum CCSIT {
-    Btech = "Btech",
-    Bca = "Bca",
-    Bsc = "Bsc",
+
+export enum HOSTEL {
+    NewBoysHostel = "New Boys Hostel",
+    MalaBhavan = "Mala Bhavan"
 }
 
 export enum HOSTEL {
@@ -40,3 +54,7 @@ export enum FILTER {
     AtoZ = "AtoZ",
     ZtoA = "ZtoA",
 }
+
+
+
+
