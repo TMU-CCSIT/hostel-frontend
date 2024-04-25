@@ -1,9 +1,11 @@
 
 import mongoose, { Document, mongo } from 'mongoose';
-import { IUser } from '@/models/user.model';
+
+import { IUser } from './user.model';
 
 
 export interface ICoordinator extends Document {
+
     college: string;
     course: string;
     user: IUser;

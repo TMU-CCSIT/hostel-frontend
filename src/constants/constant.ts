@@ -25,6 +25,13 @@ export enum HOSTEL {
     MalaBhavan = "Mala Bhavan"
 }
 
+export enum HOSTEL {
+
+    NewBoysHostel = "New Boys Hostel",
+    MalaBhavan = "Mala Bhavan"
+    
+}
+
 export enum ROLE {
     Admin = "Admin",
     Principal = "Principal",
