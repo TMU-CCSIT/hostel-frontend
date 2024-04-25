@@ -15,7 +15,6 @@ interface CustomNextRequest extends NextRequest {
 let coordinatorSchema = z.object({
     college: z.string(),
     course: z.string(),
-    userId: z.string(),
     programe: z.string(),
 })
 
@@ -52,7 +51,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const newUser = await Coordinator.create({
             college,
             course,
-            user: userId,
             programe,
         });
 

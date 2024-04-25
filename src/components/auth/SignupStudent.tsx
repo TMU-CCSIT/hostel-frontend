@@ -104,7 +104,7 @@ const Signup = () => {
 
         {/* form */}
         <form
-          className=" flex flex-col justify-center items-center"
+          className=" flex flex-col gap-7 justify-center items-center"
           onSubmit={submitHandler}
         >
           <div className="flex flex-col gap-7">

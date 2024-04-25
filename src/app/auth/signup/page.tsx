@@ -4,7 +4,7 @@ import SignupStudent from '@/components/auth/SignupStudent'
 const SignupPage = () => {
   return (
     <div>
-      <SignupStudent></SignupStudent>3
+      <Signup></Signup>
     </div>
   );
 };
