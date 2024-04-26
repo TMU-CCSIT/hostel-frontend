@@ -28,41 +28,28 @@ async function getStudentQuery(user: IUser) {
     return allApplications;
 }
 
-function getAdminQuery(user: IUser): string {
+async function getAdminQuery(user: IUser) {
     return 'leaveForm'
 }
 
-function getCoordinatorQuery(user: IUser): string {
+async function getCoordinatorQuery(user: IUser) {
 
-    // program college course
-    // const cord = {
-    //     college: "CCSIT",
-    //     program: ["Ai", "Cs"],
-    //     course: "Btech",
-    //     id: "dfghjkl56789"
-    // }
+    console.log("user: ", user)
 
-    // // find student on the program basis
-    // cord.program.map((i) => {
-
-    // });
-
-    // find in student db
+    const allApplications = await LeaveForm.find({});
 
 
-    const query = 'leaveForm ';
-    // query = 'user.refId.program===leaveForm.user.program';
-    return query;
+    return allApplications;
 }
 
 
-function getWardenQuery(user: IUser): string {
+async function getWardenQuery(user: IUser) {
     // const query = 'user.refId.hostel===leaveForm.user.hostel';
     const query = 'leaveForm';
     return query;
 }
 
-function getPrincipalQuery(user: IUser): string {
+async function getPrincipalQuery(user: IUser) {
     const query = 'user.refId.college===leaveForm.user.college';
     return query;
 }
@@ -73,16 +60,16 @@ async function getApplicationsByRole(user: IUser) {
 
     switch (user.role) {
         case ROLE.Coordinator:
-            return await getStudentQuery(user)
+            return await getCoordinatorQuery(user)
 
         case ROLE.Principal:
-            return await getStudentQuery(user)
+            return await getPrincipalQuery(user)
 
         case ROLE.Warden:
-            return await getStudentQuery(user)
+            return await getWardenQuery(user)
 
         case ROLE.Admin:
-            return await getStudentQuery(user)
+            return await getAdminQuery(user)
 
         case ROLE.Student:
             return await getStudentQuery(user)

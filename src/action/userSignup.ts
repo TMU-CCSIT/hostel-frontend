@@ -10,8 +10,6 @@ import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
 import mongoose from "mongoose";
 
-import mongoose from "mongoose";
-
 
 // Establish database connection
 dbConnection();
@@ -34,7 +32,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         // Validate request body
         try {
 
-            console.log("role id is",roleId);
+            console.log("role id is", roleId);
 
             userSchema.parse(user);
 
@@ -52,7 +50,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             });
         }
 
-        if(!roleId){
+        if (!roleId) {
 
             throw new Error("role id is not provided");
 
@@ -63,7 +61,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         // Check if the user already exists
 
         const isUserExists = await isEmailAlreadyExist(email);
-        
+
         if (isUserExists) {
 
             throw new Error("Email already registered, Please login to continue");
@@ -83,11 +81,11 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             contactNo,
             address,
             password: hashPassword,
-            profileImage:imageUrl,
+            profileImage: imageUrl,
             role: role,
-            isVerified:true,
+            isVerified: true,
             refId: new mongoose.Types.ObjectId(roleId)
-        
+
         });
 
         // Save the user to the database

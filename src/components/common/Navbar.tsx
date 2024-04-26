@@ -8,6 +8,7 @@ import { useRecoilValue } from "recoil";
 import { userAtom } from "@/app/store/atoms/user";
 import axios from "axios";
 import toast from "react-hot-toast";
+import CTAButton from "@/components/common/CTCButton";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {
@@ -111,6 +112,23 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
+        {!user && (
+          <div className="flex justify-center items-center gap-5">
+            <CTAButton
+              onClickHandler={() => {
+                router.push("/auth/signup");
+              }}
+              text="Signup"
+            />
+            <CTAButton
+              onClickHandler={() => {
+                router.push("/auth/login");
+              }}
+              text="Login"
+            />
+          </div>
+        )}
       </div>
     </nav>
   );
