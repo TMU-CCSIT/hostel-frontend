@@ -1,11 +1,9 @@
 
 import mongoose, { Document } from 'mongoose';
-import { IUser } from '@/models/user.model';
 import { COLLEGES } from '@/constants/constant';
 
 
 export interface IPrincipal extends Document {
-    user: IUser;
     college: string
 }
 
