@@ -7,6 +7,8 @@ import Coordinator from "@/models/coordinator.model";
 
 import { middleware } from "@/middleware";
 
+import { createUserAndSetSession } from "@/action/userSignup";
+
 interface CustomNextRequest extends NextRequest {
 
     user: string;
@@ -19,33 +21,28 @@ let coordinatorSchema = z.object({
 })
 
 
-export async function POST(req: NextRequest, res: NextResponse) {
+
+async function CoordinatorSignUp(coordinator: any) {
 
     try {
 
-        let body = await req.json();
+        // let body = await req.json();
 
         try {
-            coordinatorSchema.parse(body);
+
+            coordinatorSchema.parse(coordinator);
+
         } catch (error: any) {
+
             console.log(error.message);
-            return NextResponse
-                .json(
-                    {
-                        message: "validation error ",
-                        error: "",
-                        data: null,
-                        success: false,
-                    },
-                    {
-                        status: 401
-                    }
-                );
+
+            throw new Error("validation error in coordinator");
+
         }
 
 
+        const { college, course, programe } = coordinator;
 
-        const { college, course, userId, programe } = body;
 
         //create the new entry in Db 
         const newUser = await Coordinator.create({
@@ -55,18 +52,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         });
 
         // successfully return the resposne 
-        return NextResponse
-            .json(
-                {
-                    message: "coordinator  Signup Successfully",
-                    error: "",
-                    data: newUser,
-                    success: true,
-                }, {
-                status: 200
-            });
 
-
+        return newUser;
 
 
     } catch (error: any) {
@@ -88,6 +75,59 @@ export async function POST(req: NextRequest, res: NextResponse) {
     }
 }
 
+
+
+
+
+
+
+
+export async function POST(req: NextRequest, res: NextResponse) {
+
+
+    try {
+
+        const body = await req.json();
+
+        const { user, coordinator } = body;
+
+        // create the coordinator
+
+        const newCoordinator = await CoordinatorSignUp(coordinator);
+
+        const newUser = await createUserAndSetSession(user, "kdj", newCoordinator._id);
+
+
+        return NextResponse.json({
+
+            message: "coordinaotor created successfully",
+            data: {
+
+                newCoordinator,
+                newUser,
+            },
+        },{
+
+            status:200,
+        })
+
+
+    } catch (error: any) {
+
+        console.log(error.message);
+
+        return NextResponse.json({
+
+            message: "coordinaotor created successfully",
+            data:null,
+            error:error.message,
+        },{
+
+            status:500,
+        })
+
+    }
+}
 
 
 
