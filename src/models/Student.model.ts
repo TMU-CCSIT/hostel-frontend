@@ -15,9 +15,9 @@ export interface IStudent extends Document {
     course: string;
     college: string;
     roomNo: string;
-    user: Types.ObjectId | IUser;
+    // user: Types.ObjectId | IUser;
     programe: string;
-    qrCodeString: string
+    // qrCodeString: string
 }
 
 const studentSchema: Schema = new Schema(

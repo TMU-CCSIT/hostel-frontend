@@ -21,16 +21,18 @@ interface FormData {
   password: string;
   contactNo: string;
   address: string; // Assuming address is a string
-
+  
 }
 
-const Signup = () => {
+const Signup: React.FC<{ role: string }> = ({ role }) =>{
 
   // hooks for reading different values
 
   const [signUpData, setSignUpData] = useRecoilState(signupAtom);
 
   const router = useRouter();
+
+  console.log("role is ",role);
 
   const [data, setData] = useState<any>({
 
@@ -39,10 +41,14 @@ const Signup = () => {
     password: "",
     contactNo: "",
     address: "",
+    role: role,
 
   });
 
+
+
   const setSignupData = useSetRecoilState(signupAtom);
+  
   const signupValues = useRecoilValue(signupAtom);
 
 
@@ -65,11 +71,8 @@ const Signup = () => {
 
       console.log(signupAtom);
 
-
       setSignupData(data);
-
-      console.log(signupValues)
-
+      
 
       // const userResponse = await axios.post("/api/auth/signup", {
       //   email: data.email,
@@ -105,8 +108,6 @@ const Signup = () => {
 
     }
   }
-
-  console.log(signupValues)
 
   return (
 

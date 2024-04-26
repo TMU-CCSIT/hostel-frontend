@@ -22,7 +22,6 @@ interface CustomNextRequest extends NextRequest {
 }
 
 
-
 const signupSchema = z.object({
 
     enrollmentNo: z.string(),
@@ -70,8 +69,10 @@ async function createStudentAndSetSession(student: any, session: any) {
 
         } = student;
 
+        console.log("all done ");
+
         // Create a new student instance
-        const newStudent = new Student({
+        const newStudent = await Student.create({
 
             enrollmentNo,
             course,
@@ -86,9 +87,13 @@ async function createStudentAndSetSession(student: any, session: any) {
 
         // Save the student to the database within the provided session
 
-        const savedStudent = await newStudent.save({ session });
+        // const savedStudent = await newStudent.save({ session });
 
-        return savedStudent;
+        // console.log("saved stident ", savedStudent);
+
+        // return savedStudent;
+
+        return newStudent;
 
     } catch (error: any) {
 
@@ -97,10 +102,6 @@ async function createStudentAndSetSession(student: any, session: any) {
         throw error;
     }
 }
-
-
-
-
 
 
 
@@ -122,19 +123,28 @@ export async function POST(req: NextRequest) {
 
         let savedStudent;
 
+
+        console.log(user,student);
+
         // Create user and student within the same transaction
 
         try {
+
             // Create user and set session
 
             savedStudent = await createStudentAndSetSession(student, session);
 
+            console.log("saved student ",savedStudent);
+
             savedUser = await createUserAndSetSession(user, session,savedStudent._id);
+
+            console.log("saved user ",savedUser);
 
             // Create student within the same session
 
             // Commit transaction
             await session.commitTransaction();
+
             session.endSession();
 
             // Return success response

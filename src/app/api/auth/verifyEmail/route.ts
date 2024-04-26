@@ -12,13 +12,18 @@ export async function POST(req: NextRequest, res: NextResponse){
 
         const {token} = body;
 
+        console.log("token value is ",token);
+
         // find the user using token 
 
-        let isUserExists = await User.findOne({
+        const isUserExists = await User.findOne({
 
             token:token,
+            verifyTokenExpiry: { $gt: Date.now() } // Corrected token expiry comparison
 
         })
+
+        console.log(isUserExists);
 
         if(!isUserExists){
 
@@ -75,5 +80,7 @@ export async function POST(req: NextRequest, res: NextResponse){
 
     }
 }
+
+
 
 
