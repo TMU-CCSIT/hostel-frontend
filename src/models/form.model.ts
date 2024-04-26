@@ -17,7 +17,7 @@ export interface IForm extends Document {
     arrivingTime?: Date;
 }
 
-
+// TODO: Status for BCA
 const leaveFormSchema = new mongoose.Schema(
     {
         user: {
@@ -70,4 +70,3 @@ const leaveFormSchema = new mongoose.Schema(
 const LeaveForm = mongoose.models.LeaveForm<IForm> || mongoose.model('LeaveForm', leaveFormSchema);
 
 export default LeaveForm;
-

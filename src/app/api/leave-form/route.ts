@@ -12,6 +12,7 @@ interface CustomNextRequest extends NextRequest {
     user: string,
 }
 
+
 const leaveFormSchema = z.object({
     dateFrom: z.date(),
     dateTo: z.date(),
@@ -20,16 +21,35 @@ const leaveFormSchema = z.object({
 });
 
 
-function getStudentQuery(user: IUser): string {
+async function getStudentQuery(user: IUser) {
 
-    const query = 'leaveForm.user===user._id';
-    return query;
+    const allApplications = await LeaveForm.find({ user: user._id });
+
+    return allApplications;
 }
+
 function getAdminQuery(user: IUser): string {
     return 'leaveForm'
 }
 
 function getCoordinatorQuery(user: IUser): string {
+
+    // program college course
+    // const cord = {
+    //     college: "CCSIT",
+    //     program: ["Ai", "Cs"],
+    //     course: "Btech",
+    //     id: "dfghjkl56789"
+    // }
+
+    // // find student on the program basis
+    // cord.program.map((i) => {
+
+    // });
+
+    // find in student db
+
+
     const query = 'leaveForm ';
     // query = 'user.refId.program===leaveForm.user.program';
     return query;
@@ -49,30 +69,26 @@ function getPrincipalQuery(user: IUser): string {
 
 
 
-function queryByRole(user: IUser): string {
-
-    let query = "";
+async function getApplicationsByRole(user: IUser) {
 
     switch (user.role) {
         case ROLE.Coordinator:
-            query = getCoordinatorQuery(user)
-            break;
+            return await getStudentQuery(user)
+
         case ROLE.Principal:
-            query = getPrincipalQuery(user)
-            break;
+            return await getStudentQuery(user)
+
         case ROLE.Warden:
-            query = getWardenQuery(user)
-            break;
+            return await getStudentQuery(user)
+
         case ROLE.Admin:
-            query = getAdminQuery(user)
-            break;
+            return await getStudentQuery(user)
+
         case ROLE.Student:
-            query = getStudentQuery(user)
-            break;
+            return await getStudentQuery(user)
         default:
-            query = `leaveForm`;
+            return [];
     }
-    return query;
 }
 
 
@@ -89,6 +105,7 @@ const generateQRCode = async (data: string) => {
 }
 
 
+
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -97,11 +114,13 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 
         const userId = req.user;
 
-        //  TODO: populate the refId
-        // const user = await User.findById(userId).populate("refId").exec();
-        const user = await User.findById(userId);
+        const user = await User
+            .findById(userId)
+            .select("_id role")
+            .populate("refId", "-qrCode")
+            .exec();
 
-        console.log(user)
+        console.log("user: ", user)
 
         // don't need this one
         if (!user) {
@@ -117,21 +136,15 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
                 });
         }
 
-        const query = queryByRole(user);
 
-        // populate all forms
-        const allForms = await LeaveForm.find().populate("user").exec();
-
-        const filteredLeaveForms = allForms.filter((leaveForm: any) => {
-            return eval(query);
-        });
+        const allForms = await getApplicationsByRole(user);
 
         return NextResponse
             .json(
                 {
                     message: "Fetch all leave form successfully",
                     error: null,
-                    data: filteredLeaveForms,
+                    data: allForms,
                     success: true,
                 }, {
                 status: 200
@@ -153,6 +166,7 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
             );
     }
 }
+
 
 
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {

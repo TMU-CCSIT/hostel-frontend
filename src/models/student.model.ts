@@ -5,8 +5,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 
 export interface IStudent extends Document {
-
-    enrollmentNo: string; 
+    enrollmentNo: string;
     parentName: string;
     parentContactNo: string;
     fingerNo: string;
@@ -64,7 +63,7 @@ const studentSchema: Schema = new Schema(
                 type: Boolean,
                 default: false,
             }
-        }
+        },
     },
     {
         timestamps: true

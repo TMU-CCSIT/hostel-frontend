@@ -19,10 +19,12 @@ const coordinatorSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        programe: {
-            type: String,
-            required: true
-        },
+        programe: [
+            {
+                type: String,
+                required: true
+            }
+        ],
     },
     {
         timestamps: true

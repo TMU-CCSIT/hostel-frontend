@@ -8,6 +8,7 @@ import Student from "@/models/student.model";
 import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
+import mongoose from "mongoose";
 
 
 // Establish database connection
@@ -60,8 +61,6 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
 
         // Create a new user
         const newUser = await User.create({
-
-
             fullName,
             email,
             contactNo,
@@ -70,8 +69,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             profileImage: imageUrl,
             isVerified: true,
             role: role,
-            refId: roleId
-
+            refId: new mongoose.Types.ObjectId(roleId)
         });
 
         // Save the user to the database
