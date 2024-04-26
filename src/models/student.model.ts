@@ -1,8 +1,4 @@
-
-
-import mongoose, { Document, Schema } from 'mongoose';
-
-
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export interface IStudent extends Document {
     enrollmentNo: string;
@@ -13,7 +9,7 @@ export interface IStudent extends Document {
     college: string;
     roomNo: string;
     programe: string;
-    qrCodeString: string
+    qrCodeString?: string
 }
 
 const studentSchema: Schema = new Schema(
@@ -74,5 +70,7 @@ const studentSchema: Schema = new Schema(
 const Student = mongoose.models.Student || mongoose.model('Student', studentSchema);
 
 export default Student;
+
+
 
 

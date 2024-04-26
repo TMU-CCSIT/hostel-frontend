@@ -4,10 +4,12 @@ import { isEmailAlreadyExist } from "@/helper/isEmailExists";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
 
-import Student from "@/models/student.model";
+
 import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
+import mongoose from "mongoose";
+
 import mongoose from "mongoose";
 
 
@@ -16,12 +18,14 @@ dbConnection();
 
 // Define user schema using zod
 const userSchema = z.object({
+
     fullName: z.string(),
     email: z.string().email(),
     password: z.string(),
     contactNo: z.string(),
     address: z.string(),
     role: z.string(),
+
 });
 
 // Function to create user and set session
@@ -30,6 +34,8 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         // Validate request body
         try {
 
+            console.log("role id is",roleId);
+
             userSchema.parse(user);
 
         } catch (error: any) {
@@ -37,7 +43,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             // If validation fails, return error response
 
             return NextResponse.json({
-                message: "Validation error",
+                message: "Validation error in user ",
                 error: error.errors,
                 data: null,
                 success: false,
@@ -46,15 +52,26 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             });
         }
 
+        if(!roleId){
+
+            throw new Error("role id is not provided");
+
+        }
+
         const { fullName, email, password, contactNo, address, role } = user;
 
         // Check if the user already exists
+
         const isUserExists = await isEmailAlreadyExist(email);
+        
         if (isUserExists) {
+
             throw new Error("Email already registered, Please login to continue");
+
         }
 
         // Hash the password
+
         const hashPassword = await bcrypt.hash(password, 10);
 
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
@@ -66,25 +83,32 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             contactNo,
             address,
             password: hashPassword,
-            profileImage: imageUrl,
-            isVerified: true,
+            profileImage:imageUrl,
             role: role,
+            isVerified:true,
             refId: new mongoose.Types.ObjectId(roleId)
+        
         });
 
         // Save the user to the database
-        const savedUser = await newUser.save({ session });
+        // const savedUser = await newUser.save({ session });
 
-        // Send email verification (if required)
-        // await sendEmail(email, "verify", newUser._id);
+        // console.log(await sendVerificationEmail(email,fullName,"verify",newUser._id,))
 
         // Successfully created user, return the user data
-        return savedUser;
+
+        // return savedUser;
+
+        return newUser;
 
     } catch (error: any) {
         console.error('Error creating user:', error);
         throw error;
     }
 }
+
+
+
+
 
 

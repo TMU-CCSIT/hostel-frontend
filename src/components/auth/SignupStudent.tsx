@@ -12,6 +12,10 @@ import DropDown from "../common/DropDown";
 import { obj } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
 
+import { useRecoilValue } from "recoil";
+
+import { signupAtom } from "@/app/store/atoms/signup";
+
 // interface
 interface FormData {
   enrollmentNo: string;
@@ -25,7 +29,10 @@ interface FormData {
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
+  const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
 
@@ -60,28 +67,22 @@ const Signup = () => {
         console.log(data);
       e.preventDefault();
 
-      const userResponse = await axios.post("/api/auth/signup", {
-        enrollmentNo: data.enrollmentNo,
-        parentName: data.parentName,
-        parentContactNo: data.parentContactNo,
-        fingerNo: data.fingerNo,
-        course: data.course,
-        college: data.college,
-        roomNo: data.roomNo,
-        programe: data.programe,
-      });
+      // const userResponse = await axios.post("/api/auth/signup", {
+      //   // enrollmentNo: data.enrollmentNo,
+      //   // parentName: data.parentName,
+      //   // parentContactNo: data.parentContactNo,
+      //   // fingerNo: data.fingerNo,
+      //   // course: data.course,
+      //   // college: data.college,
+      //   // roomNo: data.roomNo,
+      //   // programe: data.programe,
 
-      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //     enrollmentNo: data.enrollmentNo,
-      //     course: data.course,
-      //     college: data.college,
-      //     fingerNo: data.fingerNo,
-      //     programe: data.programe,
-      //     roomNo: data.roomNo,
-      //     parentName: data.parentName,
-      //     parentContactNo: data.parentContactNo,
-      //     userId: userResponse.data.data._id,
-      //   });
+
+      // });
+
+        const userSignupReponse = await axios.post("/api/auth/studentSignup", {user:signUpValues,student:data});
+
+      console.log("student sing up response",userSignupReponse.data);
 
       //     console.log(userSignupReponse);
       //     toast.success("Signup successfully");
@@ -89,8 +90,11 @@ const Signup = () => {
       //       icon: "👏",
       //     });
       //     router.push("/auth/login");
+
     } catch (error: any) {
+
       toast.error(error?.response?.data?.message || "Signup failed");
+      
     }
   }
 
@@ -165,3 +169,6 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+

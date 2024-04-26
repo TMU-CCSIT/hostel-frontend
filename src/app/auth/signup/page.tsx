@@ -1,12 +1,45 @@
-"use client";
-import { signupAtom } from "@/app/store/atoms/signup";
+
+"use client"
+
+import Signup from "@/components/auth/Signup";
+
 import UserSignUp from "@/components/auth/Signup";
 import SignupStudent from "@/components/auth/SignupStudent";
+
+import React from "react";
+
 import { useRecoilValue } from "recoil";
 
+import { signupAtom } from "@/app/store/atoms/signup";
+
+import StudentSignup from "@/components/auth/SignupStudent";
+
+
 const SignupPage = () => {
-  const userSignupData = useRecoilValue(signupAtom);
-  return <>{userSignupData ? <SignupStudent /> : <UserSignUp />}</>;
+
+
+  const signupValues = useRecoilValue(signupAtom);
+
+  console.log(signupValues);
+  
+
+  return (
+
+    <div>
+
+      {
+
+        signupValues !== null ? <StudentSignup/> : <Signup role={"Student"}/>
+
+      }
+
+    </div>
+    
+  );
 };
 
 export default SignupPage;
+
+
+
+

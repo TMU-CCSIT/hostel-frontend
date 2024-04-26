@@ -7,44 +7,55 @@ interface CustomNextRequest extends NextRequest {
 }
 
 
-const PublicPaths = ['/auth/login', '/auth/signup'];
+const PublicPaths = ['/auth/verifyEmail/','/auth/login', '/auth/signup',];
 const DefaultPage = ["/", "/unauthorized"];
 
 export async function middleware(req: CustomNextRequest) {
 
-    const path = req.nextUrl.pathname;
+    // const path = req.nextUrl.pathname;
 
-    let isLoggedIn = req.cookies.get("token")?.value || "";
+    // console.log("verfiy email ",path);
 
-    let decodedToken;
+    // let isLoggedIn = req.cookies.get("token")?.value || "";
+
+    // let decodedToken;
 
     if (isLoggedIn) {
         decodedToken = await getDataFromToken(req);
         req.user = decodedToken.id;
     }
 
-    if (DefaultPage.includes(path)) {
-        return NextResponse.next();
-    }
 
-    const isPublicPath = PublicPaths.includes(path);
+    // if (isLoggedIn) {
+    //     decodedToken = await getDataFromToken(req);
+    //     console.log(decodedToken)
+    //     req.user = decodedToken.id;
+    // }
 
-    if (isLoggedIn && isPublicPath) {
-        return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
-    }
+    // if (DefaultPage.includes(path)) {
 
-    if (!isLoggedIn && !isPublicPath) {
-        return NextResponse.redirect(new URL('/auth/login', req.url));
-    }
+    //     return NextResponse.next();
+        
+    // }
 
-    if (isLoggedIn) {
-        // If the user is logged in, check permission based on their role
+    // const isPublicPath = PublicPaths.includes(path);
 
-        const hasPermission = checkPermission(decodedToken.role, path);
-        if (!hasPermission) {
-            return NextResponse.redirect(new URL('/unauthorized', req.url));
-        }
-    }
+    // if (isLoggedIn && isPublicPath) {
+    //     return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
+    // }
+
+    // if (!isLoggedIn && !isPublicPath) {
+    //     return NextResponse.redirect(new URL('/auth/login', req.url));
+    // }
+
+    // if (isLoggedIn) {
+    //     // If the user is logged in, check permission based on their role
+
+    //     const hasPermission = checkPermission(decodedToken.role, path);
+    //     if (!hasPermission) {
+    //         return NextResponse.redirect(new URL('/unauthorized', req.url));
+    //     }
+    // }
     return NextResponse.next();
 }
 
