@@ -42,7 +42,6 @@ const Signup: React.FC<{ role: string }> = ({ role }) =>{
     contactNo: "",
     address: "",
     role: role,
-
   });
 
 

@@ -29,9 +29,7 @@ interface FormData {
 }
 
 const Signup = () => {
-
   // hooks for reading different values
-
   const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
@@ -59,42 +57,21 @@ const Signup = () => {
     });
   };
 
-  // dummy function to pass
-
   async function submitHandler(e: any) {
     try {
-
-        console.log(data);
       e.preventDefault();
+      const userSignupReponse = await axios.post("/api/auth/studentSignup", {
+        user: signUpValues,
+        student: data,
+      });
 
-      // const userResponse = await axios.post("/api/auth/signup", {
-      //   // enrollmentNo: data.enrollmentNo,
-      //   // parentName: data.parentName,
-      //   // parentContactNo: data.parentContactNo,
-      //   // fingerNo: data.fingerNo,
-      //   // course: data.course,
-      //   // college: data.college,
-      //   // roomNo: data.roomNo,
-      //   // programe: data.programe,
-
-
-      // });
-
-        const userSignupReponse = await axios.post("/api/auth/studentSignup", {user:signUpValues,student:data});
-
-      console.log("student sing up response",userSignupReponse.data);
-
-      //     console.log(userSignupReponse);
-      //     toast.success("Signup successfully");
-      //     toast("Please verify your email!", {
-      //       icon: "👏",
-      //     });
-      //     router.push("/auth/login");
-
+      toast.success("Signup successfully");
+      toast("Please verify your email!", {
+        icon: "👏",
+      });
+      router.push("/auth/login");
     } catch (error: any) {
-
       toast.error(error?.response?.data?.message || "Signup failed");
-      
     }
   }
 
@@ -169,6 +146,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-
-
