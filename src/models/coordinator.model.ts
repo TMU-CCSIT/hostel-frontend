@@ -1,8 +1,5 @@
 
-import mongoose, { Document, mongo } from 'mongoose';
-
-import { IUser } from '@/models/User.model';
-
+import mongoose, { Document } from 'mongoose';
 
 export interface ICoordinator extends Document {
 

@@ -20,7 +20,7 @@ export const obj = {
 }
 
 
-export const HOSTEL =  ["New Boys Hostel", "Mala Bhawan" , "Gyan Bhawan", "Girls Hostel"]
+export const HOSTEL = ["New Boys Hostel", "Mala Bhawan", "Gyan Bhawan", "Girls Hostel"]
 
 
 export enum ROLE {
@@ -47,10 +47,10 @@ export enum FILTER {
 }
 
 export const ADMINDATA = {
-    b1:"Sign Up Main",
-    b2:"Sign Up Student",
-    b3:"Sign Up Coordinator",
-    b4:"Sign Up Warden"
+    b1: "Sign Up Main",
+    b2: "Sign Up Student",
+    b3: "Sign Up Coordinator",
+    b4: "Sign Up Warden"
 }
 
 
