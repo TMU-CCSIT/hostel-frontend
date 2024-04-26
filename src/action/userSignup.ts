@@ -23,7 +23,7 @@ const userSchema = z.object({
 });
 
 // Function to create user and set session
-export async function createUserAndSetSession(user: any, session: any,roleId:string) {
+export async function createUserAndSetSession(user: any, session: any, roleId: string) {
     try {
         // Validate request body
         try {
@@ -69,7 +69,7 @@ export async function createUserAndSetSession(user: any, session: any,roleId:str
             profileImage: imageUrl,
             isVerified: true,
             role: role,
-            refId:roleId
+            refId: roleId
 
         });
 
