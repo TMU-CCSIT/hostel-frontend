@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
 import { obj } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
+import { signupAtom } from "@/app/store/atoms/signup";
+
 
 // interface
 interface FormData {
@@ -37,13 +39,16 @@ const Signup = () => {
   // dummy function to pass
 
   async function submitHandler(e: any) {
+
     try {
         console.log(data);
         e.preventDefault();
 
       const userResponse = await axios.post("/api/auth/signup", {
+
         college: data.college,
         programe: data.programe,
+
       });
 
       //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
@@ -64,8 +69,12 @@ const Signup = () => {
       //       icon: "👏",
       //     });
       //     router.push("/auth/login");
+
+
     } catch (error: any) {
+
       toast.error(error?.response?.data?.message || "Signup failed");
+
     }
   }
 

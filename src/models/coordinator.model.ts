@@ -1,6 +1,8 @@
 
 import mongoose, { Document } from 'mongoose';
 
+import { ProgrameData } from '@/constants/constant';
+
 export interface ICoordinator extends Document {
 
     college: string;
@@ -15,13 +17,17 @@ const coordinatorSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        course: {
+        branch:[{
+
             type: String,
             required: true,
-        },
+
+        }],
         programe: {
-            type: String,
+
+            type: ProgrameData,
             required: true
+
         },
     },
     {
@@ -30,4 +36,8 @@ const coordinatorSchema = new mongoose.Schema(
 );
 
 const Coordinator = mongoose.models.Coordinator<ICoordinator> || mongoose.model('Coordinator', coordinatorSchema);
+
 export default Coordinator;
+
+
+

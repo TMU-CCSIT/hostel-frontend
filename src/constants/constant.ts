@@ -1,4 +1,4 @@
-export const COLLEGES = ["College Of Computing Sciences And IT", "Dental", "Faculty of Engineering", "Medical"];
+export const COLLEGES = ["College Of Computing Sciences And IT"];
 
 export const obj = {
     "College Of Computing Sciences And IT": [
@@ -24,6 +24,7 @@ export const HOSTEL = ["New Boys Hostel", "Mala Bhawan", "Gyan Bhawan", "Girls H
 
 
 export enum ROLE {
+
     Admin = "Admin",
     Principal = "Principal",
     Coordinator = "Coordinator",
@@ -52,6 +53,16 @@ export const ADMINDATA = {
     b3: "Sign Up Coordinator",
     b4: "Sign Up Warden"
 }
+
+
+export enum ProgrameData {
+
+    CS = "CS",
+    AI = "AI",
+    TCS = "TCS",
+
+}
+
 
 
 
