@@ -20,6 +20,12 @@ export async function middleware(req: CustomNextRequest) {
 
     // let decodedToken;
 
+    if (isLoggedIn) {
+        decodedToken = await getDataFromToken(req);
+        req.user = decodedToken.id;
+    }
+
+
     // if (isLoggedIn) {
     //     decodedToken = await getDataFromToken(req);
     //     console.log(decodedToken)

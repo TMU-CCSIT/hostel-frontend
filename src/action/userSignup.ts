@@ -8,14 +8,10 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
-
-<<<<<<< HEAD
-import {sendVerificationEmail} from "@/helper/resendMail";
+import mongoose from "mongoose";
 
 import mongoose from "mongoose";
 
-=======
->>>>>>> 0d46afd6e639ea0420156221fec8956557d5445f
 
 // Establish database connection
 dbConnection();
@@ -82,8 +78,6 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
 
         // Create a new user
         const newUser = await User.create({
-
-
             fullName,
             email,
             contactNo,
@@ -91,13 +85,9 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             password: hashPassword,
             profileImage:imageUrl,
             role: role,
-<<<<<<< HEAD
             isVerified:true,
             refId: new mongoose.Types.ObjectId(roleId)
-=======
-            refId: roleId
->>>>>>> 0d46afd6e639ea0420156221fec8956557d5445f
-
+        
         });
 
         // Save the user to the database
