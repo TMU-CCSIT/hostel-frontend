@@ -9,6 +9,7 @@ import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
 
+
 // Establish database connection
 dbConnection();
 
@@ -83,10 +84,8 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         return savedUser;
 
     } catch (error: any) {
-
         console.error('Error creating user:', error);
         throw error;
-
     }
 }
 
