@@ -72,7 +72,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
         }
 
         // user exists but he is not verified 
-        
+
         if (isUserExists && !isUserExists.isVerified) {
 
             return NextResponse.json({
@@ -109,7 +109,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             id: isUserExists._id,
             email: isUserExists.email,
             profileImage: isUserExists.profileImage,
-            role:isUserExists.role,
+            role: isUserExists.role,
         }
 
         const token = jwt.sign(
