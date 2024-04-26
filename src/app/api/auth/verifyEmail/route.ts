@@ -4,6 +4,10 @@ import User from "@/models/user.model";
 
 import { NextRequest,NextResponse } from "next/server";
 
+import { dbConnection } from "@/config/dbConfig";
+
+dbConnection();
+
 export async function POST(req: NextRequest, res: NextResponse){
 
     try{
@@ -12,14 +16,19 @@ export async function POST(req: NextRequest, res: NextResponse){
 
         const {token} = body;
 
-        console.log("token value is ",token);
+        console.log("token is ",token);
 
         // find the user using token 
+        
+        // const decodedToken = decodeURIComponent(token);
+        
+        // console.log("decoded token value  ",decodedToken);
+
 
         const isUserExists = await User.findOne({
 
-            token:token,
-            verifyTokenExpiry: { $gt: Date.now() } // Corrected token expiry comparison
+            token:token as string,
+            // verifyTokenExpiry: { $gt: Date.now() } // Corrected token expiry comparison
 
         })
 

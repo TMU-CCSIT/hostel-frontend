@@ -16,16 +16,18 @@ export default function emailVerification({ params }: { params: { token: string 
     const router = useRouter();
 
 
-    console.log("token value is ",params.token[0]);
+    // console.log("token value is ",params.token[0]);
 
     async function verifyYourEMail(){
 
         try{
 
+            console.log(params.token);
 
-            let resposne = await axios.post("/api/auth/verifyEmail",{token:params.token[0]});
 
-            console.log("res ka data ",resposne.data);
+            // let resposne = await axios.post("/api/auth/verifyEmail",{token:params.token[0]});
+
+            // console.log("res ka data ",resposne.data);
 
 
         }catch(error:any){

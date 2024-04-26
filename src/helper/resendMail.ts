@@ -7,6 +7,8 @@ import User from "@/models/user.model";
 
 import bcrypt from "bcrypt";
 
+import { v4 as uuidv4 } from 'uuid';
+
 
 export async function sendVerificationEmail(
 
@@ -21,11 +23,15 @@ export async function sendVerificationEmail(
 
         // console
 
-        const hashedToken = await bcrypt.hash(userId.toString(), 10);
+        // const hashedToken = await bcrypt.hash(userId.toString(), 5);
+
+        const randomUUID: string = uuidv4();
+
+        console.log("actual hash token value ",randomUUID);
 
         const updateUser = await User.findByIdAndUpdate(userId,{
 
-            token:hashedToken,
+            token:randomUUID,
             tokenExpiry:Date.now() + 3600000
 
         },{new:true})
@@ -39,7 +45,7 @@ export async function sendVerificationEmail(
             from: 'Acme <onboarding@resend.dev>',
             to: email,
             subject: `${emailType === "reset" ? "Reset Password":" User Verification"}  Email Sent Successfully `,
-            react: VerificationEmail({username,verificationLink:`http://localhost:3000/auth/verifyEmail/${hashedToken}`}),
+            react: VerificationEmail({username,verificationLink:`http://localhost:3000/auth/verifyEmail/token=${randomUUID}`}),
 
         });
 
@@ -48,6 +54,7 @@ export async function sendVerificationEmail(
 
             success: true,
             message: "sucessfully send the email ",
+            
 
         }
 

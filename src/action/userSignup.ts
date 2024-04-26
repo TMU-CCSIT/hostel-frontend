@@ -19,12 +19,14 @@ dbConnection();
 
 // Define user schema using zod
 const userSchema = z.object({
+
     fullName: z.string(),
     email: z.string().email(),
     password: z.string(),
     contactNo: z.string(),
     address: z.string(),
     role: z.string(),
+
 });
 
 // Function to create user and set session
@@ -84,7 +86,9 @@ export async function createUserAndSetSession(user: any, session: any,roleId:str
             contactNo,
             address,
             password: hashPassword,
+            profileImage:imageUrl,
             role: role,
+            isVerified:true,
             refId: new mongoose.Types.ObjectId(roleId)
 
         });
@@ -92,7 +96,7 @@ export async function createUserAndSetSession(user: any, session: any,roleId:str
         // Save the user to the database
         // const savedUser = await newUser.save({ session });
 
-        console.log(await sendVerificationEmail(email,fullName,"verify",newUser._id,))
+        // console.log(await sendVerificationEmail(email,fullName,"verify",newUser._id,))
 
         // Successfully created user, return the user data
 
@@ -107,6 +111,8 @@ export async function createUserAndSetSession(user: any, session: any,roleId:str
 
     }
 }
+
+
 
 
 
