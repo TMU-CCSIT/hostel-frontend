@@ -30,12 +30,15 @@ function getAdminQuery(user: IUser): string {
 }
 
 function getCoordinatorQuery(user: IUser): string {
-    const query = 'user.refId.program===leaveForm.user.program';
+    const query = 'leaveForm ';
+    // query = 'user.refId.program===leaveForm.user.program';
     return query;
 }
 
+
 function getWardenQuery(user: IUser): string {
-    const query = 'user.refId.hostel===leaveForm.user.hostel';
+    // const query = 'user.refId.hostel===leaveForm.user.hostel';
+    const query = 'leaveForm';
     return query;
 }
 
@@ -210,6 +213,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 // create qr code
                 const qrCodeString: string = await generateQRCode(`${formId}-${form.user}`);
                 // user
+
                 const user = await User.findById(form.user);
 
                 await Student.findByIdAndUpdate(
@@ -239,13 +243,13 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 status: 200
             });
 
-    } catch (error) {
+    } catch (error: any) {
 
         return NextResponse
             .json(
                 {
                     message: "Server failed to update form, try again later",
-                    error: error,
+                    error: error.message,
                     data: null,
                     success: false,
                 },
