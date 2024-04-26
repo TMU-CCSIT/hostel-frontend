@@ -9,10 +9,13 @@ import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
 
+<<<<<<< HEAD
 import {sendVerificationEmail} from "@/helper/resendMail";
 
 import mongoose from "mongoose";
 
+=======
+>>>>>>> 0d46afd6e639ea0420156221fec8956557d5445f
 
 // Establish database connection
 dbConnection();
@@ -30,7 +33,7 @@ const userSchema = z.object({
 });
 
 // Function to create user and set session
-export async function createUserAndSetSession(user: any, session: any,roleId:string) {
+export async function createUserAndSetSession(user: any, session: any, roleId: string) {
     try {
         // Validate request body
         try {
@@ -88,8 +91,12 @@ export async function createUserAndSetSession(user: any, session: any,roleId:str
             password: hashPassword,
             profileImage:imageUrl,
             role: role,
+<<<<<<< HEAD
             isVerified:true,
             refId: new mongoose.Types.ObjectId(roleId)
+=======
+            refId: roleId
+>>>>>>> 0d46afd6e639ea0420156221fec8956557d5445f
 
         });
 
@@ -105,10 +112,8 @@ export async function createUserAndSetSession(user: any, session: any,roleId:str
         return newUser;
 
     } catch (error: any) {
-
         console.error('Error creating user:', error);
         throw error;
-
     }
 }
 

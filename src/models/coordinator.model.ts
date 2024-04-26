@@ -1,16 +1,13 @@
 
-import mongoose, { Document, mongo } from 'mongoose';
-
-import { IUser } from '@/models/User.model';
-
+import mongoose, { Document } from 'mongoose';
 
 export interface ICoordinator extends Document {
 
     college: string;
     course: string;
-    user: IUser;
     programe: string;
 }
+
 
 const coordinatorSchema = new mongoose.Schema(
     {
@@ -34,5 +31,3 @@ const coordinatorSchema = new mongoose.Schema(
 
 const Coordinator = mongoose.models.Coordinator<ICoordinator> || mongoose.model('Coordinator', coordinatorSchema);
 export default Coordinator;
-
-

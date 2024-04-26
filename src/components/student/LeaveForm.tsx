@@ -44,10 +44,11 @@ const Leave = () => {
 
       // validation for date
       const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
 
-      if (data.dateFrom < tomorrow || data.dateFrom > data.dateTo) {
-        toast.dismiss("Please enter a valid date");
+      const dateFrom = new Date(data.dateFrom);
+
+      if (dateFrom < tomorrow || data.dateFrom > data.dateTo) {
+        toast.dismiss("Please enter a valid date!");
         return;
       }
 
@@ -61,6 +62,7 @@ const Leave = () => {
         reasonForLeave: "",
         addressDuringLeave: "",
       });
+
       toast.success("Leave Form created!");
     } catch (error) {
       console.log(error);

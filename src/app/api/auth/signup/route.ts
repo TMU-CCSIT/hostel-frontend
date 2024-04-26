@@ -114,10 +114,8 @@ export async function POST(req: NextRequest) {
             password: hashPassword,
             profileImage: imageUrl,
             isVerified: true,
-            refId: "662a40d395542a09c752ce03"
-            
+            refId: "662a4ef75b20d2afa10cb446"
         })
-
 
         // send the mail to the user 
 

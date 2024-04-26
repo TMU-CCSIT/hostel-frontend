@@ -1,8 +1,5 @@
-
 import mongoose, { Document } from 'mongoose';
 import { ROLE } from '@/constants/constant';
-
-const roles = Object.values(ROLE);
 
 export interface IUser extends Document {
     fullName: string;
@@ -19,10 +16,9 @@ export interface IUser extends Document {
 
 const userSchema = new mongoose.Schema(
     {
-
         refId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "role",
+            refPath: "role",
             required: true,
         },
         fullName: {
@@ -48,7 +44,7 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: roles,
+            enum: Object.values(ROLE),
             required: true,
         },
         isVerified: {
