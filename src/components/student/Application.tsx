@@ -48,7 +48,6 @@ const Application = ({ userInfo }: any) => {
             {/* date-from */}
             <div>
               <span>
-                {" "}
                 {dateIntoReadableFormat(userInfo.dateFrom) || "24/03"}
               </span>
             </div>
@@ -59,18 +58,8 @@ const Application = ({ userInfo }: any) => {
             </div>
           </div>
 
-          {/* button for approval */}
-          <div className="flex w-full justify-center gap-10">
-            {/* yes */}
-            <div>
-              <CTCButton text={"Yes"} />
-            </div>
-
-            {/* no */}
-            <div>
-              <CTCButton text={"No"} />
-            </div>
-          </div>
+          {/* Status */}
+          <div className="flex w-full justify-center gap-10">Status</div>
         </div>
       </div>
     </>

@@ -116,29 +116,24 @@ export async function POST(req: NextRequest) {
         // Parse request body
         const body = await req.json();
 
-
         const { user, student } = body;
 
         let savedUser;
 
         let savedStudent;
 
-
-        console.log(user,student);
-
         // Create user and student within the same transaction
-
         try {
 
             // Create user and set session
 
             savedStudent = await createStudentAndSetSession(student, session);
 
-            console.log("saved student ",savedStudent);
+            console.log("saved student ", savedStudent);
 
-            savedUser = await createUserAndSetSession(user, session,savedStudent._id);
+            savedUser = await createUserAndSetSession(user, session, savedStudent._id);
 
-            console.log("saved user ",savedUser);
+            console.log("saved user ", savedUser);
 
             // Create student within the same session
 
