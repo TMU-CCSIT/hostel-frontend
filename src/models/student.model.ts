@@ -5,7 +5,7 @@ export interface IStudent extends Document {
     parentName: string;
     parentContactNo: string;
     fingerNo: string;
-    course: string;
+    branch: string;
     college: string;
     roomNo: string;
     programe: string;
@@ -28,7 +28,7 @@ const studentSchema: Schema = new Schema(
             type: String,
             required: true
         },
-        course: {
+        branch: {
             type: String,
             required: true,
         },
