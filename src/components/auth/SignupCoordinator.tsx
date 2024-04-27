@@ -11,6 +11,9 @@ import { PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
 import { signupAtom } from "@/app/store/atoms/signup";
 
+import { useRecoilValue } from "recoil";
+
+
 
 
 // interface
@@ -20,13 +23,19 @@ interface FormData {
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
+  const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
 
+
   const [data, setData] = useState<FormData>({
+
     college: COLLEGES.ccsit,
     programe: PROGRAME["Bachelor of Tecnology"][0],
+
   });
 
   console.log(Object.keys(PROGRAME));  
@@ -43,33 +52,17 @@ const Signup = () => {
   async function submitHandler(e: any) {
 
     try {
+
       console.log(data);
+
       e.preventDefault();
 
-      const userResponse = await axios.post("/api/auth/signup", {
+      const userResponse = await axios.post("/api/auth/coordinatorSignup", {
 
-        college: data.college,
-        programe: data.programe,
+        user:signUpValues,
+        coordinator:data,
 
       });
-      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //     enrollmentNo: data.enrollmentNo,
-      //     course: data.course,
-      //     college: data.college,
-      //     fingerNo: data.fingerNo,
-      //     programe: data.programe,
-      //     roomNo: data.roomNo,
-      //     parentName: data.parentName,
-      //     parentContactNo: data.parentContactNo,
-      //     userId: userResponse.data.data._id,
-      //   });
-
-      //     console.log(userSignupReponse);
-      //     toast.success("Signup successfully");
-      //     toast("Please verify your email!", {
-      //       icon: "👏",
-      //     });
-      //     router.push("/auth/login");
 
 
     } catch (error: any) {
