@@ -13,6 +13,9 @@ import { signupAtom } from "@/app/store/atoms/signup";
 import Checkbox from "../common/CheckBox";
 import { NEVER } from "zod";
 
+import { useRecoilValue } from "recoil";
+
+
 
 
 // interface
@@ -23,16 +26,24 @@ interface FormData {
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
+  const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
 
   const [updatedBranches,setUpdatedBranches] = useState([]);
 
+
   const [data, setData] = useState<FormData>({
+
     college: COLLEGES,
     programe: Object.keys(PROGRAME)[0],
     branch: PROGRAME["Bachelor of Tecnology"]
+
+
+
   });
 
   console.log(PROGRAME["Bachelor of Tecnology"]);  
@@ -83,7 +94,6 @@ const Signup = () => {
       console.log(data);
       e.preventDefault();
 
-      console.log("done ",updatedBranches);
 
       // const userResponse = await axios.post("/api/auth/signup", {
 
@@ -109,6 +119,13 @@ const Signup = () => {
       //       icon: "👏",
       //     });
       //     router.push("/auth/login");
+
+      const userResponse = await axios.post("/api/auth/coordinatorSignup", {
+
+        user:signUpValues,
+        coordinator:data,
+
+      });
 
 
     } catch (error: any) {
