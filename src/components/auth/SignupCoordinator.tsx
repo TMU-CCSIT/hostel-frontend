@@ -15,7 +15,7 @@ import { signupAtom } from "@/app/store/atoms/signup";
 
 // interface
 interface FormData {
-  college: string;
+  college: string[];
   programe: string;
 }
 
@@ -25,11 +25,11 @@ const Signup = () => {
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
-    college: COLLEGES.ccsit,
+    college: COLLEGES,
     programe: PROGRAME["Bachelor of Tecnology"][0],
   });
 
-  console.log(Object.keys(PROGRAME));  
+  // console.log(data.college);  
 
   const handleChangeOfDropDown = (e: any) => {
     setData({
@@ -43,7 +43,7 @@ const Signup = () => {
   async function submitHandler(e: any) {
 
     try {
-      console.log(data);
+      // console.log(data);
       e.preventDefault();
 
       const userResponse = await axios.post("/api/auth/signup", {
@@ -93,12 +93,12 @@ const Signup = () => {
           onSubmit={submitHandler}
         >
           {/* dropdown for college */}
-          {/* <DropDown
+          <DropDown
             text="college"
             label="Select College:"
             name={data.college}
             onChange={handleChangeOfDropDown}
-          ></DropDown> */}
+          ></DropDown>
 
           {/* deropdown for fields related to college */}
           <DropDown
