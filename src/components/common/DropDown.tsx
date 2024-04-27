@@ -2,12 +2,13 @@ import React from "react";
 
 interface DropdownProps {
   label: string;
-  name: string[];
+  name: string[] | string;
   text: string;
   onChange?: (value: any) => void;
 }
 
 const DropDown = (props: DropdownProps) => {
+  console.log(props.name);
   return (
     <div className="flex flex-col gap-4">
       <label htmlFor="dropdown" className="font-bold text-lg">
