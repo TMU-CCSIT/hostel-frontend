@@ -20,7 +20,7 @@ import { useRecoilValue } from "recoil";
 
 // interface
 interface FormData {
-  college: string[];
+  college: any;
   programe: string;
   branch: string[];
 }
@@ -41,8 +41,6 @@ const Signup = () => {
     college: COLLEGES,
     programe: Object.keys(PROGRAME)[0],
     branch: PROGRAME["Bachelor of Tecnology"]
-
-
 
   });
 
@@ -91,34 +89,20 @@ const Signup = () => {
   async function submitHandler(e: any) {
 
     try {
+
       console.log(data);
       e.preventDefault();
 
+      setData({
 
-      // const userResponse = await axios.post("/api/auth/signup", {
+        ...data,
+        college:"College Of Computing Sciences And IT",
+  
+      })
 
-      //   college: data.college,
-      //   programe: data.programe,
 
-      // });
-      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //     enrollmentNo: data.enrollmentNo,
-      //     course: data.course,
-      //     college: data.college,
-      //     fingerNo: data.fingerNo,
-      //     programe: data.programe,
-      //     roomNo: data.roomNo,
-      //     parentName: data.parentName,
-      //     parentContactNo: data.parentContactNo,
-      //     userId: userResponse.data.data._id,
-      //   });
+      console.log("whole data is ",data);
 
-      //     console.log(userSignupReponse);
-      //     toast.success("Signup successfully");
-      //     toast("Please verify your email!", {
-      //       icon: "👏",
-      //     });
-      //     router.push("/auth/login");
 
       const userResponse = await axios.post("/api/auth/coordinatorSignup", {
 

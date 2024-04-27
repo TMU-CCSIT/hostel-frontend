@@ -1,5 +1,4 @@
 import { ROLE, STATUS } from "@/constants/constant";
-import { compareDates } from "@/helper/compareDates";
 import { middleware } from "@/middleware";
 import LeaveForm from "@/models/form.model";
 import Student from "@/models/student.model";
@@ -99,6 +98,7 @@ async function getApplicationsByRole(user: IUser) {
 }
 
 
+
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -110,8 +110,8 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
         const user = await User
             .findById(userId)
             .select("_id role")
-            .populate("refId", "-qrCode")
-            .exec();
+            .populate("refId", "-qrCode"
+                .exec();
 
         console.log("user: ", user)
 
@@ -172,7 +172,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         const form = await LeaveForm.findById(formId);
 
-        const user = await User.findById(userId).populate("redIf", "_id");
+        const user = await User.findById(userId);
 
         if (!form || !user) {
             return NextResponse
@@ -208,6 +208,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         }
 
+
         // if hostel warden
         if (user.role === ROLE.Warden) {
             // if result is true then set status and create qr code and put into user db
@@ -216,7 +217,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 form.status.hostelWarden = STATUS.Accepted;
 
                 // create qr code
-                const qrCodeString: string = `${formId}-${user.refId._id}`;
+                const qrCodeString: string = `${formId}-${form.user}`;
 
                 // user
                 const user = await User.findById(form.user);
@@ -249,6 +250,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
             });
 
     } catch (error: any) {
+
         return NextResponse
             .json(
                 {
@@ -263,6 +265,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
             );
     }
 }
+
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {
 
@@ -357,34 +360,18 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
 }
 
 
-export async function PUT(req: CustomNextRequest, res: NextResponse) {
+export async function PUT(req: NextRequest, res: NextResponse) {
 
     try {
-        // verify gateKeeper is valid or not
-        await middleware(req);
 
-        const loggedInUserId = req.user;
+        let body = await req.json();
+        const { qrString } = body;
 
-        const loggedInUser = await User.findById(loggedInUserId);
+        if (!qrString) {
 
-        if (!loggedInUser || loggedInUser.role !== ROLE.Gatekeeper) {
             return NextResponse.json({
-                message: "User not found or user is not authenticated",
-                error: null,
-                data: null,
-                success: false,
-            }, {
-                status: 404
-            });
-        }
 
-        // fetch data from body
-        const body = await req.json();
-        const { qrCodeString } = body;
-
-        if (!qrCodeString) {
-            return NextResponse.json({
-                message: "No QR Code string received",
+                message: "No QR string received",
                 error: null,
                 data: null,
                 success: false,
@@ -393,21 +380,19 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
             });
         }
 
-        // split the data
-        const formId = qrCodeString.split("-").at(0);
-        const userId = qrCodeString.split("-").at(1);
+        const { leaveformId, userId } = qrString;
 
+        // Find the user using the QR string
 
-        // Find the user and leave-form using the QR string
-        const studentInfo = await Student.findById(userId);
-        const formInfo = await LeaveForm.findById(formId);
+        const userInfo = await Student.findOne({ user: userId });
 
-        // Check if the user and leaveform exists
-        if (!studentInfo || !formInfo) {
+        // Check if the user exists
+
+        if (!userInfo) {
 
             return NextResponse.json({
 
-                message: "User or leave-form not found",
+                message: "User not found",
                 error: null,
                 data: null,
                 success: false,
@@ -417,73 +402,72 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
             });
         }
 
-        // if qrcode string not found
-        if (!studentInfo.qrCode.qrString) {
+        // Check if the user is already scanned
 
-            return NextResponse.json({
-                message: "Qr String not found",
-                error: null,
-                data: null,
-                success: false,
+        if (userInfo.qrCode.status === false) {
 
-            }, {
-                status: 404,
+            const today = new Date();
+
+            const userLeaveFormData = await LeaveForm.findOne({
+                user: userInfo.user,
+                dateFrom: today,
             });
-        }
 
-        // if user not scanned the qrcode till now  ------>> that means he/she try to out
-        if (!studentInfo.qrCode.status) {
+            if (!userLeaveFormData) {
 
-            const todaysDate = new Date();
+                return NextResponse.json({
 
-            // if form date is not equal to today's date 
-            if (!compareDates(formInfo.dateFrom, todaysDate)) {
-                return NextResponse.json(
-                    {
-                        message: "You can't go today, Date doesn't matched",
-                        error: null,
-                        data: null,
-                        success: false,
-                    }, {
-                    status: 401
+                    message: "The leaving date in the form does not match the current date",
+                    error: null,
+                    data: null,
+                    success: false,
+                }, {
+                    status: 400,
                 });
             }
 
             // Set the status of the student as "out"
-            studentInfo.qrCode.status = true;
-            formInfo.leavingTime = Date.now();
 
-            // TODO: Send Mail to thier parents
+            userInfo.qrCode.status = true;
 
         } else {
-            // if user already scanned qrcode  --> that means he/she try to in
 
-            // Make QR code setting as default
-            studentInfo.qrCode.status = false;
-            studentInfo.qrCode.qrString = "";
+            // Set the student status as "false"
+
+            userInfo.qrCode.status = false;
+
+            userInfo.qrCode.qrString = null; // Make QR code string null
+
             // Update leave form data
-            formInfo.leavingTime = Date.now();
-            // TODO: Send mail to their parents
+            const updateLeaveFormData = await LeaveForm.findByIdAndUpdate(leaveformId, {
+
+                arrivingDate: new Date(),
+
+            });
+
+            // Sending confirmation mail to the parents regarding the reaching of their child
         }
 
-        // Save the updated information
-        await studentInfo.save();
-        await formInfo.save();
+        // Save the updated user information
+
+        await userInfo.save();
 
         // Respond with success message
-        return NextResponse.json(
-            {
-                message: studentInfo.qrCode.status ? "QR Scanned for Out successfully" : "QR Scanned for In successfully",
-                error: null,
-                data: null,
-                success: true,
-            }, {
-            status: 200
+
+        return NextResponse.json({
+
+            message: "QR code status updated successfully",
+            error: null,
+            data: null,
+            success: true,
         });
 
     } catch (error: any) {
+
         console.log(error.message);
+
         return NextResponse.json({
+
             message: "An error occurred while processing the request",
             error: error.message,
             data: null,
@@ -493,3 +477,4 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
         });
     }
 }
+

@@ -26,15 +26,27 @@ const LoginPage = () => {
   };
 
   async function loginHandler() {
+
     try {
+
       const resposne = await axios.post("/api/auth/login", data);
+
+      console.log(resposne.data);
+      
       setUser(resposne.data.data);
+
       toast.success("Login successfully");
+
       const role = (resposne?.data?.data?.role).toLowerCase();
+
       router.push(`/${role}`);
+
     } catch (error: any) {
+
       console.log(error);
+      
       toast.error(error?.response?.data?.message || "Login failed");
+
     }
   }
 

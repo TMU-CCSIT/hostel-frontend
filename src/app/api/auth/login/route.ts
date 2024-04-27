@@ -45,6 +45,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
             console.log(error.message);
 
+            return NextResponse.json({
+
+
+                message:"all fields are not fULLFILLED",
+                data:null,
+                error:null,
+
+            },{
+
+                status:400,
+            })
+
 
         }
 
@@ -57,6 +69,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         console.log("is user exists", isUserExists);
 
         if (!isUserExists) {
+
+            
             return NextResponse.json(
                 {
                     message: "this user is not exists with this email address",

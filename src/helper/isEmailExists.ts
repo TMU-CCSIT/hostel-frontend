@@ -4,11 +4,11 @@ import { dbConnection } from "@/config/dbConfig";
 
 dbConnection();
 
-export async function isEmailAlreadyExist(email: string) {
+export async function isEmailAlreadyExist(email:any) {
 
     try {
         
-        return await User.findOne({ email });
+        return await User.findOne({ email:email });
 
     } catch (error: any) {
 

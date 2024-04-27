@@ -16,15 +16,13 @@ interface CustomNextRequest extends NextRequest {
 
 
 
-let coordinatorSchema = z.object({
+// let coordinatorSchema = z.object({
 
-    college: z.string(),
-    branches: z.array(z.string()),
-    programe: z.string(),
+//     college: z.string(),
+//     branches: z.array(z.string()),
+//     programe: z.string(),
 
-})
-
-
+// })
 
 
 
@@ -34,29 +32,31 @@ async function CoordinatorSignUp(coordinator: any) {
     try {
 
 
-        try {
+        // try {
 
-            coordinatorSchema.parse(coordinator);
+        //     coordinatorSchema.parse(coordinator);
 
-        } catch (error: any) {
+        // } catch (error: any) {
 
-            console.log(error.message);
+        //     console.log(error.message);
 
-            throw new Error("validation error in coordinator");
+        //     throw new Error("validation error in coordinator");
 
-        }
+        // }
 
 
         const { college,branches, programe } = coordinator;
+
+        console.log("data is ",college,branches,programe);
 
 
         //create the new entry in Db 
 
         const newUser = await Coordinator.create({
             
-            college,
+            college:college,
             branches:branches, // it an  array 
-            programe,
+            programe:programe,
 
         });
 
@@ -99,6 +99,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
         const body = await req.json();
 
         const { user, coordinator } = body;
+
+        console.log(user,coordinator);
 
         // create the coordinator
 
