@@ -4,7 +4,6 @@ import LeaveForm from "@/models/form.model";
 import Student from "@/models/student.model";
 import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
-import QRCode from 'qrcode';
 import { z } from "zod";
 
 
@@ -100,19 +99,6 @@ async function getApplicationsByRole(user: IUser) {
 
 
 
-const generateQRCode = async (data: string) => {
-    try {
-
-        return await QRCode.toDataURL(data);
-
-    } catch (error: any) {
-        console.log("Error when generating qr code: ", error.message)
-        throw new Error("QR generation failed!");
-    }
-}
-
-
-
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -175,7 +161,6 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 }
 
 
-
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -232,9 +217,9 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 form.status.hostelWarden = STATUS.Accepted;
 
                 // create qr code
-                const qrCodeString: string = await generateQRCode(`${formId}-${form.user}`);
-                // user
+                const qrCodeString: string = `${formId}-${form.user}`;
 
+                // user
                 const user = await User.findById(form.user);
 
                 await Student.findByIdAndUpdate(
@@ -280,7 +265,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
             );
     }
 }
-
 
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {

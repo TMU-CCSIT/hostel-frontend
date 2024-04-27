@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
-import QRCode from "qrcode";
+import { QRCodeSVG } from "qrcode.react";
 
 const Page = () => {
   const [qrCodeData, setQRCodeData] = useState(null);
@@ -20,21 +20,11 @@ const Page = () => {
     fetchQRCodeData();
   }, []);
 
-  useEffect(() => {
-    if (!qrCodeData) return;
-
-    var canvas = document.getElementById("canvas");
-    QRCode.toCanvas(canvas, qrCodeData, function (error) {
-      if (error) console.error(error);
-      console.log("success!");
-    });
-  }, [qrCodeData]);
-
   return (
     <div className="min-h-screen w-full flex justify-center items-center">
       {qrCodeData && (
         <div className=" object-cover relative">
-          <canvas id="canvas" />
+          <QRCodeSVG value={qrCodeData} />,
         </div>
       )}
     </div>
