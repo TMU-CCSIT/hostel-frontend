@@ -34,24 +34,44 @@ async function getAdminQuery(user: IUser) {
 
 async function getCoordinatorQuery(user: IUser) {
 
-    console.log("user: ", user)
+    console.log("coord: ", user)
 
-    const allApplications = await LeaveForm.find({});
-
+    const allApplications = await LeaveForm.find({
+        'user.refId.programe': { $in: ['Btech', 'Ai'] }
+    })
+        .populate('user')
+        .populate('user.refId')
+        .exec();
 
     return allApplications;
 }
 
 
 async function getWardenQuery(user: IUser) {
-    // const query = 'user.refId.hostel===leaveForm.user.hostel';
-    const query = 'leaveForm';
-    return query;
+    console.log("warden: ", user)
+
+    const allApplications = await LeaveForm.find({
+        'user.refId.hostel': { $eq: "New Boys Hostel" }
+    })
+        .populate('user')
+        .populate('user.refId')
+        .exec();
+
+    return allApplications;
 }
 
+
 async function getPrincipalQuery(user: IUser) {
-    const query = 'user.refId.college===leaveForm.user.college';
-    return query;
+    console.log("princ: ", user)
+
+    const allApplications = await LeaveForm.find({
+        'user.refId.college': { $eq: "CCSIT" }
+    })
+        .populate('user')
+        .populate('user.refId')
+        .exec();
+
+    return allApplications;
 }
 
 
@@ -104,8 +124,8 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
         const user = await User
             .findById(userId)
             .select("_id role")
-            .populate("refId", "-qrCode")
-            .exec();
+            .populate("refId", "-qrCode"
+                .exec();
 
         console.log("user: ", user)
 
