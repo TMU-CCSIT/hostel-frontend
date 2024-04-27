@@ -63,7 +63,7 @@ export const ADMINDATA = {
     b1: "Sign Up Main",
     b2: "Sign Up Student",
     b3: "Sign Up Coordinator",
-    b4: "Sign Up Warden"
+    b4: "Sign Up Warden"
 }
 
 

@@ -1,30 +1,39 @@
 
 import mongoose, { Document } from 'mongoose';
 
+import { COLLEGES } from '@/constants/constant';
+
+import { PROGRAME } from '@/constants/constant';
+
 export interface ICoordinator extends Document {
 
     college: string;
-    course: string;
     programe: string;
+    branches: string[]; // Array of branches
 }
 
 
 const coordinatorSchema = new mongoose.Schema(
     {
         college: {
+
             type: String,
-            required: true,
+            enum: Object.keys(COLLEGES), // Restrict to valid college keys
+            required: true
         },
-        course: {
+        program: {
+
             type: String,
-            required: true,
+            enum: Object.keys(PROGRAME), // Restrict to valid program keys
+            required: true
         },
-        programe: [
-            {
-                type: String,
-                required: true
-            }
-        ],
+        branches: [{
+
+            type: String,
+            required: true
+            
+        }]
+
     },
     {
         timestamps: true
@@ -32,4 +41,11 @@ const coordinatorSchema = new mongoose.Schema(
 );
 
 const Coordinator = mongoose.models.Coordinator<ICoordinator> || mongoose.model('Coordinator', coordinatorSchema);
+
 export default Coordinator;
+
+
+
+
+
+

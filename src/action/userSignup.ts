@@ -8,6 +8,9 @@ import { NextRequest, NextResponse } from "next/server";
 import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
 import { sendEmail } from "@/helper/sendMail";
+
+import {sendVerificationEmail} from "@/helper/resendMail";
+
 import mongoose from "mongoose";
 
 
@@ -83,7 +86,9 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             password: hashPassword,
             profileImage: imageUrl,
             role: role,
-            isVerified: true,
+
+            isVerified:true,
+
             refId: new mongoose.Types.ObjectId(roleId)
 
         });
