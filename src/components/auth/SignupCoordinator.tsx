@@ -14,14 +14,12 @@ import Checkbox from "../common/CheckBox";
 import { NEVER } from "zod";
 import { useRecoilValue } from "recoil";
 
-import { useRecoilValue } from "recoil";
-
 
 
 
 // interface
 interface FormData {
-  college: string[];
+  college: string;
   programe: string;
   branch: string[];
 }
@@ -34,18 +32,15 @@ const Signup = () => {
 
   const router = useRouter();
 
-  const signUpValues = useRecoilValue(signupAtom);
 
   const [updatedBranches,setUpdatedBranches] = useState([]);
 
 
   const [data, setData] = useState<FormData>({
 
-    college: COLLEGES,
+    college:Object.keys(COLLEGES)[0],
     programe: Object.keys(PROGRAME)[0],
     branch: PROGRAME["Bachelor of Tecnology"]
-
-
 
   });
 
@@ -155,7 +150,7 @@ const Signup = () => {
           <DropDown
             text="college"
             label="Select College:"
-            name={data.college}
+            name={Object.keys(COLLEGES)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
@@ -177,7 +172,7 @@ const Signup = () => {
 
 
           {/* button */}
-          <div className="m-12">
+          <div className="m-12 flex justify-center items-center">
             <CTCButton text={"Submit"} type={true} />
           </div>
 
