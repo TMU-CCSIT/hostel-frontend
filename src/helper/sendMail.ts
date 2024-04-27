@@ -1,65 +1,126 @@
 
-import { EmailTemplate } from '@/helper/mailTemplates/verificationMailTemplate';
-import { Resend } from 'resend';
+import nodemailer from "nodemailer";
+
 import bcrypt from "bcrypt";
 
-import Student from '@/models/student.model';
+import { dbConnection } from "@/config/dbConfig";
 
-import { renderReactToStaticMarkup } from './renderToStaticMarkup';
+import User from "@/models/user.model";
 
-const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
+dbConnection();
 
-export async function sendEmail(email: any, emailType: any, userId: any) {
+export async function sendMail(email: string, emailType: string) {
 
   try {
 
-    console.log("send email ke andar ",process.env.NEXT_PUBLIC_RESEND_API_KEY);
+    console.log("sendMail function called.");
+    console.log("Email:", email);
+    console.log("Email Type:", emailType);
 
-    // Generate hashed token
+    console.log("base url is ", process.env.NEXT_PUBLIC_BASE_URL);
 
-    const hashedToken = await bcrypt.hash(userId.toString(), 10);
+    // Generate hashed token for the email
 
-    // Update user document with hashed token and token expiry
+    const hashedToken: string = await bcrypt.hash(email, 6);
 
-    await Student.findByIdAndUpdate(userId, {
+    console.log("Hashed Token:", hashedToken);
 
-      verifyToken: hashedToken,
-      verifyTokenExpiry: Date.now() + 3600000
 
-    }, { new: true });
+    // Update user's token and token expiry based on email type
 
-    // Render React template to HTML
+    // Find a single user document based on the email address
 
-    const reactTemplate = EmailTemplate({
+    const updateUser = await User.findOneAndUpdate(
 
-      emailType: emailType,
-      hashedToken: hashedToken,
 
+      { email: email },
+
+      // Update object
+
+      {
+        token: hashedToken,
+        tokenExpiry: new Date(Date.now() + 3600000), // tokenExpiry is set to expire in 1 hour
+      },
+      // Options
+      { new: true }
+    );
+
+
+    // Create Nodemailer transport
+
+    const transport = nodemailer.createTransport({
+      host: process.env.mail_host,
+      port: 587,
+      auth: {
+        user: process.env.mail_user,
+        pass: process.env.mail_pass
+      }
     });
 
-    // const htmlTemplate = ReactDOMServer.renderToStaticMarkup(reactTemplate);
 
-    // const htmlTemplate = renderReactToStaticMarkup(reactTemplate);
-
-    // Send email using resend library
-    const data = await resend.emails.send({
-
-      from: process.env.NEXT_PUBLIC_SENDEREMAIL as string,
+    // Define email content
+    const mailOptions = {
+      from: process.env.mail_user,
       to: email,
-      subject: emailType === "verify" ? "Verify Your Email" : " Reset Password",
-      html: "<h1>hellow</h1>", // Pass HTML template instead of react
+      subject: emailType === "verifyEmail" ? "Verify Your Email" : "Reset Your Password",
+      html: `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>${emailType === "verifyEmail" ? "Verify Your Email" : "Reset Your Password"}</title>
+            <style>
+                body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 2rem; }
+                .container { max-width: 600px; margin: 0 auto; background-color: white; padding: 2rem; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); }
+                .header { text-align: center; margin-bottom: 2rem; }
+                .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+                .header p { font-size: 1.2rem; color: #777; }
+                .content { text-align: center; }
+                .content h2 { font-size: 1.5rem; margin-bottom: 1rem; }
+                .content p { font-size: 1.1rem; color: #333; }
+                .button-container { display: flex; justify-content: center; margin-top: 2rem; }
+                .button { display: inline-block; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; }
+                .button:hover { background-color: #45a049; }
+            </style>
+        </head>
+        <body>
+    
+            <div class="container">
+    
+                <div class="header">
+                    <h1>${emailType === "verifyEmail" ? "Verify Your Email" : "Reset Your Password"}</h1>
+                    <p>${emailType === "verifyEmail" ? "Please click the button below to verify your email address." : "Please click the button below to reset your password."}</p>
+                </div>
+    
+                <p>Click <a href="${process.env.NEXT_PUBLIC_BASE_URL}/auth/${emailType === "verifyEmail"?"verifyEmail":"forgotPassword"}/token=${hashedToken}">${emailType === "verifyEmail" ? "here" : "here"}</a> to ${emailType === "verifyEmail" ? "verify your email" : "reset your password"}</p> 
 
-    });
+            </div>
+    
+        </body>
+        </html>
+      `
+    };
 
-    console.log("mail data is ",data);
 
-    return Response.json("done");
+    // Send email
 
-  } catch (error) {
+    const mailResponse = await transport.sendMail(mailOptions);
 
-    return Response.json({ error });
+    console.log("Mail Response:", mailResponse);
+
+    return mailResponse;
+
+  } catch (error: any) {
+
+    console.error("Error sending email:", error.message);
+    throw error;
+
 
   }
 }
+
+
+
 
 

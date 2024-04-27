@@ -13,6 +13,7 @@ import { middleware } from "@/middleware";
 import { createUserAndSetSession } from "@/action/userSignup";
 
 
+
 dbConnection();
 
 interface CustomNextRequest extends NextRequest {
@@ -105,6 +106,8 @@ async function createStudentAndSetSession(student: any, session: any) {
 
 
 
+
+
 export async function POST(req: NextRequest) {
 
     try {
@@ -138,6 +141,7 @@ export async function POST(req: NextRequest) {
             // Create student within the same session
 
             // Commit transaction
+
             await session.commitTransaction();
 
             session.endSession();

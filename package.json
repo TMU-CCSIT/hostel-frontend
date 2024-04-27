@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/nodemailer": "^6.4.14",
     "@types/qrcode": "^1.5.5",
     "@yudiel/react-qr-scanner": "^2.0.0-beta.3",
     "axios": "^1.6.8",
@@ -19,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.3.2",
     "next": "14.2.2",
+    "nodemailer": "^6.9.13",
     "qrcode.react": "^3.1.0",
     "react": "^18",
     "react-dom": "^18.2.0",
