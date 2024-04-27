@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
-import { obj } from "@/constants/constant";
+import { PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
 
 import { useRecoilValue } from "recoil";
@@ -40,9 +40,9 @@ const Signup = () => {
     parentContactNo: "",
     fingerNo: "",
     course: "a",
-    college: COLLEGES[0],
+    college: COLLEGES.ccsit,
     roomNo: "",
-    programe: obj["College Of Computing Sciences And IT"][0],
+    programe: PROGRAME["Bachelor of Tecnology"][0],
   });
 
   // function for data matching
@@ -110,7 +110,7 @@ const Signup = () => {
           <DropDown
             text="college"
             label="Select College:"
-            name={COLLEGES}
+            name={data.college}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
@@ -118,7 +118,7 @@ const Signup = () => {
           <DropDown
             text="programe"
             label="Program"
-            name={obj[data.college as keyof typeof obj]}
+            name={PROGRAME[data.college as keyof typeof PROGRAME]}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 

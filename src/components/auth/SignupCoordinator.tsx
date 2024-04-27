@@ -1,21 +1,22 @@
 "use client";
 
 // importing necessities
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
-import { obj } from "@/constants/constant";
+import { PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
 import { signupAtom } from "@/app/store/atoms/signup";
 
 
+
 // interface
 interface FormData {
-    college: string,
-    programe: string,
+  college: string;
+  programe: string;
 }
 
 const Signup = () => {
@@ -24,10 +25,11 @@ const Signup = () => {
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
-    college: COLLEGES[0],
-    programe: obj["College Of Computing Sciences And IT"][0],
+    college: COLLEGES.ccsit,
+    programe: PROGRAME["Bachelor of Tecnology"][0],
   });
 
+  console.log(Object.keys(PROGRAME));  
 
   const handleChangeOfDropDown = (e: any) => {
     setData({
@@ -41,8 +43,8 @@ const Signup = () => {
   async function submitHandler(e: any) {
 
     try {
-        console.log(data);
-        e.preventDefault();
+      console.log(data);
+      e.preventDefault();
 
       const userResponse = await axios.post("/api/auth/signup", {
 
@@ -50,7 +52,6 @@ const Signup = () => {
         programe: data.programe,
 
       });
-
       //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
       //     enrollmentNo: data.enrollmentNo,
       //     course: data.course,
@@ -91,20 +92,19 @@ const Signup = () => {
           className=" flex flex-col justify-center items-center"
           onSubmit={submitHandler}
         >
-
           {/* dropdown for college */}
-          <DropDown
+          {/* <DropDown
             text="college"
             label="Select College:"
-            name={COLLEGES}
+            name={data.college}
             onChange={handleChangeOfDropDown}
-          ></DropDown>
+          ></DropDown> */}
 
           {/* deropdown for fields related to college */}
           <DropDown
             text="programe"
             label="programe"
-            name={obj[data.college as keyof typeof obj]}
+            name={Object.keys(PROGRAME)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
