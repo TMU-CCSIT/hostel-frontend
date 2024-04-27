@@ -1,31 +1,44 @@
 "use client";
 
 // importing necessities
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
-import { obj } from "@/constants/constant";
+import { PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
+import { signupAtom } from "@/app/store/atoms/signup";
+
+import { useRecoilValue } from "recoil";
+
+
+
 
 // interface
 interface FormData {
-    college: string,
-    programe: string,
+  college: string[];
+  programe: string;
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
+  const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
 
+
   const [data, setData] = useState<FormData>({
-    college: COLLEGES[0],
-    programe: obj["College Of Computing Sciences And IT"][0],
+
+    college: COLLEGES,
+    programe: PROGRAME["Bachelor of Tecnology"][0],
+
   });
 
+  // console.log(data.college);  
 
   const handleChangeOfDropDown = (e: any) => {
     setData({
@@ -37,35 +50,24 @@ const Signup = () => {
   // dummy function to pass
 
   async function submitHandler(e: any) {
-    try {
-        console.log(data);
-        e.preventDefault();
 
-      const userResponse = await axios.post("/api/auth/signup", {
-        college: data.college,
-        programe: data.programe,
+    try {
+
+      console.log(data);
+      e.preventDefault();
+
+      const userResponse = await axios.post("/api/auth/coordinatorSignup", {
+
+        user:signUpValues,
+        coordinator:data,
+
       });
 
-      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //     enrollmentNo: data.enrollmentNo,
-      //     course: data.course,
-      //     college: data.college,
-      //     fingerNo: data.fingerNo,
-      //     programe: data.programe,
-      //     roomNo: data.roomNo,
-      //     parentName: data.parentName,
-      //     parentContactNo: data.parentContactNo,
-      //     userId: userResponse.data.data._id,
-      //   });
 
-      //     console.log(userSignupReponse);
-      //     toast.success("Signup successfully");
-      //     toast("Please verify your email!", {
-      //       icon: "👏",
-      //     });
-      //     router.push("/auth/login");
     } catch (error: any) {
+
       toast.error(error?.response?.data?.message || "Signup failed");
+
     }
   }
 
@@ -82,12 +84,11 @@ const Signup = () => {
           className=" flex flex-col justify-center items-center"
           onSubmit={submitHandler}
         >
-
           {/* dropdown for college */}
           <DropDown
             text="college"
             label="Select College:"
-            name={COLLEGES}
+            name={data.college}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
@@ -95,7 +96,7 @@ const Signup = () => {
           <DropDown
             text="programe"
             label="programe"
-            name={obj[data.college as keyof typeof obj]}
+            name={Object.keys(PROGRAME)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 

@@ -1,22 +1,35 @@
-export const COLLEGES = ["College Of Computing Sciences And IT", "Dental", "Faculty of Engineering", "Medical"];
+export const COLLEGES = ["College Of Computing Sciences And IT"];
 
-export const obj = {
-    "College Of Computing Sciences And IT": [
-        "Btech",
-        "Bca",
-        "Bsc",
-    ],
+export const BTech = [
+    "Artificial Intelligence",
+    "Computer Science",
+    "TCS",
+    "IBM",
+    "I-Nurture"
+]
 
-    "Dental": [
-        "Bachelor of Dental Surgery"
-    ],
-    "Faculty of Engineering": [
-        "Civil Engineering",
-        "Mechanical Engineering"
-    ],
-    "Medical": [
-        "Bachelor of Medicine, Bachelor of Surgery"
-    ]
+export const BCA = [
+    "Artificial Intelligence",
+    "IBM",
+    "I-Nurture",
+    "Core"
+]
+
+export const MTech = [
+    "Core",
+    "Artificial Intelligence"
+]
+
+export const MCA = [
+    "Core",
+    "I-Nurture"
+]
+
+export const PROGRAME = {
+    "Bachelor of Tecnology": BTech,
+    "bachelor of Computer Applications": BCA,
+    "Master of Technology": MTech,
+    "Master of Computer Applications": MCA,
 }
 
 
@@ -50,7 +63,7 @@ export const ADMINDATA = {
     b1: "Sign Up Main",
     b2: "Sign Up Student",
     b3: "Sign Up Coordinator",
-    b4: "Sign Up Warden"
+    b4: "Sign Up Warden"
 }
 
 

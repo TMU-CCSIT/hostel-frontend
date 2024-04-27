@@ -21,7 +21,7 @@ interface FormData {
   password: string;
   contactNo: string;
   address: string; // Assuming address is a string
-  
+
 }
 
 const Signup: React.FC<{ role: string }> = ({ role }) =>{
