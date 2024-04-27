@@ -1,4 +1,6 @@
-export const COLLEGES = ["College Of Computing Sciences And IT"];
+"use client"
+
+export const COLLEGES = {"College Of Computing Sciences And IT":"ccsit"};
 
 export const BTech = [
     "Artificial Intelligence",
