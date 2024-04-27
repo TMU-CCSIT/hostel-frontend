@@ -16,13 +16,13 @@ interface CustomNextRequest extends NextRequest {
 
 
 
-// let coordinatorSchema = z.object({
+let coordinatorSchema = z.object({
 
-//     college: z.string(),
-//     branches: z.array(z.string()),
-//     programe: z.string(),
+    college: z.string(),
+    branch: z.array(z.string()),
+    programe: z.string(),
 
-// })
+})
 
 
 
@@ -32,22 +32,22 @@ async function CoordinatorSignUp(coordinator: any) {
     try {
 
 
-        // try {
+        try {
 
-        //     coordinatorSchema.parse(coordinator);
+            coordinatorSchema.parse(coordinator);
 
-        // } catch (error: any) {
+        } catch (error: any) {
 
-        //     console.log(error.message);
+            console.log(error.message);
 
-        //     throw new Error("validation error in coordinator");
+            throw new Error("validation error in coordinator");
 
-        // }
+        }
 
 
-        const { college,branches, programe } = coordinator;
+        const { college,branch, programe } = coordinator;
 
-        console.log("data is ",college,branches,programe);
+        console.log("data is ",college,branch,programe);
 
 
         //create the new entry in Db 
@@ -55,7 +55,7 @@ async function CoordinatorSignUp(coordinator: any) {
         const newUser = await Coordinator.create({
             
             college:college,
-            branches:branches, // it an  array 
+            branches:branch, 
             programe:programe,
 
         });
@@ -104,10 +104,37 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
         // create the coordinator
 
-        const newCoordinator = await CoordinatorSignUp(coordinator);
+        let newCoordinator;
 
-        const newUser = await createUserAndSetSession(user, "kdj", newCoordinator._id);
+        let newUser;
 
+
+        try{
+
+
+            const newCoordinator = await CoordinatorSignUp(coordinator);
+    
+            const newUser = await createUserAndSetSession(user, "kdj", newCoordinator._id);
+
+            console.log(newCoordinator);
+
+            console.log(newUser);
+
+
+        }catch(error:any){
+
+            return NextResponse.json({
+
+                message:"Error creating coordinator",
+                error:error.message,
+                data:null,
+                
+            },{
+
+                status:400
+            })
+
+        }
 
         return NextResponse.json({
 
@@ -132,6 +159,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
             message: "coordinaotor created successfully",
             data:null,
             error:error.message,
+            
         },{
 
             status:500,

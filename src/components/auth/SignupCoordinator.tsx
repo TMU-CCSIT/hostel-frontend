@@ -12,7 +12,6 @@ import { COLLEGES } from "@/constants/constant";
 import { signupAtom } from "@/app/store/atoms/signup";
 import Checkbox from "../common/CheckBox";
 import { NEVER } from "zod";
-
 import { useRecoilValue } from "recoil";
 
 
@@ -20,7 +19,7 @@ import { useRecoilValue } from "recoil";
 
 // interface
 interface FormData {
-  college: any;
+  college: string;
   programe: string;
   branch: string[];
 }
@@ -33,12 +32,13 @@ const Signup = () => {
 
   const router = useRouter();
 
+
   const [updatedBranches,setUpdatedBranches] = useState([]);
 
 
   const [data, setData] = useState<FormData>({
 
-    college: COLLEGES,
+    college:Object.keys(COLLEGES)[0],
     programe: Object.keys(PROGRAME)[0],
     branch: PROGRAME["Bachelor of Tecnology"]
 
@@ -89,20 +89,34 @@ const Signup = () => {
   async function submitHandler(e: any) {
 
     try {
-
       console.log(data);
       e.preventDefault();
 
-      setData({
 
-        ...data,
-        college:"College Of Computing Sciences And IT",
-  
-      })
+      // const userResponse = await axios.post("/api/auth/signup", {
 
+      //   college: data.college,
+      //   programe: data.programe,
 
-      console.log("whole data is ",data);
+      // });
+      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
+      //     enrollmentNo: data.enrollmentNo,
+      //     course: data.course,
+      //     college: data.college,
+      //     fingerNo: data.fingerNo,
+      //     programe: data.programe,
+      //     roomNo: data.roomNo,
+      //     parentName: data.parentName,
+      //     parentContactNo: data.parentContactNo,
+      //     userId: userResponse.data.data._id,
+      //   });
 
+      //     console.log(userSignupReponse);
+      //     toast.success("Signup successfully");
+      //     toast("Please verify your email!", {
+      //       icon: "👏",
+      //     });
+      //     router.push("/auth/login");
 
       const userResponse = await axios.post("/api/auth/coordinatorSignup", {
 
@@ -136,7 +150,7 @@ const Signup = () => {
           <DropDown
             text="college"
             label="Select College:"
-            name={data.college}
+            name={Object.keys(COLLEGES)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
@@ -158,7 +172,7 @@ const Signup = () => {
 
 
           {/* button */}
-          <div className="m-12">
+          <div className="m-12 flex justify-center items-center">
             <CTCButton text={"Submit"} type={true} />
           </div>
 
@@ -180,9 +194,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
-
-
-
-
-
+export default Signup;

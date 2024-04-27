@@ -21,10 +21,10 @@ const coordinatorSchema = new mongoose.Schema(
             enum: Object.keys(COLLEGES), // Restrict to valid college keys
             required: true
         },
-        program: {
+        programe: {
 
             type: String,
-            enum: Object.keys(PROGRAME), // Restrict to valid program keys
+            // enum: Object.keys(PROGRAME), // Restrict to valid program keys
             required: true
         },
         branches: [{

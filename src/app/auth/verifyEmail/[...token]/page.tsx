@@ -16,7 +16,11 @@ export default function emailVerification({ params }: { params: { token: string 
 
     const router = useRouter();
 
+    // const actualToken = decodeURIComponent(params.token[0]).split("=")[1];
+
     const actualToken = decodeURIComponent(params.token[0]).split("=")[1];
+
+    console.log(actualToken);
 
     async function verifyYourEMail(){
 

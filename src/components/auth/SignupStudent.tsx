@@ -23,10 +23,10 @@ interface FormData {
   parentName: string;
   parentContactNo: string;
   fingerNo: string;
-  course: string;
   college: string;
   roomNo: string;
   programe: string;
+  branch: string;
 }
 
 const Signup = () => {
@@ -40,10 +40,10 @@ const Signup = () => {
     parentName: "",
     parentContactNo: "",
     fingerNo: "",
-    course: "a",
-    college: COLLEGES[0],
+    college: Object.keys(COLLEGES)[0],
     roomNo: "",
     programe: Object.keys(PROGRAME)[0],
+    branch: PROGRAME["Bachelor of Tecnology"][0]
   });
 
   // function for data matching
@@ -57,6 +57,7 @@ const Signup = () => {
       [e.target.name]: e.target.value,
     });
   };
+ 
 
   async function submitHandler(e: any) {
 
@@ -65,30 +66,25 @@ const Signup = () => {
       console.log(data);
       e.preventDefault();
 
-      // const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //   user: signUpValues,
-      //   student: data,
-      // });
+      const userSignupReponse = await axios.post("/api/auth/studentSignup", {
 
-    
+        user: signUpValues,
+        student: data,
+
+      });
 
       toast.success("Signup successfully");
       toast("Please verify your email!", {
         icon: "👏",
       });
       router.push("/auth/login");
-
     } catch (error: any) {
-
       toast.error(error?.response?.data?.message || "Signup failed");
-
     }
   }
 
   return (
-
     // main div
-
     <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
       {/* inner div */}
       <div className="bg-[#EDF6FF] flex flex-col p-8 rounded-md shadow-xl justify-center items-center gap-4 ">
@@ -97,7 +93,7 @@ const Signup = () => {
 
         {/* form */}
         <form
-          className=" flex flex-col gap-7 justify-center "
+          className=" flex flex-col gap-7 justify-center items-center "
           onSubmit={submitHandler}
         >
           <div className="flex flex-col gap-7">
@@ -122,7 +118,7 @@ const Signup = () => {
           <DropDown
             text="college"
             label="Select College:"
-            name={data.college}
+            name={Object.keys(COLLEGES)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
@@ -135,12 +131,12 @@ const Signup = () => {
           ></DropDown>
 
 
-          <Checkbox
+          <DropDown
           text="branch"
           label="Branch"
           name={PROGRAME[data.programe as keyof typeof PROGRAME]}
-          onChange={handleChange}
-          ></Checkbox>
+          onChange={handleChangeOfDropDown}
+          ></DropDown>
 
           {/* button */}
           <div className="m-12">
@@ -165,4 +161,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signup;

@@ -26,7 +26,7 @@ interface CustomNextRequest extends NextRequest {
 const signupSchema = z.object({
 
     enrollmentNo: z.string(),
-    course: z.string(),
+    branch: z.string(),
     college: z.string(),
     fingerNo: z.string(),
     programe: z.string(),
@@ -35,8 +35,6 @@ const signupSchema = z.object({
     parentContactNo: z.string(),
 
 });
-
-
 
 
 async function createStudentAndSetSession(student: any, session: any) {
@@ -60,7 +58,7 @@ async function createStudentAndSetSession(student: any, session: any) {
         const {
 
             enrollmentNo,
-            course,
+            branch,
             college,
             fingerNo,
             programe,
@@ -76,7 +74,7 @@ async function createStudentAndSetSession(student: any, session: any) {
         const newStudent = await Student.create({
 
             enrollmentNo,
-            course,
+            branch,
             college,
             fingerNo,
             programe,

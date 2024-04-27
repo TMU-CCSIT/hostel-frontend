@@ -22,7 +22,9 @@ const LoginPage = () => {
   const setUser = useSetRecoilState(userAtom);
 
   const handleChange = (e: any) => {
+
     setData({ ...data, [e.target.name]: e.target.value });
+
   };
 
   async function loginHandler() {
@@ -44,7 +46,7 @@ const LoginPage = () => {
     } catch (error: any) {
 
       console.log(error);
-      
+
       toast.error(error?.response?.data?.message || "Login failed");
 
     }
@@ -110,7 +112,7 @@ const LoginPage = () => {
           <div
             className="text-blue-500 cursor-pointer underline"
             onClick={() => {
-              router.push("/forgetpassword");
+              router.push("/auth/forgotEmail");
             }}
           >
             Forget Password
