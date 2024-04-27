@@ -33,6 +33,7 @@ const studentSchema: Schema = new Schema(
             required: true,
         },
         college: {
+            
             type: String,
             required: true,
         },

@@ -55,7 +55,11 @@ export async function POST(req: NextRequest, res: NextResponse){
 
         isUserExists.token = "";
 
+        isUserExists.tokenExpiry = "";
+
         // isUserExists.tokenExpiry =;
+
+        await isUserExists.save();
 
          return NextResponse
 
@@ -89,6 +93,8 @@ export async function POST(req: NextRequest, res: NextResponse){
 
     }
 }
+
+
 
 
 

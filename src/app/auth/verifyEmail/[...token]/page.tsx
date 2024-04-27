@@ -8,6 +8,7 @@ import { TbMailPin } from "react-icons/tb";
 import axios from "axios";
 
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function emailVerification({ params }: { params: { token: string } }) {
 
@@ -15,19 +16,19 @@ export default function emailVerification({ params }: { params: { token: string 
 
     const router = useRouter();
 
-
-    // console.log("token value is ",params.token[0]);
+    const actualToken = decodeURIComponent(params.token[0]).split("=")[1];
 
     async function verifyYourEMail(){
 
         try{
 
-            console.log(params.token);
+            let resposne = await axios.post("/api/auth/verifyEmail",{token:actualToken});
 
+            console.log("res ka data ",resposne.data);
 
-            // let resposne = await axios.post("/api/auth/verifyEmail",{token:params.token[0]});
+            toast.success("your email is successfully verified");
 
-            // console.log("res ka data ",resposne.data);
+            router.push("/auth/login");
 
 
         }catch(error:any){
@@ -37,16 +38,6 @@ export default function emailVerification({ params }: { params: { token: string 
         }
     }
 
-
-    useEffect(()=>{
-
-
-        // token = (window.location.pathname.split("/")[window.location.pathname.split("/").length - 1]).split("=")[1];
-
-        // console.log("token value is ",token);
-
-
-    },[]);
 
     return (
 

@@ -23,7 +23,7 @@ interface FormData {
   parentContactNo: string;
   fingerNo: string;
   course: string;
-  college: string[];
+  college: string;
   roomNo: string;
   programe: string;
 }
@@ -40,7 +40,7 @@ const Signup = () => {
     parentContactNo: "",
     fingerNo: "",
     course: "a",
-    college: COLLEGES,
+    college: COLLEGES[0],
     roomNo: "",
     programe: PROGRAME["Bachelor of Tecnology"][0],
   });

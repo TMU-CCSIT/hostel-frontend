@@ -7,7 +7,9 @@ dbConnection();
 export async function isEmailAlreadyExist(email: string) {
 
     try {
-        return await User.findOne({ email })
+        
+        return await User.findOne({ email });
+
     } catch (error: any) {
 
         console.log("Error: ", error.message)
