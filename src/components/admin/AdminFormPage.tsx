@@ -16,17 +16,16 @@ const AdminFormPage = () => {
   const clickHandler = (e:any) =>{
     console.log(e.target.textContent);
       if(e.target.textContent === "Sign Up Main"){
-        console.log("b1 clicked");
         setRender(<Signup role ={ROLE.Admin}/>);
       }
       if(e.target.textContent === "Sign Up Student"){
-        console.log("b2 clicked");
         setRender(<SignupStudent />);
       }
       if(e.target.textContent === "Sign Up Coordinator"){
         setRender(<SignupCoordinator />);
       }
-      if(e.target.textContent === "Sign Up Warden"){
+      if(e.target.textContent === "Sign Up Warden"){
+        console.log("warden clicked ");
         setRender(<SignupWarden/>)
       }
   }

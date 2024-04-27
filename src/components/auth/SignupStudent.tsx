@@ -23,7 +23,7 @@ interface FormData {
   parentContactNo: string;
   fingerNo: string;
   course: string;
-  college: string;
+  college: string[];
   roomNo: string;
   programe: string;
 }
@@ -40,7 +40,7 @@ const Signup = () => {
     parentContactNo: "",
     fingerNo: "",
     course: "a",
-    college: COLLEGES.ccsit,
+    college: COLLEGES,
     roomNo: "",
     programe: PROGRAME["Bachelor of Tecnology"][0],
   });
@@ -118,7 +118,7 @@ const Signup = () => {
           <DropDown
             text="programe"
             label="Program"
-            name={PROGRAME[data.college as keyof typeof PROGRAME]}
+            name={Object.keys(PROGRAME)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
 
