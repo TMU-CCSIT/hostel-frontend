@@ -8,7 +8,7 @@ interface DropdownProps {
 }
 
 const DropDown = (props: DropdownProps) => {
-  console.log(props.name);
+  // console.log(props.name);
   return (
     <div className="flex flex-col gap-4">
       <label htmlFor="dropdown" className="font-bold text-lg">
