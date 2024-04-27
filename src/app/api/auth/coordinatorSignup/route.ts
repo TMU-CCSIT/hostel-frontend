@@ -19,8 +19,8 @@ interface CustomNextRequest extends NextRequest {
 let coordinatorSchema = z.object({
 
     college: z.string(),
-    course: z.string(),
-    programe: z.array(z.string()),
+    branches: z.array(z.string()),
+    programe: z.string(),
 
 })
 
@@ -47,15 +47,16 @@ async function CoordinatorSignUp(coordinator: any) {
         }
 
 
-        const { college, course, programe } = coordinator;
+        const { college,branches, programe } = coordinator;
 
 
         //create the new entry in Db 
+
         const newUser = await Coordinator.create({
             
             college,
-            course,
-            programe:programe,
+            branches:branches, // it an  array 
+            programe,
 
         });
 
@@ -136,6 +137,10 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
     }
 }
+
+
+
+
 
 
 

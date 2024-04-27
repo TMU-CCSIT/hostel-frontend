@@ -35,7 +35,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         // Validate request body
         try {
 
-            console.log("role id is",roleId);
+            console.log("role id is", roleId);
 
             userSchema.parse(user);
 
@@ -53,7 +53,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             });
         }
 
-        if(!roleId){
+        if (!roleId) {
 
             throw new Error("role id is not provided");
 
@@ -64,7 +64,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         // Check if the user already exists
 
         const isUserExists = await isEmailAlreadyExist(email);
-        
+
         if (isUserExists) {
 
             throw new Error("Email already registered, Please login to continue");
@@ -79,16 +79,16 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
 
         // Create a new user
         const newUser = await User.create({
-
-
             fullName,
             email,
             contactNo,
             address,
             password: hashPassword,
-            profileImage:imageUrl,
+            profileImage: imageUrl,
             role: role,
+
             isVerified:true,
+
             refId: new mongoose.Types.ObjectId(roleId)
 
         });
