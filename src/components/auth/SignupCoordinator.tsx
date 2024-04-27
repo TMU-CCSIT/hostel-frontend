@@ -10,6 +10,8 @@ import DropDown from "../common/DropDown";
 import { PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
 import { signupAtom } from "@/app/store/atoms/signup";
+import Checkbox from "../common/CheckBox";
+import { NEVER } from "zod";
 
 
 
@@ -17,6 +19,7 @@ import { signupAtom } from "@/app/store/atoms/signup";
 interface FormData {
   college: string[];
   programe: string;
+  branch: string[];
 }
 
 const Signup = () => {
@@ -24,12 +27,15 @@ const Signup = () => {
 
   const router = useRouter();
 
+  const [updatedBranches,setUpdatedBranches] = useState([]);
+
   const [data, setData] = useState<FormData>({
     college: COLLEGES,
-    programe: PROGRAME["Bachelor of Tecnology"][0],
+    programe: Object.keys(PROGRAME)[0],
+    branch: PROGRAME["Bachelor of Tecnology"]
   });
 
-  // console.log(data.college);  
+  console.log(PROGRAME["Bachelor of Tecnology"]);  
 
   const handleChangeOfDropDown = (e: any) => {
     setData({
@@ -38,20 +44,53 @@ const Signup = () => {
     });
   };
 
-  // dummy function to pass
+  const handleChangeOfCheck = (e: any) => {
+    const { checked, value } = e.target;
+  
+    // Create a copy of the current branch array  
+    let updatedBranchesCopy: any = [...updatedBranches];
+  
+    if (checked) {
+      // Add the value to the copied array if checked
+      updatedBranchesCopy.push(value);
+    } else {
+      // Remove the value from the copied array if unchecked
+      updatedBranchesCopy = updatedBranchesCopy.filter((branch: any) => branch !== value);
+    }
+
+
+    setUpdatedBranches(updatedBranchesCopy);
+  
+    // Update the state with the new branch array
+    // setData({
+    //   ...data,
+    //   branch: updatedBranchesCopy,
+    // });
+
+    setData({
+
+      ...data,
+      branch:updatedBranchesCopy
+
+    })
+  };
+  
+
 
   async function submitHandler(e: any) {
 
     try {
-      // console.log(data);
+      console.log(data);
       e.preventDefault();
 
-      const userResponse = await axios.post("/api/auth/signup", {
+      console.log("done ",updatedBranches);
 
-        college: data.college,
-        programe: data.programe,
+      // const userResponse = await axios.post("/api/auth/signup", {
 
-      });
+      //   college: data.college,
+      //   programe: data.programe,
+
+      // });
       //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
       //     enrollmentNo: data.enrollmentNo,
       //     course: data.course,
@@ -89,7 +128,7 @@ const Signup = () => {
 
         {/* form */}
         <form
-          className=" flex flex-col justify-center items-center"
+          className=" flex flex-col justify-center gap-5"
           onSubmit={submitHandler}
         >
           {/* dropdown for college */}
@@ -103,10 +142,19 @@ const Signup = () => {
           {/* deropdown for fields related to college */}
           <DropDown
             text="programe"
-            label="programe"
+            label="Programe"
             name={Object.keys(PROGRAME)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
+
+
+          <Checkbox
+          text="branch"
+          label="Branch"
+          name={PROGRAME[data.programe as keyof typeof PROGRAME]}
+          onChange={handleChangeOfCheck}
+          ></Checkbox>
+
 
           {/* button */}
           <div className="m-12">
