@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
 import { PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
+import Checkbox from "../common/CheckBox";
 
 import { useRecoilValue } from "recoil";
 
@@ -42,7 +43,7 @@ const Signup = () => {
     course: "a",
     college: COLLEGES[0],
     roomNo: "",
-    programe: PROGRAME["Bachelor of Tecnology"][0],
+    programe: Object.keys(PROGRAME)[0],
   });
 
   // function for data matching
@@ -59,6 +60,7 @@ const Signup = () => {
 
   async function submitHandler(e: any) {
     try {
+      console.log(data);
       e.preventDefault();
       const userSignupReponse = await axios.post("/api/auth/studentSignup", {
         user: signUpValues,
@@ -85,7 +87,7 @@ const Signup = () => {
 
         {/* form */}
         <form
-          className=" flex flex-col gap-7 justify-center items-center"
+          className=" flex flex-col gap-7 justify-center "
           onSubmit={submitHandler}
         >
           <div className="flex flex-col gap-7">
@@ -121,6 +123,14 @@ const Signup = () => {
             name={Object.keys(PROGRAME)}
             onChange={handleChangeOfDropDown}
           ></DropDown>
+
+
+          <Checkbox
+          text="branch"
+          label="Branch"
+          name={PROGRAME[data.programe as keyof typeof PROGRAME]}
+          onChange={handleChange}
+          ></Checkbox>
 
           {/* button */}
           <div className="m-12">
