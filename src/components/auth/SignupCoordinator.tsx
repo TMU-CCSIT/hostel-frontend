@@ -14,6 +14,9 @@ import Checkbox from "../common/CheckBox";
 import { NEVER } from "zod";
 import { useRecoilValue } from "recoil";
 
+import { useRecoilValue } from "recoil";
+
+
 
 
 // interface
@@ -24,7 +27,10 @@ interface FormData {
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
+  const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
 
@@ -32,10 +38,15 @@ const Signup = () => {
 
   const [updatedBranches,setUpdatedBranches] = useState([]);
 
+
   const [data, setData] = useState<FormData>({
+
     college: COLLEGES,
     programe: Object.keys(PROGRAME)[0],
     branch: PROGRAME["Bachelor of Tecnology"]
+
+
+
   });
 
   console.log(PROGRAME["Bachelor of Tecnology"]);  

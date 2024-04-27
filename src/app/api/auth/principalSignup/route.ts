@@ -53,6 +53,8 @@ async function principalSignUp(principal: any) {
   }
 }
 
+
+
 export async function POST(req: Request, res: Response) {
 
   try {
