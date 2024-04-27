@@ -51,7 +51,7 @@ const Navbar = () => {
         <Link href="/" className=" relative h-14 w-14">
           <Image
             className="w-auto object-cover bg-cover"
-            src="http://portal2.tmu.ac.in/images/rightlogo.png"
+            src="/logo.jpg"
             alt="Logo"
             fill
           />
