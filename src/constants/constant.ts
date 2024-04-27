@@ -1,6 +1,8 @@
+
 "use client"
 
 export const COLLEGES = {"College Of Computing Sciences And IT":"ccsit"};
+
 
 export const BTech = [
     "Artificial Intelligence",
@@ -28,12 +30,10 @@ export const MCA = [
 ]
 
 export const PROGRAME = {
-
     "Bachelor of Tecnology": BTech,
     "bachelor of Computer Applications": BCA,
     "Master of Technology": MTech,
     "Master of Computer Applications": MCA,
-    
 }
 
 
@@ -69,7 +69,3 @@ export const ADMINDATA = {
     b3: "Sign Up Coordinator",
     b4: "Sign Up Warden"
 }
-
-
-
-

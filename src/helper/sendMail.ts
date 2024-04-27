@@ -7,6 +7,10 @@ import { dbConnection } from "@/config/dbConfig";
 
 import User from "@/models/user.model";
 
+import { v4 as uuidv4} from "uuid";
+
+
+
 dbConnection();
 
 export async function sendMail(email: string, emailType: string) {
@@ -21,7 +25,9 @@ export async function sendMail(email: string, emailType: string) {
 
     // Generate hashed token for the email
 
-    const hashedToken: string = await bcrypt.hash(email, 6);
+    // const hashedToken: string = await bcrypt.hash(email, 6);
+
+    const hashedToken =  uuidv4().toString();
 
     console.log("Hashed Token:", hashedToken);
 

@@ -89,20 +89,34 @@ const Signup = () => {
   async function submitHandler(e: any) {
 
     try {
-
       console.log(data);
       e.preventDefault();
 
-      setData({
 
-        ...data,
-        college:"College Of Computing Sciences And IT",
-  
-      })
+      // const userResponse = await axios.post("/api/auth/signup", {
 
+      //   college: data.college,
+      //   programe: data.programe,
 
-      console.log("whole data is ",data);
+      // });
+      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
+      //     enrollmentNo: data.enrollmentNo,
+      //     course: data.course,
+      //     college: data.college,
+      //     fingerNo: data.fingerNo,
+      //     programe: data.programe,
+      //     roomNo: data.roomNo,
+      //     parentName: data.parentName,
+      //     parentContactNo: data.parentContactNo,
+      //     userId: userResponse.data.data._id,
+      //   });
 
+      //     console.log(userSignupReponse);
+      //     toast.success("Signup successfully");
+      //     toast("Please verify your email!", {
+      //       icon: "👏",
+      //     });
+      //     router.push("/auth/login");
 
       const userResponse = await axios.post("/api/auth/coordinatorSignup", {
 
@@ -180,9 +194,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
-
-
-
-
-
+export default Signup;
