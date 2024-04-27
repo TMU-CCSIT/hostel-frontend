@@ -7,7 +7,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import User from "@/models/user.model";
 import { ROLE } from "@/constants/constant";
-import { sendEmail } from "@/helper/sendMail";
+
+import { sendMail } from "@/helper/sendMail";
 
 import {sendVerificationEmail} from "@/helper/resendMail";
 
@@ -31,8 +32,11 @@ const userSchema = z.object({
 
 // Function to create user and set session
 export async function createUserAndSetSession(user: any, session: any, roleId: string) {
+
     try {
+
         // Validate request body
+
         try {
 
             console.log("role id is", roleId);
@@ -87,7 +91,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
             profileImage: imageUrl,
             role: role,
 
-            isVerified:true,
+            // isVerified:true,
 
             refId: new mongoose.Types.ObjectId(roleId)
 
@@ -98,15 +102,16 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
 
         // console.log(await sendVerificationEmail(email,fullName,"verify",newUser._id,))
 
-        // Successfully created user, return the user data
+        sendMail(email,"verifyEmail");
 
-        // return savedUser;
 
         return newUser;
 
     } catch (error: any) {
+
         console.error('Error creating user:', error);
         throw error;
+
     }
 }
 

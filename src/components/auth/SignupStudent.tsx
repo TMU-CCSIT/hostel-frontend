@@ -60,26 +60,36 @@ const Signup = () => {
  
 
   async function submitHandler(e: any) {
+
     try {
+
       console.log(data);
       e.preventDefault();
-      const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-        user: signUpValues,
-        student: data,
-      });
+
+      // const userSignupReponse = await axios.post("/api/auth/studentSignup", {
+      //   user: signUpValues,
+      //   student: data,
+      // });
+
+    
 
       toast.success("Signup successfully");
       toast("Please verify your email!", {
         icon: "👏",
       });
       router.push("/auth/login");
+
     } catch (error: any) {
+
       toast.error(error?.response?.data?.message || "Signup failed");
+
     }
   }
 
   return (
+
     // main div
+
     <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
       {/* inner div */}
       <div className="bg-[#EDF6FF] flex flex-col p-8 rounded-md shadow-xl justify-center items-center gap-4 ">

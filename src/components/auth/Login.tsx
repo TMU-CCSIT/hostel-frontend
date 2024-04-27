@@ -2,16 +2,19 @@
 
 // importing necessities
 import React, { useState } from "react";
-import InputField from "../common/InputField";
+import InputField from "@/components/common/InputField";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
 import { userAtom } from "@/app/store/atoms/user";
+import Loading from "@/components/common/Loading";
 
 // logic for saving login details
 const LoginPage = () => {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
 
   // hook for reading different email and password values
   const [data, setData] = useState({
@@ -26,6 +29,7 @@ const LoginPage = () => {
   };
 
   async function loginHandler() {
+    setLoading(true);
     try {
       const resposne = await axios.post("/api/auth/login", data);
       setUser(resposne.data.data);
@@ -33,10 +37,14 @@ const LoginPage = () => {
       const role = (resposne?.data?.data?.role).toLowerCase();
       router.push(`/${role}`);
     } catch (error: any) {
-      console.log(error);
+      console.log("error: ", error);
       toast.error(error?.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   }
+
+  if (loading) return <Loading />;
 
   // frontend of login page
   return (
