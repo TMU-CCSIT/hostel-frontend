@@ -1,4 +1,5 @@
 import { ROLE, STATUS } from "@/constants/constant";
+import { compareDates } from "@/helper/compareDates";
 import { middleware } from "@/middleware";
 import LeaveForm from "@/models/form.model";
 import Student from "@/models/student.model";
@@ -98,7 +99,6 @@ async function getApplicationsByRole(user: IUser) {
 }
 
 
-
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -110,8 +110,8 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
         const user = await User
             .findById(userId)
             .select("_id role")
-            .populate("refId", "-qrCode"
-                .exec();
+            .populate("refId", "-qrCode")
+            .exec();
 
         console.log("user: ", user)
 
@@ -172,7 +172,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         const form = await LeaveForm.findById(formId);
 
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).populate("redIf", "_id");
 
         if (!form || !user) {
             return NextResponse
@@ -208,7 +208,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         }
 
-
         // if hostel warden
         if (user.role === ROLE.Warden) {
             // if result is true then set status and create qr code and put into user db
@@ -217,7 +216,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 form.status.hostelWarden = STATUS.Accepted;
 
                 // create qr code
-                const qrCodeString: string = `${formId}-${form.user}`;
+                const qrCodeString: string = `${formId}-${user.refId._id}`;
 
                 // user
                 const user = await User.findById(form.user);
@@ -250,7 +249,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
             });
 
     } catch (error: any) {
-
         return NextResponse
             .json(
                 {
@@ -265,7 +263,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
             );
     }
 }
-
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {
 
@@ -363,15 +360,12 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
 export async function PUT(req: CustomNextRequest, res: NextResponse) {
 
     try {
-
         // verify gateKeeper is valid or not
         await middleware(req);
 
         const loggedInUserId = req.user;
 
         const loggedInUser = await User.findById(loggedInUserId);
-
-        console.log("loggedInUser: ", loggedInUser);
 
         if (!loggedInUser || loggedInUser.role !== ROLE.Gatekeeper) {
             return NextResponse.json({
@@ -405,11 +399,8 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
 
 
         // Find the user and leave-form using the QR string
-        const studentInfo = await Student.findOne({ user: userId });
+        const studentInfo = await Student.findById(userId);
         const formInfo = await LeaveForm.findById(formId);
-
-        console.log("userInfo: ", studentInfo)
-        console.log("formInfo: ", formInfo)
 
         // Check if the user and leaveform exists
         if (!studentInfo || !formInfo) {
@@ -426,21 +417,35 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
             });
         }
 
+        // if qrcode string not found
+        if (!studentInfo.qrCode.qrString) {
+
+            return NextResponse.json({
+                message: "Qr String not found",
+                error: null,
+                data: null,
+                success: false,
+
+            }, {
+                status: 404,
+            });
+        }
+
         // if user not scanned the qrcode till now  ------>> that means he/she try to out
         if (!studentInfo.qrCode.status) {
 
             const todaysDate = new Date();
 
-            // if date doesn't match
-            if (formInfo.dateFrom !== todaysDate) {
+            // if form date is not equal to today's date 
+            if (!compareDates(formInfo.dateFrom, todaysDate)) {
                 return NextResponse.json(
                     {
-                        message: "You can't go today, Date is not matched",
+                        message: "You can't go today, Date doesn't matched",
                         error: null,
                         data: null,
                         success: false,
                     }, {
-                    status: 400
+                    status: 401
                 });
             }
 
@@ -455,11 +460,9 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
 
             // Make QR code setting as default
             studentInfo.qrCode.status = false;
-            studentInfo.qrCode.qrString = null;
-
+            studentInfo.qrCode.qrString = "";
             // Update leave form data
             formInfo.leavingTime = Date.now();
-
             // TODO: Send mail to their parents
         }
 
@@ -470,7 +473,7 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
         // Respond with success message
         return NextResponse.json(
             {
-                message: "QR code status updated successfully",
+                message: studentInfo.qrCode.status ? "QR Scanned for Out successfully" : "QR Scanned for In successfully",
                 error: null,
                 data: null,
                 success: true,

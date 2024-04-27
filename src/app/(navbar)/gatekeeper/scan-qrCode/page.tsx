@@ -6,10 +6,11 @@ import toast from "react-hot-toast";
 
 async function updateStateOfStudent(qrCodeString: string) {
   try {
-    const res = await axios.post("/api/leave-form", { qrCodeString });
-    toast.success("QrCode Scanned Successfully");
-  } catch (error) {
-    toast.error("Something went wrong!");
+    console.log("text: ", qrCodeString);
+    const res = await axios.put("/api/leave-form", { qrCodeString });
+    toast.success(res.data.message || "QrCode Scanned Successfully");
+  } catch (error: any) {
+    toast.error(error.response.data.message || "Something went wrong!");
   }
 }
 
