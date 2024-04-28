@@ -1,4 +1,4 @@
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, ObjectId } from 'mongoose';
 import { ROLE } from '@/constants/constant';
 
 export interface IUser extends Document {
@@ -10,7 +10,8 @@ export interface IUser extends Document {
     isVerified: boolean;
     token?: string;
     tokenExpiry?: Date;
-    address: string
+    address: string;
+    refId: ObjectId;
 }
 
 
