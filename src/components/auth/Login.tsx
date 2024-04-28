@@ -25,9 +25,7 @@ const LoginPage = () => {
   const setUser = useSetRecoilState(userAtom);
 
   const handleChange = (e: any) => {
-
     setData({ ...data, [e.target.name]: e.target.value });
-
   };
 
   async function loginHandler() {
@@ -39,7 +37,6 @@ const LoginPage = () => {
       const role = (resposne?.data?.data?.role).toLowerCase();
       router.push(`/${role}`);
     } catch (error: any) {
-
       toast.error(error?.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
@@ -82,46 +79,40 @@ const LoginPage = () => {
             />
           </div>
 
-<<<<<<< HEAD
           {/* login button */}
           <button
             onClick={loginHandler}
             className="bg-[#437FC7] text-white py-2 px-4 rounded-md mt-4 w-full"
-=======
-        {/* For Forget Password */}
-        <div className="text-sm text-center mt-0">
-          <div
-            className="text-blue-500 cursor-pointer underline"
-            onClick={() => {
-              router.push("/auth/forgotEmail");
-            }}
->>>>>>> 03eeecae118937f3f6847c95d7521b8c67ec6fce
           >
             Login
           </button>
 
-          {/* For Signup */}
-          <div className="text-sm text-center">
-            {"Don't have an account?"}
-            <div
-              onClick={() => {
-                router.push("/auth/signup");
-              }}
-              className="underline cursor-pointer text-blue-500"
-            >
-              Sign Up
-            </div>
-          </div>
-
           {/* For Forget Password */}
+
           <div className="text-sm text-center mt-0">
-            <div
-              className="text-blue-500 cursor-pointer underline"
-              onClick={() => {
-                router.push("/forgetpassword");
-              }}
-            >
-              Forget Password
+            {/* For Signup */}
+            <div className="text-sm text-center">
+              {"Don't have an account?"}
+              <div
+                onClick={() => {
+                  router.push("/auth/signup");
+                }}
+                className="underline cursor-pointer text-blue-500"
+              >
+                Sign Up
+              </div>
+            </div>
+
+            {/* For Forget Password */}
+            <div className="text-sm text-center mt-0">
+              <div
+                className="text-blue-500 cursor-pointer underline"
+                onClick={() => {
+                  router.push("/forgetpassword");
+                }}
+              >
+                Forget Password
+              </div>
             </div>
           </div>
         </div>

@@ -64,6 +64,9 @@ function checkPermission(role: ROLE, path: string): boolean {
         case "Student":
             return path.includes('student')
 
+        case "Admin":
+            return path.includes('admin')
+
         case "Principal":
             return path.includes('principal');
 
