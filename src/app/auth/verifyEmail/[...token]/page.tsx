@@ -19,7 +19,9 @@ export default function EmailVerification({
   const actualToken = decodeURIComponent(params.token[0]).split("=")[1];
 
   async function verifyYourEMail() {
+
     try {
+
       let resposne = await axios.post("/api/auth/verifyEmail", {
         token: actualToken,
       });
@@ -27,7 +29,9 @@ export default function EmailVerification({
       toast.success("your email is successfully verified");
 
       router.push("/auth/login");
+
     } catch (error: any) {
+
       console.log(error.message);
     }
   }
