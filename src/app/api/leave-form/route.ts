@@ -6,6 +6,7 @@ import Student from "@/models/student.model";
 import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { v4 as uuidv4 } from 'uuid';
 
 
 interface CustomNextRequest extends NextRequest {
@@ -23,7 +24,17 @@ const leaveFormSchema = z.object({
 
 async function getStudentQuery(user: IUser) {
 
-    const allApplications = await LeaveForm.find({ user: user._id });
+    const allApplications = await LeaveForm
+        .find({ user: user._id })
+        .populate({
+            path: "user",
+            populate: {
+                path: "refId",
+                select: "enrollmentNo branch programe"
+            },
+            select: "fullName profileImage refId _id"
+        })
+        .exec();
 
     return allApplications;
 }
@@ -32,30 +43,48 @@ async function getAdminQuery(user: IUser) {
     return 'leaveForm'
 }
 
+
 async function getCoordinatorQuery(user: IUser) {
 
-    console.log("coord: ", user)
-
-    const allApplications = await LeaveForm.find({
-        'user.refId.programe': { $in: ['Btech', 'Ai'] }
-    })
-        .populate('user')
-        .populate('user.refId')
-        .exec();
+    const allApplications = await LeaveForm.find()
+        .populate(
+            {
+                path: 'user',
+                populate: {
+                    path: 'refId',
+                    select: "enrollmentNo branch programe",
+                    match: { programe: { $in: user.refId?.branches } },
+                },
+                select: "fullName profileImage refId _id"
+            }
+        )
+        .where("status.coordinator").equals(STATUS.Pending);
 
     return allApplications;
 }
 
 
 async function getWardenQuery(user: IUser) {
-    console.log("warden: ", user)
 
-    const allApplications = await LeaveForm.find({
-        'user.refId.hostel': { $eq: "New Boys Hostel" }
-    })
-        .populate('user')
-        .populate('user.refId')
-        .exec();
+    const allApplications = await LeaveForm.find({})
+        .populate(
+            {
+                path: 'user',
+                populate: {
+                    path: 'refId',
+                    select: "enrollmentNo branch hostel programe",
+                    match: { hostel: { $eq: user.refId?.hostel } },
+                },
+                select: "fullName profileImage refId _id"
+            }
+        )
+        .where({
+            $and: [
+                { "status.coordinator": STATUS.Accepted },
+                { "status.hostelWarden": STATUS.Pending }
+            ]
+        });
+
 
     return allApplications;
 }
@@ -73,7 +102,6 @@ async function getPrincipalQuery(user: IUser) {
 
     return allApplications;
 }
-
 
 
 async function getApplicationsByRole(user: IUser) {
@@ -97,6 +125,7 @@ async function getApplicationsByRole(user: IUser) {
             return [];
     }
 }
+
 
 
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
@@ -161,6 +190,7 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 }
 
 
+
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -172,7 +202,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 
         const form = await LeaveForm.findById(formId);
 
-        const user = await User.findById(userId).populate("redIf", "_id");
+        const user = await User.findById(userId).populate("refId", "_id");
 
         if (!form || !user) {
             return NextResponse
@@ -215,14 +245,13 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 // set status
                 form.status.hostelWarden = STATUS.Accepted;
 
-                // create qr code
-                const qrCodeString: string = `${formId}-${user.refId._id}`;
+                const uuid = uuidv4();
 
-                // user
-                const user = await User.findById(form.user);
+                // create qr code
+                const qrCodeString: string = `${formId}-${uuid}`;
 
                 await Student.findByIdAndUpdate(
-                    user.refId,
+                    user.refId._id,
                     { $set: { "qrCode.qrString": qrCodeString } },
                     { new: true }
                 );
@@ -264,6 +293,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     }
 }
 
+
 export async function POST(req: CustomNextRequest, res: NextResponse) {
 
     try {
@@ -274,6 +304,8 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
 
 
         const userId = req.user;
+
+        console.log("user: ", userId)
 
         // validation by parsing
         try {
