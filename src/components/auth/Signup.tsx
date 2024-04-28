@@ -11,31 +11,25 @@ import { useRouter } from "next/navigation";
 
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
-import { signupAtom, } from "@/app/store/atoms/signup";
+import { signupAtom } from "@/app/store/atoms/signup";
 
 // interface
 interface FormData {
-
   fullName: string;
   email: string;
   password: string;
   contactNo: string;
   address: string; // Assuming address is a string
-
 }
 
-const Signup: React.FC<{ role: string }> = ({ role }) =>{
-
+const Signup: React.FC<{ role: string }> = ({ role }) => {
   // hooks for reading different values
 
   const [signUpData, setSignUpData] = useRecoilState(signupAtom);
 
   const router = useRouter();
-
-  console.log("role is ",role);
-
+  
   const [data, setData] = useState<any>({
-
     fullName: "",
     email: "",
     password: "",
@@ -44,16 +38,12 @@ const Signup: React.FC<{ role: string }> = ({ role }) =>{
     role: role,
   });
 
-
-
   const setSignupData = useSetRecoilState(signupAtom);
-  
-  const signupValues = useRecoilValue(signupAtom);
 
+  const signupValues = useRecoilValue(signupAtom);
 
   // Function to handle input change
   const handleChange = (e: any) => {
-
     const { name, value } = e.target;
     setData({
       ...data,
@@ -61,55 +51,16 @@ const Signup: React.FC<{ role: string }> = ({ role }) =>{
     });
   };
 
-
   async function submitHandler(e: any) {
-
     try {
-
       e.preventDefault();
-
-      console.log(signupAtom);
-
       setSignupData(data);
-      
-
-      // const userResponse = await axios.post("/api/auth/signup", {
-      //   email: data.email,
-      //   password: data.password,
-      //   fullName: data.fullName,
-      //   contactNo: data.contactNo,
-      //   address: data.address,
-      //   role: "Student",
-      // });
-
-      // const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //   enrollmentNo: data.enrollmentNo,
-      //   course: data.course,
-      //   college: data.college,
-      //   fingerNo: data.fingerNo,
-      //   programe: data.programe,
-      //   roomNo: data.roomNo,
-      //   parentName: data.parentName,
-      //   parentContactNo: data.parentContactNo,
-      //   userId: userResponse.data.data._id,
-      // });
-
-      //     console.log(userSignupReponse);
-      //     toast.success("Signup successfully");
-      //     toast("Please verify your email!", {
-      //       icon: "👏",
-      //     });
-      //     router.push("/auth/login");
-
     } catch (error: any) {
-
       toast.error(error?.response?.data?.message || "Signup failed");
-
     }
   }
 
   return (
-
     // main div
     <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
       {/* inner div */}
@@ -140,13 +91,10 @@ const Signup: React.FC<{ role: string }> = ({ role }) =>{
             }
           </div>
 
-
           {/* button */}
           <div className="m-12">
             <CTCButton text={"Next"} type={true} />
           </div>
-
-
 
           {/* return to login button */}
           <div className="text-sm text-center">

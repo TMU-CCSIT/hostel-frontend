@@ -1,7 +1,7 @@
 
 "use client"
 
-export const COLLEGES = {"College Of Computing Sciences And IT":"ccsit"};
+export const COLLEGES = { "College Of Computing Sciences And IT": "ccsit" };
 
 
 export const BTech = [
@@ -61,11 +61,4 @@ export enum FILTER {
     Oldest = "Oldest",
     AtoZ = "AtoZ",
     ZtoA = "ZtoA",
-}
-
-export const ADMINDATA = {
-    b1: "Sign Up Main",
-    b2: "Sign Up Student",
-    b3: "Sign Up Coordinator",
-    b4: "Sign Up Warden"
 }
