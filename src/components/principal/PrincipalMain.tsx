@@ -1,9 +1,25 @@
-import React from 'react'
+"use client";
+import React, { useState } from "react";
+import SideBar from "../common/SideBar";
+import CTCButton from "../common/CTCButton";
 
-const PrincipalMain = () => {
+const PrincipalMain = (e: any) => {
+  const [showSideBar, setShowSideBar] = useState(true);
+
+  const handleSidebar = () => {
+    setShowSideBar(!showSideBar);
+  };
+
   return (
-    <div>PrincipalMain</div>
-  )
-}
+    <div>
+      <div className="flex">{showSideBar && <SideBar />}
 
-export default PrincipalMain
+        <CTCButton text={"h"} type={false} onClickHandler={handleSidebar}>
+        </CTCButton>
+
+      </div>
+    </div>
+  );
+};
+
+export default PrincipalMain;
