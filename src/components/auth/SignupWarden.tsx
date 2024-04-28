@@ -9,18 +9,28 @@ import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
 import { HOSTEL } from "@/constants/constant";
 
+import { useRecoilValue } from "recoil";
+
+import { signupAtom } from "@/app/store/atoms/signup";
+import Warden from "@/models/warden.model";
+
 // interface
 interface FormData {
   hostel: string;
 }
 
 const Signup = () => {
+
   // hooks for reading different values
+
+  const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
 
   const [data, setData] = useState<FormData>({
+
       hostel: HOSTEL[0]
+
   });
 
   // function for data matching
@@ -38,28 +48,13 @@ const Signup = () => {
         console.log(data);
       e.preventDefault();
 
-      const userResponse = await axios.post("/api/auth/signup", {
-        hostel: data.hostel,
+      const userResponse = await axios.post("/api/auth/wardenSignup", {
+
+          warden:Warden,
+          user:signUpValues
+
       });
 
-      //   const userSignupReponse = await axios.post("/api/auth/studentSignup", {
-      //     enrollmentNo: data.enrollmentNo,
-      //     course: data.course,
-      //     college: data.college,
-      //     fingerNo: data.fingerNo,
-      //     programe: data.programe,
-      //     roomNo: data.roomNo,
-      //     parentName: data.parentName,
-      //     parentContactNo: data.parentContactNo,
-      //     userId: userResponse.data.data._id,
-      //   });
-
-      //     console.log(userSignupReponse);
-      //     toast.success("Signup successfully");
-      //     toast("Please verify your email!", {
-      //       icon: "👏",
-      //     });
-      //     router.push("/auth/login");
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Signup failed");
     }
