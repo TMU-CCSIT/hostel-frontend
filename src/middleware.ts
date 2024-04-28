@@ -7,7 +7,7 @@ interface CustomNextRequest extends NextRequest {
 }
 
 
-const PublicPaths = ['/auth/verifyEmail/', '/auth/login', '/auth/signup',];
+const PublicPaths = ['/auth/verifyEmail', '/auth/login', '/auth/signup',];
 const DefaultPage = ["/", "/unauthorized"];
 
 export async function middleware(req: CustomNextRequest) {
@@ -64,6 +64,9 @@ function checkPermission(role: ROLE, path: string): boolean {
         case "Student":
             return path.includes('student')
 
+        case "Admin":
+            return path.includes('admin')
+
         case "Principal":
             return path.includes('principal');
 
@@ -83,5 +86,5 @@ function checkPermission(role: ROLE, path: string): boolean {
 
 
 export const config = {
-    matcher: '/((?!api|static|.*\\..*|_next).*)',
+    matcher: ['/((?!api|static|.*\\..*|_next).*)', '/auth/verifyEmail/:token'],
 };

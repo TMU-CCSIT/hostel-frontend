@@ -1,6 +1,5 @@
 "use client";
 
-// importing necessities
 import React, { useEffect, useState } from "react";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
@@ -8,10 +7,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
 import { HOSTEL } from "@/constants/constant";
+import Loading from "../common/Loading";
 
 import { useRecoilValue } from "recoil";
 
 import { signupAtom } from "@/app/store/atoms/signup";
+
 import Warden from "@/models/warden.model";
 
 // interface
@@ -26,6 +27,8 @@ const Signup = () => {
   const signUpValues = useRecoilValue(signupAtom);
 
   const router = useRouter();
+  
+  const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState<FormData>({
 
@@ -39,71 +42,85 @@ const Signup = () => {
     console.log(e.target.value);
   };
 
-
   // dummy function to pass
 
   async function submitHandler(e: any) {
+
+    setLoading(true);
+
     try {
 
-        console.log(data);
       e.preventDefault();
 
+
       const userResponse = await axios.post("/api/auth/wardenSignup", {
-
-          warden:Warden,
-          user:signUpValues
-
+        warden: data,
+        user: signUpValues,
       });
 
+      console.log(data);
+
+
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Signup failed");
+
+      console.log(error.message);
+
+      // toast.error(error?.response?.data?.message || "Signup failed");
+
+    } finally {
+
+      setLoading(false);
+      
     }
   }
 
+
+
   return (
     // main div
-    <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
-      {/* inner div */}
-      <div className="bg-[#EDF6FF] flex flex-col p-8 rounded-md shadow-xl justify-center items-center gap-4 ">
-        {/* heading */}
-        <h1 className="text-2xl font-bold">WARDEN SIGN UP</h1>
+    <>
+      {loading && <Loading />}
 
-        {/* form */}
-        <form
-          className=" flex flex-col justify-center items-center"
-          onSubmit={submitHandler}
-        >
+      <div className="bg-white min-h-screen text-black text-lg flex justify-center items-center p-10">
+        {/* inner div */}
+        <div className="bg-[#EDF6FF] flex flex-col p-8 rounded-md shadow-xl justify-center items-center gap-4 ">
+          {/* heading */}
+          <h1 className="text-2xl font-bold">WARDEN SIGN UP</h1>
 
+          {/* form */}
+          <form
+            className=" flex flex-col justify-center items-center"
+            onSubmit={submitHandler}
+          >
+            {/* dropdown for hostel */}
+            <DropDown
+              text="hostel"
+              label="Select Hostel:"
+              name={HOSTEL}
+              onChange={handleChange}
+            ></DropDown>
 
-          {/* dropdown for hostel */}
-          <DropDown
-            text="hostel"
-            label="Select Hostel:"
-            name={HOSTEL}
-            onChange={handleChange}
-          ></DropDown>
-
-
-          {/* button */}
-          <div className="m-12">
-            <CTCButton text={"Submit"} type={true} />
-          </div>
-
-          {/* return to login button */}
-          <div className="text-sm text-center">
-            {"Already have a account?"}
-            <div
-              onClick={() => {
-                router.push("/auth/login");
-              }}
-              className="underline cursor-pointer text-blue-500"
-            >
-              Log In
+            {/* button */}
+            <div className="m-12">
+              <CTCButton text={"Submit"} type={true} />
             </div>
-          </div>
-        </form>
+
+            {/* return to login button */}
+            <div className="text-sm text-center">
+              {"Already have a account?"}
+              <div
+                onClick={() => {
+                  router.push("/auth/login");
+                }}
+                className="underline cursor-pointer text-blue-500"
+              >
+                Log In
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

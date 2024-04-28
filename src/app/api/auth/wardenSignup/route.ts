@@ -1,158 +1,145 @@
+"use server"
+
 import { NextRequest, NextResponse } from "next/server";
-
+import { z } from "zod";
 import Warden from "@/models/warden.model";
+import { createUserAndSetSession } from "@/action/userSignup";
+// import { HOSTEL } from "@/constants/constant";
+import { dbConnection } from "@/config/dbConfig";
 
-import {z} from "zod";
-
-import { HOSTEL } from "@/constants/constant";
- 
-import {createUserAndSetSession} from "@/action/userSignup"
-
+dbConnection();
 
 const wardenSchema = z.object({
+  hostel: z.string(),
+});
 
-    hostel:z.string(),
+const HOSTEL = ["New Boys Hostel", "Mala Bhawan", "Gyan Bhawan", "Girls Hostel"]
 
-})
+async function wardenSignUp(warden: any) {
 
-async function wardenSignUp(warden:any){
-
-    try{
-
-        try {
-
-            wardenSchema.parse(warden);
+  try {
 
 
-        } catch (error: any) {
-
-            // If validation fails, throw error
-            console.error('Validation error:', error.errors);
-            throw new Error('Validation error');
-
-        }
-
-        // fetch {the data from the body 
-
-        const {hostel} = warden;
-
-        const ishostelExists = HOSTEL.includes(hostel);
-
-        if(!ishostelExists){
-
-            // console.error('Error creating student:', error.message);
-
-            throw new Error("no hostel exists with given hostel name ")
-        }
 
 
-        // create a new hostel warden 
+    const validatedWarden = wardenSchema.parse(warden);
 
+    if (!HOSTEL.includes(validatedWarden.hostel)) {
 
-        const newWarden = await Warden.create({
-
-            hostel:hostel,
-
-        })
-
-
-        return newWarden;
-
-    }catch(error:any){
-
-        console.error('Error creating warden :', error.message);
-
-        throw new Error("Error creating warden ",error.message);
+      throw new Error("No hostel exists with the given name");
 
     }
 
+    const {hostel} = warden;
+
+    const newWarden = await Warden.create({
+
+      hostel: hostel,
+
+    });
+
+    return newWarden;
+
+  } catch (error:any) {
+
+    console.log("warden error ");
+
+    console.error('Error creating warden:', error.message);
+    throw new Error("Error creating warden");
+  }
 }
+
+
+
+
 
 
 
 
 export async function POST(req: NextRequest, res: NextResponse) {
 
+  try {
+
+
+    const body = await req.json();
+
+    const { warden, user } = body;
+
+    console.log(warden, user);
+
+    if (!warden || !user) {
+
+      return NextResponse.json(
+
+        {
+
+          success: false,
+          error: "All fields are not fulfilled",
+          message: "All fields are required",
+          data: null,
+        },
+        { status: 400 }
+      );
+    }
+
+    let newWarden;
+    let newUser;
 
     try {
 
+      newWarden = await wardenSignUp(warden);
 
-        const body = await req.json();
+      newUser = await createUserAndSetSession(user, "dkhd", newWarden?._id);
 
-        const { warden,user } = body;
-
-        if (!warden || !user) {
-            
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: null,
-                    message: "all fields are not fullfilled ",
-                    data: null,
-                },
-                {
-                    status: 500
-                }
-            );
-        }
-
-        let newWarden;
-
-        let newUser;
-
-        try{
-
-            newWarden = await wardenSignUp(Warden);
-
-            newUser = await createUserAndSetSession(user,"dkhd",newWarden._id);
-
-
-        }catch(error:any){
-
-
-            console.log(error.message);
-
-            return NextResponse.json(
-                {
-                    success: false,
-                    error: error.message,
-                    message: "Error occurred during signup",
-                    data: null,
-                },
-                {
-                    status: 500
-                }
-            );
-
-        }
-
-        // successfully return the response
-        return NextResponse.json({
-            success: true,
-            error: null,
-            message: "Warden signup done successfully",
-            data: newWarden,
-        });
 
     } catch (error: any) {
 
-        console.log(error.message);
+      console.error('Error during signup:', error.message);
 
-        return NextResponse.json(
-            {
-                success: false,
-                error: error.message,
-                message: "Error occurred during signup",
-                data: null,
-            },
-            {
-                status: 500
-            }
-        );
+      return NextResponse.json(
+        {
+          success: false,
+          error: error.message,
+          message: "Error occurred during signup",
+          data: null,
+        },
+        { status: 500 }
+      );
+
     }
+
+
+    return NextResponse.json({
+
+      success: true,
+      error: null,
+      message: "Warden signup done successfully",
+      data: {
+
+          newWarden,
+          newUser
+
+      },
+
+    });
+
+    
+
+  } catch (error: any) {
+
+    console.error('Error parsing request:', error.message);
+
+    return NextResponse.json(
+      {
+        success: false,
+        error: error.message,
+        message: "Error occurred during request parsing",
+        data: null,
+      },
+      { status: 400 }
+    );
+  }
 }
-
-
 
 
 
