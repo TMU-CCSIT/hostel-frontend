@@ -12,12 +12,15 @@ import { useRecoilValue } from "recoil";
 import { signupAtom } from "@/app/store/atoms/signup";
 
 import StudentSignup from "@/components/auth/SignupStudent";
+import { ROLE } from "@/constants/constant";
 
 const SignupPage = () => {
   const signupValues = useRecoilValue(signupAtom);
 
   return (
-    <div>{signupValues ? <StudentSignup /> : <Signup role={"Student"} />}</div>
+    <div>
+      {signupValues ? <StudentSignup /> : <Signup role={ROLE.Student} />}
+    </div>
   );
 };
 

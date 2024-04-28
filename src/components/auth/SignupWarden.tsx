@@ -37,9 +37,10 @@ const Signup = () => {
     setLoading(true);
     try {
       e.preventDefault();
-      const userResponse = await axios.post("/api/auth/signup", {
+      const userResponse = await axios.post("/api/auth/wardenSignup", {
         hostel: data.hostel,
       });
+      toast.success("Signup successfully");
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Signup failed");
     } finally {
