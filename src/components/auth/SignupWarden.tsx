@@ -70,7 +70,7 @@ const Signup = () => {
     } finally {
 
       setLoading(false);
-      
+
     }
   }
 
@@ -125,3 +125,6 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+
