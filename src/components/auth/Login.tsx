@@ -108,7 +108,9 @@ const LoginPage = () => {
               <div
                 className="text-blue-500 cursor-pointer underline"
                 onClick={() => {
-                  router.push("/forgetpassword");
+
+                  router.push("/auth/forgotEmail");
+
                 }}
               >
                 Forget Password
@@ -122,3 +124,7 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
+
+

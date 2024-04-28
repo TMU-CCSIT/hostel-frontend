@@ -7,10 +7,11 @@ interface CustomNextRequest extends NextRequest {
 }
 
 
-const PublicPaths = ['/auth/verifyEmail/:token', '/auth/login', '/auth/signup',];
+const PublicPaths = '/auth/';
+
 const DefaultPage = ["/", "/unauthorized"];
 
-const otherProtectedRoute = ["/auth/verifyEmail/token"]
+// const otherProtectedRoute = ["/auth/verifyEmail/token"]
 
 export async function middleware(req: CustomNextRequest) {
 
@@ -34,21 +35,29 @@ export async function middleware(req: CustomNextRequest) {
 
     }
 
-    const isPublicPath = PublicPaths.includes(path);
+    const isPublicPath = path.startsWith(PublicPaths);
+
+    console.log(isPublicPath);
 
     if (isLoggedIn && isPublicPath) {
+
         return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
+
     }
 
     if (!isLoggedIn && !isPublicPath) {
+
         return NextResponse.redirect(new URL('/auth/login', req.url));
     }
 
     if (isLoggedIn) {
+
         // If the user is logged in, check permission based on their role
 
         const hasPermission = checkPermission(decodedToken.role, path);
+        
         if (!hasPermission) {
+
             return NextResponse.redirect(new URL('/unauthorized', req.url));
         }
     }
