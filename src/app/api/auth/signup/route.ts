@@ -13,8 +13,6 @@ import User from "@/models/user.model";
 
 import { ROLE } from "@/constants/constant";
 
-import { sendEmail } from "@/helper/sendMail";
-
 // import AdditionalDetails from "@/models/additionalDetails.model";
 
 dbConnection();
@@ -36,8 +34,6 @@ export async function POST(req: NextRequest) {
     try {
 
         // fetch data 
-
-        console.log("hellow ");
 
         const body = await req.json();
 
