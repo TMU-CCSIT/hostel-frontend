@@ -76,6 +76,8 @@ const Signup = () => {
         user: signUpValues,
         coordinator: data,
       });
+
+      toast.success("Signup successfully");
     } catch (error: any) {
       toast.error(error?.response?.data?.message || "Signup failed");
     } finally {
