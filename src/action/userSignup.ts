@@ -1,3 +1,5 @@
+"use server";
+
 import { z } from "zod";
 import { dbConnection } from "@/config/dbConfig";
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
@@ -10,7 +12,7 @@ import { ROLE } from "@/constants/constant";
 
 import { sendMail } from "@/helper/sendMail";
 
-import {sendVerificationEmail} from "@/helper/resendMail";
+import { sendVerificationEmail } from "@/helper/resendMail";
 
 import mongoose from "mongoose";
 
@@ -102,7 +104,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
 
         // console.log(await sendVerificationEmail(email,fullName,"verify",newUser._id,))
 
-        sendMail(email,"verifyEmail");
+        sendMail(email, "verifyEmail");
 
 
         return newUser;

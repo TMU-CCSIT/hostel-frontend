@@ -1,6 +1,5 @@
 "use client";
 
-// importing necessities
 import React, { useEffect, useState } from "react";
 import CTCButton from "../common/CTCButton";
 import toast from "react-hot-toast";
@@ -10,19 +9,31 @@ import DropDown from "../common/DropDown";
 import { HOSTEL } from "@/constants/constant";
 import Loading from "../common/Loading";
 
+import { useRecoilValue } from "recoil";
+
+import { signupAtom } from "@/app/store/atoms/signup";
+
+import Warden from "@/models/warden.model";
+
 // interface
 interface FormData {
   hostel: string;
 }
 
 const Signup = () => {
+
   // hooks for reading different values
 
+  const signUpValues = useRecoilValue(signupAtom);
+
   const router = useRouter();
+  
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState<FormData>({
-    hostel: HOSTEL[0],
+
+      hostel: HOSTEL[0]
+
   });
 
   // function for data matching
@@ -34,19 +45,36 @@ const Signup = () => {
   // dummy function to pass
 
   async function submitHandler(e: any) {
+
     setLoading(true);
+
     try {
+
       e.preventDefault();
+
+
       const userResponse = await axios.post("/api/auth/wardenSignup", {
-        hostel: data.hostel,
+        warden: data,
+        user: signUpValues,
       });
-      toast.success("Signup successfully");
+
+      console.log(data);
+
+
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Signup failed");
+
+      console.log(error.message);
+
+      // toast.error(error?.response?.data?.message || "Signup failed");
+
     } finally {
+
       setLoading(false);
+      
     }
   }
+
+
 
   return (
     // main div
