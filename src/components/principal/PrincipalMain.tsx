@@ -7,7 +7,9 @@ const PrincipalMain = (e: any) => {
   const [showSideBar, setShowSideBar] = useState(true);
 
   const handleSidebar = () => {
+
     setShowSideBar(!showSideBar);
+    
   };
 
   return (
@@ -23,3 +25,8 @@ const PrincipalMain = (e: any) => {
 };
 
 export default PrincipalMain;
+
+
+
+
+
