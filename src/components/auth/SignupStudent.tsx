@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import DropDown from "../common/DropDown";
-import { PROGRAME } from "@/constants/constant";
+import { HOSTEL, PROGRAME } from "@/constants/constant";
 import { COLLEGES } from "@/constants/constant";
 
 import { useRecoilValue } from "recoil";
@@ -27,6 +27,7 @@ interface FormData {
   roomNo: string;
   programe: string;
   branch: string;
+  hostel: string;
 }
 
 const Signup = () => {
@@ -41,6 +42,7 @@ const Signup = () => {
     parentContactNo: "",
     fingerNo: "",
     college: Object.keys(COLLEGES)[0],
+    hostel: HOSTEL[0],
     roomNo: "",
     programe: Object.keys(PROGRAME)[0],
     branch: PROGRAME["Bachelor of Tecnology"][0],
@@ -118,6 +120,14 @@ const Signup = () => {
 
             {/* dropdown for college */}
             <DropDown
+              text="hostel"
+              label="Select Hostel:"
+              name={HOSTEL}
+              onChange={handleChangeOfDropDown}
+            />
+
+            {/* dropdown for college */}
+            <DropDown
               text="college"
               label="Select College:"
               name={Object.keys(COLLEGES)}
@@ -130,14 +140,14 @@ const Signup = () => {
               label="Program"
               name={Object.keys(PROGRAME)}
               onChange={handleChangeOfDropDown}
-            ></DropDown>
+            />
 
             <DropDown
               text="branch"
               label="Branch"
               name={PROGRAME[data.programe as keyof typeof PROGRAME]}
               onChange={handleChangeOfDropDown}
-            ></DropDown>
+            />
 
             {/* button */}
             <div className="m-12">

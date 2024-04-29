@@ -8,13 +8,14 @@ import { dateIntoReadableFormat } from "@/helper/date";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const LeaveApprovalCard = ({ userInfo }: any) => {
+const LeaveApprovalCard = ({ userInfo, removeHandler }: any) => {
   async function leaveFormResponseHandler(result: Boolean) {
     try {
       const res = await axios.patch("/api/leave-form", {
         formId: userInfo._id,
         result,
       });
+      removeHandler(userInfo._id);
       toast.success("Response Submitted");
     } catch (error) {
       toast.error("Response Not Submitted");

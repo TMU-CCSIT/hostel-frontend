@@ -1,5 +1,9 @@
 import mongoose, { Document, ObjectId } from 'mongoose';
 import { ROLE } from '@/constants/constant';
+import { IStudent } from './student.model';
+import { IWarden } from './warden.model';
+import { ICoordinator } from './coordinator.model';
+import { IPrincipal } from './principal.model';
 
 export interface IUser extends Document {
     fullName: string;
@@ -11,7 +15,7 @@ export interface IUser extends Document {
     token?: string;
     tokenExpiry?: Date;
     address: string;
-    refId: ObjectId;
+    refId: IStudent | IWarden | ICoordinator | IPrincipal;
 }
 
 

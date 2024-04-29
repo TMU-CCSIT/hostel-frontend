@@ -9,7 +9,7 @@ interface CustomNextRequest extends NextRequest {
 
 const PublicPaths = '/auth/';
 
-const DefaultPage = ["/", "/unauthorized"];
+const DefaultPage = ["/", "/unauthorized", "/something-went-wrong"];
 
 // const otherProtectedRoute = ["/auth/verifyEmail/token"]
 
