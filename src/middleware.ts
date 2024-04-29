@@ -55,7 +55,7 @@ export async function middleware(req: CustomNextRequest) {
         // If the user is logged in, check permission based on their role
 
         const hasPermission = checkPermission(decodedToken.role, path);
-        
+
         if (!hasPermission) {
 
             return NextResponse.redirect(new URL('/unauthorized', req.url));
@@ -94,10 +94,6 @@ function checkPermission(role: ROLE, path: string): boolean {
 
 export const config = {
 
-    matcher: ['/((?!api|static|.*\\..*|_next).*)', '/auth/verifyEmail/:token'],
+    matcher: ['/((?!api|static|.\\..|_next).*)', '/auth/verifyEmail/:token'],
 
 };
-
-
-
-

@@ -1,6 +1,3 @@
-
-"use client"
-
 export const COLLEGES = { "College Of Computing Sciences And IT": "ccsit" };
 
 
