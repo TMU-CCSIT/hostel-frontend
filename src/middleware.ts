@@ -37,8 +37,6 @@ export async function middleware(req: CustomNextRequest) {
 
     const isPublicPath = path.startsWith(PublicPaths);
 
-    console.log(isPublicPath);
-
     if (isLoggedIn && isPublicPath) {
 
         return NextResponse.redirect(new URL(`/${(decodedToken.role)?.toLowerCase()}`, req.url));
