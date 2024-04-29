@@ -2,7 +2,7 @@
 import CTCButton from "@/components/common/CTCButton";
 import { useRouter } from "next/navigation";
 
-const CoordinatorPage = () => {
+const WardenPage = () => {
   const router = useRouter();
   return (
     <>
@@ -10,19 +10,19 @@ const CoordinatorPage = () => {
         <div className="flex flex-col justify-center rounded-lg items-center   gap-8 p-10 bg-[#EDF6FF]">
           {/* for pending applications  */}
           <CTCButton
-            onClickHandler={() => router.push("/coordinator/applications")}
+            onClickHandler={() => router.push("/warden/applications")}
             text="View Applications"
           />
 
           {/* view all applications */}
           <CTCButton
-            onClickHandler={() => router.push("/coordinator/history")}
+            onClickHandler={() => router.push("/warden/history")}
             text="View History"
           />
 
           {/* view stats */}
           <CTCButton
-            onClickHandler={() => router.push("/coordinator/stats")}
+            onClickHandler={() => router.push("/warden/stats")}
             text="View Stats"
           />
         </div>
@@ -31,4 +31,4 @@ const CoordinatorPage = () => {
   );
 };
 
-export default CoordinatorPage;
+export default WardenPage;

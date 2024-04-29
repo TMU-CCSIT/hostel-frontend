@@ -33,6 +33,7 @@ const signupSchema = z.object({
     roomNo: z.string(),
     parentName: z.string(),
     parentContactNo: z.string(),
+    hostel: z.string(),
 
 });
 
@@ -65,6 +66,7 @@ async function createStudentAndSetSession(student: any, session: any) {
             roomNo,
             parentName,
             parentContactNo,
+            hostel,
 
         } = student;
 
@@ -72,7 +74,6 @@ async function createStudentAndSetSession(student: any, session: any) {
 
         // Create a new student instance
         const newStudent = await Student.create({
-
             enrollmentNo,
             branch,
             college,
@@ -81,7 +82,7 @@ async function createStudentAndSetSession(student: any, session: any) {
             roomNo,
             parentName,
             parentContactNo,
-
+            hostel
         });
 
         // Save the student to the database within the provided session

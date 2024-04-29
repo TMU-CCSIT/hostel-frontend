@@ -9,7 +9,7 @@ interface CustomNextRequest extends NextRequest {
 
 const PublicPaths = '/auth/';
 
-const DefaultPage = ["/", "/unauthorized"];
+const DefaultPage = ["/", "/unauthorized", "/something-went-wrong"];
 
 // const otherProtectedRoute = ["/auth/verifyEmail/token"]
 
@@ -36,8 +36,6 @@ export async function middleware(req: CustomNextRequest) {
     }
 
     const isPublicPath = path.startsWith(PublicPaths);
-
-    console.log(isPublicPath);
 
     if (isLoggedIn && isPublicPath) {
 

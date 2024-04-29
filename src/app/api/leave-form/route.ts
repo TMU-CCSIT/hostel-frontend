@@ -73,7 +73,7 @@ async function getWardenQuery(user: IUser) {
                 populate: {
                     path: 'refId',
                     select: "enrollmentNo branch hostel programe",
-                    match: { hostel: { $eq: user.refId?.hostel } },
+                    match: { hostel: { $eq: user.refId.hostel } },
                 },
                 select: "fullName profileImage refId _id"
             }
@@ -131,14 +131,12 @@ async function getApplicationsByRole(user: IUser) {
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
-
         await middleware(req);
-
         const userId = req.user;
 
         const user = await User
             .findById(userId)
-            .select("_id role")
+            .select("_id role refId")
             .populate("refId", "-qrCode")
             .exec();
 

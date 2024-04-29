@@ -1,4 +1,5 @@
-import mongoose, { Document, Schema, Types } from 'mongoose';
+import { HOSTEL } from '@/constants/constant';
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface IStudent extends Document {
     enrollmentNo: string;
@@ -7,6 +8,7 @@ export interface IStudent extends Document {
     fingerNo: string;
     branch: string;
     college: string;
+    hostel: string,
     roomNo: string;
     programe: string;
     qrCodeString?: string
@@ -23,6 +25,11 @@ const studentSchema: Schema = new Schema(
             type: String,
             required: true,
             unique: true,
+        },
+        hostel: {
+            type: String,
+            enum: HOSTEL,
+            required: true
         },
         parentContactNo: {
             type: String,
