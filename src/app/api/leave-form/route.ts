@@ -8,6 +8,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { v4 as uuidv4 } from 'uuid';
 
+import { dbConnection } from "@/config/dbConfig";
+
+dbConnection();
+
 
 interface CustomNextRequest extends NextRequest {
     user: string,
@@ -61,7 +65,53 @@ async function getCoordinatorQuery(user: IUser) {
         .where("status.coordinator").equals(STATUS.Pending);
 
     return allApplications;
+
 }
+
+
+
+
+async function getStudentDetailsById(user:IUser,userId:any){
+
+    try{
+
+        if(user.role === "Student"){
+
+            return NextResponse.json({
+
+                message:"this is invalid request ",
+                data:null,
+                error:null
+            })
+        }
+
+        const userDetails = await User.findById(userId).select('-password').populate("refId")
+
+        // if(!userDetails){
+
+        //     return NextResponse.json({
+
+        //         message:"this is invalid user id ",
+        //         data:null,
+        //         error:null
+
+        //     },{
+
+        //         status:400
+        //     })
+        // }
+
+
+        return userDetails;
+
+
+    }catch(error:any){
+
+        console.log(error.message);
+
+    }
+}
+
 
 
 async function getWardenQuery(user: IUser) {
@@ -87,7 +137,10 @@ async function getWardenQuery(user: IUser) {
 
 
     return allApplications;
+    
 }
+
+
 
 
 async function getPrincipalQuery(user: IUser) {
@@ -129,7 +182,10 @@ async function getApplicationsByRole(user: IUser) {
 
 
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
+
     try {
+
+        await dbConnection();
 
         await middleware(req);
         const userId = req.user;
@@ -186,6 +242,10 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
             );
     }
 }
+
+
+
+
 
 
 
