@@ -16,7 +16,7 @@ interface InputFieldProps {
 }
 
 const InputField = (props: InputFieldProps) => {
-  const [show, setShow] = useState(props.type === "password" ? false : true);
+  const [show, setShow] = useState(props.type === "password" ? true : false);
 
   const handlePasswordToggle = () => {
     setShow(!show);
@@ -48,9 +48,9 @@ const InputField = (props: InputFieldProps) => {
             onClick={handlePasswordToggle}
           >
             {show === true ? (
-              <FaEye size={24}></FaEye>
-            ) : (
               <IoEyeOffSharp size={24}></IoEyeOffSharp>
+            ) : (
+              <FaEye size={24}></FaEye>
             )}
           </button>
         )}
