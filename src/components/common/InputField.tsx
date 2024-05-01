@@ -4,15 +4,15 @@ import { FaEye } from "react-icons/fa";
 import { IoEyeOffSharp } from "react-icons/io5";
 
 interface InputFieldProps {
-  label: string;
+  label?: string;
   type: string;
   placeholder?: string;
-  value: any;
+  value?: any;
   name: any;
   min?: number;
   required: Boolean;
   readOnly?: any;
-  onChange: (value: any) => void;
+  onChange?: (value: any) => void;
 }
 
 const InputField = (props: InputFieldProps) => {
