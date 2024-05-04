@@ -157,6 +157,8 @@ async function getPrincipalQuery(user: IUser) {
 }
 
 
+
+
 async function getApplicationsByRole(user: IUser) {
 
     switch (user.role) {
@@ -610,5 +612,8 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
         });
     }
 }
+
+
+
 
 

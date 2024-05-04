@@ -9,6 +9,7 @@ import StudentLeaves from "@/components/principal/StudentLeaves";
 
 
 const PrincipalMain = () => {
+  
   const [showSideBar, setShowSideBar] = useState(true);
   const [showContent, setShowContent] = useState(principalSidebar[0]);
   

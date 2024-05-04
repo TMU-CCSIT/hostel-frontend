@@ -2,33 +2,70 @@ import React, {useState} from 'react'
 import InputField from '@/components/common/InputField'
 import CTCButton from '../common/CTCButton'
 import {principalDD} from '@/constants/buttonConst'
+import axios from 'axios';
+
+import { useRecoilValue } from'recoil';
+
+import { userAtom } from '@/app/store/atoms/user';
 
 // interface
 interface searchData {
     sortByName: string;
     sortByDate: Date;
     sort: string;
+    dateFrom: Date | null;
+    dateTo: Date | null;
+    name: string| "";
 }
 
 const StudentLeaves = () => {
 
+    const user: any = useRecoilValue(userAtom);
+
+    console.log("user data ",user);
+
     const [data, setData] = useState<searchData>({
         sortByName:"",
         sortByDate:new Date(),
-        sort: principalDD[0]
+        sort: principalDD[0],
+        dateTo:new Date(),
+        dateFrom:new Date(),
+        name:""
+
     })
 
     const handleChange = (e: any) => {
+
         setData({...data, [e.target.name]: [e.target.value]})
+
     }
 
-    console.log(data);
+
+    async function handleClick(){
+
+        console.log(data);
+
+        // const response = await axios.get(`/api/Principal?action=getStudentOnLeave&dateFrom=${data.dateFrom[0] as Date}&dateTo=${data.dateTo[0]}&status=Accepted`)
+
+        // const response = await axios.get(`/api/Principal?action=fetchCoordinatorDetails&programe=Bachelor of Tecnology&branch=Artificial Intelligence`)
+
+        // fetchStudentDetails
+
+        // const response = await axios.get(`/api/Principal?action=fetchStudentDetails&programe=Bachelor of Tecnology&branch=Artificial Intelligence`)
+
+        // const response = await axios.get(`/api/Principal?action=searchStudentByText&text=${data.name[0]}`);
+
+    }
+
 
   return (
+
     // main div
+
     <div className='flex flex-col md:flex-row gap-11 '>
 
         {/* div for search */}
+
         <div className='flex justify-center items-baseline gap-2'>
             <div>
                 <input
@@ -41,7 +78,7 @@ const StudentLeaves = () => {
                 ></input>
             </div>
             
-            <div className=''>
+            <div onClick={handleClick}>
                 <CTCButton text={'Search'}></CTCButton>
             </div>
         </div>
