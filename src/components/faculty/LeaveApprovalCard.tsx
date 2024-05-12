@@ -1,15 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import CTCButton from "../common/CTCButton";
 import Image from "next/image";
 import Link from "next/link";
 import { dateIntoReadableFormat } from "@/helper/date";
 import axios from "axios";
 import toast from "react-hot-toast";
+import Loading from "@/components/common/Loading";
 
 const LeaveApprovalCard = ({ userInfo, removeHandler }: any) => {
+  const [loading, setLoading] = useState(false);
+
   async function leaveFormResponseHandler(result: Boolean) {
+    setLoading(true);
     try {
       const res = await axios.patch("/api/leave-form", {
         formId: userInfo._id,
@@ -20,11 +24,14 @@ const LeaveApprovalCard = ({ userInfo, removeHandler }: any) => {
     } catch (error) {
       toast.error("Response Not Submitted");
       console.log("error: ", error);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <>
+      {loading && <Loading />}
       <div className="w-full font-medium px-5 flex lg:flex-row flex-col  text-black py-3 gap-2 lg:gap-40 bg-[#EDF6FF]">
         {/* for user details */}
         <div className="flex w-full items-center justify-between gap-10">

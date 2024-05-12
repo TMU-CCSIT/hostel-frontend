@@ -30,7 +30,7 @@ async function wardenSignUp(warden: any) {
 
     }
 
-    const {hostel} = warden;
+    const { hostel } = warden;
 
     const newWarden = await Warden.create({
 
@@ -40,7 +40,7 @@ async function wardenSignUp(warden: any) {
 
     return newWarden;
 
-  } catch (error:any) {
+  } catch (error: any) {
 
     console.log("warden error ");
 
@@ -116,14 +116,14 @@ export async function POST(req: NextRequest, res: NextResponse) {
       message: "Warden signup done successfully",
       data: {
 
-          newWarden,
-          newUser
+        newWarden,
+        newUser
 
       },
 
     });
 
-    
+
 
   } catch (error: any) {
 

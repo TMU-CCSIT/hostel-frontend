@@ -6,7 +6,6 @@ export interface IStudent extends Document {
     parentName: string;
     parentContactNo: string;
     fingerNo: string;
-    branch: string;
     college: string;
     hostel: string,
     roomNo: string;
@@ -34,10 +33,6 @@ const studentSchema: Schema = new Schema(
         parentContactNo: {
             type: String,
             required: true
-        },
-        branch: {
-            type: String,
-            required: true,
         },
         college: {
             type: String,

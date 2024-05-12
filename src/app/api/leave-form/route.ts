@@ -2,11 +2,14 @@ import { ROLE, STATUS } from "@/constants/constant";
 import { compareDates } from "@/helper/compareDates";
 import { middleware } from "@/middleware";
 import LeaveForm from "@/models/form.model";
-import Student from "@/models/student.model";
+import Student, { IStudent } from "@/models/student.model";
 import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { v4 as uuidv4 } from 'uuid';
+import { IWarden } from "@/models/warden.model";
+import { ICoordinator } from "@/models/coordinator.model";
+import { IPrincipal } from "@/models/principal.model";
 
 import { dbConnection } from "@/config/dbConfig";
 
@@ -49,20 +52,25 @@ async function getAdminQuery(user: IUser) {
 
 
 async function getCoordinatorQuery(user: IUser) {
+    let allApplications;
 
-    const allApplications = await LeaveForm.find()
-        .populate(
-            {
-                path: 'user',
-                populate: {
-                    path: 'refId',
-                    select: "enrollmentNo branch programe",
-                    match: { programe: { $in: user.refId?.branches } },
-                },
-                select: "fullName profileImage refId _id"
-            }
-        )
-        .where("status.coordinator").equals(STATUS.Pending);
+    if (isCoordinator(user.refId)) {
+        allApplications = await LeaveForm.find()
+            .populate(
+                {
+                    path: 'user',
+                    populate: {
+                        path: 'refId',
+                        select: "enrollmentNo branch programe",
+                        match: { programe: { $in: user.refId.branches } },
+                    },
+                    select: "fullName profileImage refId _id"
+                }
+            )
+            .where("status.coordinator").equals(STATUS.Pending);
+    } else {
+        // Handle the case where user.refId is not a coordinator
+    }
 
     return allApplications;
 
@@ -112,32 +120,44 @@ async function getStudentDetailsById(user: IUser, userId: any) {
     }
 }
 
+// Define the type guard function
+function isCoordinator(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is ICoordinator {
+    return (refId as ICoordinator).branches !== undefined;
+}
+
+
+// Define the type guard function
+function isWarden(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is IWarden {
+    return (refId as IWarden).hostel !== undefined;
+}
+
 
 
 async function getWardenQuery(user: IUser) {
 
-    const allApplications = await LeaveForm.find({})
-        .populate(
-            {
-                path: 'user',
-                populate: {
-                    path: 'refId',
-                    select: "enrollmentNo branch hostel programe",
-                    match: { hostel: { $eq: user.refId.hostel } },
-                },
-                select: "fullName profileImage refId _id"
-            }
-        )
-        .where({
-            $and: [
-                { "status.coordinator": STATUS.Accepted },
-                { "status.hostelWarden": STATUS.Pending }
-            ]
-        });
+    if (isWarden(user.refId)) {
 
+        const allApplications = await LeaveForm.find({})
+            .populate(
+                {
+                    path: 'user',
+                    populate: {
+                        path: 'refId',
+                        select: "enrollmentNo branch hostel programe",
+                        match: { hostel: { $eq: user.refId.hostel } },
+                    },
+                    select: "fullName profileImage refId _id"
+                }
+            )
+            .where({
+                $and: [
+                    { "status.coordinator": STATUS.Accepted },
+                    { "status.hostelWarden": STATUS.Pending }
+                ]
+            });
 
-    return allApplications;
-
+        return allApplications;
+    }
 }
 
 
