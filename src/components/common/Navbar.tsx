@@ -12,12 +12,14 @@ import CTAButton from "@/components/common/CTCButton";
 import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null); // Specify the correct type
   const user: any = useRecoilValue(userAtom);
   const router = useRouter();
 
   useEffect(() => {
+    
     function handleClickOutside(event: MouseEvent) {
       if (
         dropdownRef.current &&
