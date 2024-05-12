@@ -19,7 +19,9 @@ const Page = () => {
   }
 
   useEffect(() => {
+
     fetchAllPendingLeaves();
+
   }, []);
   return (
     <>
@@ -43,3 +45,8 @@ const Page = () => {
 };
 
 export default Page;
+
+
+
+
+

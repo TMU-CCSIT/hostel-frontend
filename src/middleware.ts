@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getDataFromToken } from "@/helper/getDataFromToken";
 import { ROLE } from "@/constants/constant";
 
+
 interface CustomNextRequest extends NextRequest {
     user: string,
 }
@@ -14,6 +15,8 @@ const DefaultPage = ["/", "/unauthorized", "/something-went-wrong"];
 // const otherProtectedRoute = ["/auth/verifyEmail/token"]
 
 export async function middleware(req: CustomNextRequest) {
+
+    // Apply middleware for parsing URL-encoded bodies
 
     const path = req.nextUrl.pathname;
 
@@ -67,7 +70,7 @@ function checkPermission(role: ROLE, path: string): boolean {
     switch (role) {
 
         case "Student":
-            return path.includes('student')
+            return path.includes('student');
 
         case "Admin":
             return path.includes('admin')

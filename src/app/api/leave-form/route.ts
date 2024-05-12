@@ -11,6 +11,10 @@ import { IWarden } from "@/models/warden.model";
 import { ICoordinator } from "@/models/coordinator.model";
 import { IPrincipal } from "@/models/principal.model";
 
+import { dbConnection } from "@/config/dbConfig";
+
+dbConnection();
+
 
 interface CustomNextRequest extends NextRequest {
     user: string,
@@ -69,6 +73,51 @@ async function getCoordinatorQuery(user: IUser) {
     }
 
     return allApplications;
+
+}
+
+
+
+
+async function getStudentDetailsById(user: IUser, userId: any) {
+
+    try {
+
+        if (user.role === "Student") {
+
+            return NextResponse.json({
+
+                message: "this is invalid request ",
+                data: null,
+                error: null
+            })
+        }
+
+        const userDetails = await User.findById(userId).select('-password').populate("refId")
+
+        // if(!userDetails){
+
+        //     return NextResponse.json({
+
+        //         message:"this is invalid user id ",
+        //         data:null,
+        //         error:null
+
+        //     },{
+
+        //         status:400
+        //     })
+        // }
+
+
+        return userDetails;
+
+
+    } catch (error: any) {
+
+        console.log(error.message);
+
+    }
 }
 
 // Define the type guard function
@@ -81,6 +130,7 @@ function isCoordinator(refId: IStudent | IWarden | ICoordinator | IPrincipal): r
 function isWarden(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is IWarden {
     return (refId as IWarden).hostel !== undefined;
 }
+
 
 
 async function getWardenQuery(user: IUser) {
@@ -111,6 +161,8 @@ async function getWardenQuery(user: IUser) {
 }
 
 
+
+
 async function getPrincipalQuery(user: IUser) {
     console.log("princ: ", user)
 
@@ -123,6 +175,8 @@ async function getPrincipalQuery(user: IUser) {
 
     return allApplications;
 }
+
+
 
 
 async function getApplicationsByRole(user: IUser) {
@@ -150,7 +204,10 @@ async function getApplicationsByRole(user: IUser) {
 
 
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
+
     try {
+
+        await dbConnection();
 
         await middleware(req);
         const userId = req.user;
@@ -210,6 +267,10 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 
 
 
+
+
+
+
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -219,8 +280,13 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
         const { formId, result } = body;
         const userId = req.user;
 
-        const form = await LeaveForm.findById(formId);
+        // fetch student by form
+        const form = await LeaveForm
+            .findById(formId)
+            .populate("user", "refId")
+            .exec();
 
+        // get current user
         const user = await User.findById(userId).populate("refId", "_id");
 
         if (!form || !user) {
@@ -267,10 +333,10 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 const uuid = uuidv4();
 
                 // create qr code
-                const qrCodeString: string = `${formId}-${uuid}`;
+                const qrCodeString: string = `${formId}TMUHOSTEL${uuid}`;
 
-                await Student.findByIdAndUpdate(
-                    user.refId._id,
+                const updatedStudent = await Student.findByIdAndUpdate(
+                    form.user.refId,
                     { $set: { "qrCode.qrString": qrCodeString } },
                     { new: true }
                 );
@@ -280,7 +346,6 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
                 form.status.hostelWarden = STATUS.Rejected;
 
             }
-
         }
 
         await form.save();
@@ -313,6 +378,8 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
 }
 
 
+
+
 export async function POST(req: CustomNextRequest, res: NextResponse) {
 
     try {
@@ -323,8 +390,6 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
 
 
         const userId = req.user;
-
-        console.log("user: ", userId)
 
         // validation by parsing
         try {
@@ -408,6 +473,9 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
 }
 
 
+
+
+
 export async function PUT(req: CustomNextRequest, res: NextResponse) {
 
     try {
@@ -445,13 +513,33 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
         }
 
         // split the data
-        const formId = qrCodeString.split("-").at(0);
-        const userId = qrCodeString.split("-").at(1);
+        const formId = qrCodeString.split("TMUHOSTEL").at(0);
+        const randomUuid = qrCodeString.split("TMUHOSTEL").at(1);
 
 
         // Find the user and leave-form using the QR string
-        const studentInfo = await Student.findById(userId);
-        const formInfo = await LeaveForm.findById(formId);
+        const formInfo = await LeaveForm
+            .findById(formId)
+            .populate("user", "refId")
+            .exec();
+
+        const studentInfo = await Student.findById(formInfo.user.refId);
+
+        console.log("stdeubnt: ", studentInfo)
+
+        if (studentInfo.qrCode.qrString.split("TMUHOSTEL").at(-1) !== randomUuid) {
+
+            return NextResponse.json({
+
+                message: "Qr code is not valid",
+                error: null,
+                data: null,
+                success: false,
+
+            }, {
+                status: 401,
+            });
+        }
 
         // Check if the user and leaveform exists
         if (!studentInfo || !formInfo) {
@@ -544,3 +632,8 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
         });
     }
 }
+
+
+
+
+

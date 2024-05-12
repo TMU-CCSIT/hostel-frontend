@@ -7,9 +7,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+import StudentInfo from "@/components/student/StudentInfo";
+
 const ApplicationPage = () => {
+
   const [data, setData] = useState<null | []>(null);
   const [loading, setLoading] = useState(false);
+
+  const [click, setClick] = useState(false);
 
   const router = useRouter();
 
@@ -35,13 +40,30 @@ const ApplicationPage = () => {
     setData(newData);
   }
 
+  async function fetchStudentData(userId: string) {
+
+    try {
+
+      const response = await axios.get("/api/student") // 
+
+
+    } catch (error: any) {
+
+      console.log(error.message);
+
+    }
+  }
+
   useEffect(() => {
+
     fetchAllPendingLeaves();
+    
   }, []);
 
   return (
     <>
       {loading && <Loading />}
+
       <div className="min-h-screen w-full bg-[#ffffff] flex flex-col gap-5 justify-start items-center">
         <div className="w-11/12 mt-5 mb-10 flex-col flex gap-2">
           <div>
@@ -63,10 +85,31 @@ const ApplicationPage = () => {
                 <NotFound />
               ))}
           </div>
+
+          <div>
+
+
+            {
+
+
+              <div className={`fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75 ${click ? 'block' : 'hidden'}`}>
+
+                <StudentInfo name="Adarsh jain " enrollmentNo="enrollmentNo" Branch="branch" College="college" Hostel="boys" ParentNo="dlkjd" parentName="jnd" setClick={setClick} />
+                
+              </div>
+
+            }
+
+          </div>
+
+
         </div>
       </div>
+
     </>
   );
 };
 
 export default ApplicationPage;
+
+
