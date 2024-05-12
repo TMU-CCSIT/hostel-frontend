@@ -7,7 +7,7 @@ import React from "react";
 
 import { useState } from "react";
 
-export default function forgotEmail() {
+export default function ForgotEmail() {
 
     const [email,setEmail] = useState({
 
