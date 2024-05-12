@@ -25,7 +25,6 @@ export async function middleware(req: CustomNextRequest) {
     if (isLoggedIn) {
 
         decodedToken = await getDataFromToken(req);
-        console.log(decodedToken)
         req.user = decodedToken.id;
     }
 

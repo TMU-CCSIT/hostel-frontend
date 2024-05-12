@@ -7,8 +7,8 @@ import User, { IUser } from "@/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { v4 as uuidv4 } from 'uuid';
-import { IWarden } from "@/models/warden.model";
-import { ICoordinator } from "@/models/coordinator.model";
+import Warden, { IWarden } from "@/models/warden.model";
+import Coordinator, { ICoordinator } from "@/models/coordinator.model";
 import { IPrincipal } from "@/models/principal.model";
 
 
@@ -23,6 +23,19 @@ const leaveFormSchema = z.object({
     reasonForLeave: z.string(),
     addressDuringLeave: z.string(),
 });
+
+
+// Define the type guard function
+function isCoordinator(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is ICoordinator {
+    return (refId as ICoordinator).branches !== undefined;
+}
+
+
+// Define the type guard function
+function isWarden(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is IWarden {
+    return (refId as IWarden).hostel !== undefined;
+}
+
 
 
 async function getStudentQuery(user: IUser) {
@@ -42,6 +55,8 @@ async function getStudentQuery(user: IUser) {
     return allApplications;
 }
 
+
+
 async function getAdminQuery(user: IUser) {
     return 'leaveForm'
 }
@@ -50,7 +65,10 @@ async function getAdminQuery(user: IUser) {
 async function getCoordinatorQuery(user: IUser) {
     let allApplications;
 
-    if (isCoordinator(user.refId)) {
+    // populate
+    const populatedUser = await Coordinator.findById(user.refId)
+
+    if (isCoordinator(populatedUser)) {
         allApplications = await LeaveForm.find()
             .populate(
                 {
@@ -58,7 +76,7 @@ async function getCoordinatorQuery(user: IUser) {
                     populate: {
                         path: 'refId',
                         select: "enrollmentNo branch programe",
-                        match: { programe: { $in: user.refId.branches } },
+                        match: { programe: { $in: populatedUser.branches } },
                     },
                     select: "fullName profileImage refId _id"
                 }
@@ -71,21 +89,16 @@ async function getCoordinatorQuery(user: IUser) {
     return allApplications;
 }
 
-// Define the type guard function
-function isCoordinator(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is ICoordinator {
-    return (refId as ICoordinator).branches !== undefined;
-}
-
-
-// Define the type guard function
-function isWarden(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is IWarden {
-    return (refId as IWarden).hostel !== undefined;
-}
-
 
 async function getWardenQuery(user: IUser) {
 
-    if (isWarden(user.refId)) {
+
+    console.log("hahaa")
+    const populatedUser = await Warden.findById(user.refId)
+
+    console.log("warden: ", populatedUser)
+
+    if (isWarden(populatedUser)) {
 
         const allApplications = await LeaveForm.find({})
             .populate(
@@ -94,7 +107,7 @@ async function getWardenQuery(user: IUser) {
                     populate: {
                         path: 'refId',
                         select: "enrollmentNo branch hostel programe",
-                        match: { hostel: { $eq: user.refId.hostel } },
+                        match: { hostel: { $eq: populatedUser.hostel } },
                     },
                     select: "fullName profileImage refId _id"
                 }
@@ -107,6 +120,8 @@ async function getWardenQuery(user: IUser) {
             });
 
         return allApplications;
+    } else {
+        return null;
     }
 }
 
@@ -157,9 +172,7 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 
         const user = await User
             .findById(userId)
-            .select("_id role refId")
-            .populate("refId", "-qrCode")
-            .exec();
+            .select("_id role refId");
 
         console.log("user: ", user)
 
@@ -185,7 +198,7 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
                 {
                     message: "Fetch all leave form successfully",
                     error: null,
-                    data: allForms,
+                    // data: allForms,
                     success: true,
                 }, {
                 status: 200

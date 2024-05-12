@@ -24,8 +24,7 @@ const wardenSchema = new mongoose.Schema(
     }
 );
 
-
-const Warden = mongoose.model('Warden', wardenSchema) || mongoose.models.Warden<IWarden>;
+const Warden = mongoose.models.Warden || mongoose.model<IWarden>('Coordinator', wardenSchema);
 export default Warden;
 
 
