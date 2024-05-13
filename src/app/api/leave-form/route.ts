@@ -1,22 +1,18 @@
 import { ROLE, STATUS } from "@/constants/constant";
-import { compareDates } from "@/helper/compareDates";
 import { middleware } from "@/middleware";
 import LeaveForm from "@/models/form.model";
-import Student from "@/models/student.model";
 import User, { IUser } from "@/models/user.model";
+import Coordinator, { ICoordinator } from "@/models/coordinator.model";
+import Warden, { IWarden } from "@/models/warden.model";
+import Student from "@/models/student.model";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { v4 as uuidv4 } from 'uuid';
-
-import { dbConnection } from "@/config/dbConfig";
-
-dbConnection();
-
+import { compareDates } from "@/helper/compareDates";
 
 interface CustomNextRequest extends NextRequest {
-    user: string,
+    user: string;
 }
-
 
 const leaveFormSchema = z.object({
     dateFrom: z.date(),
@@ -25,445 +21,268 @@ const leaveFormSchema = z.object({
     addressDuringLeave: z.string(),
 });
 
+function isCoordinator(refId: any): refId is ICoordinator {
+    return refId.branches !== undefined;
+}
+
+function isWarden(refId: any): refId is IWarden {
+    return refId.hostel !== undefined;
+}
 
 async function getStudentQuery(user: IUser) {
-
-    const allApplications = await LeaveForm
-        .find({ user: user._id })
+    const allApplications = await LeaveForm.find({ user: user._id })
         .populate({
             path: "user",
-            populate: {
-                path: "refId",
-                select: "enrollmentNo branch programe"
-            },
+            populate: { path: "refId", select: "enrollmentNo branch programe" },
             select: "fullName profileImage refId _id"
         })
         .exec();
-
     return allApplications;
 }
 
 async function getAdminQuery(user: IUser) {
-    return 'leaveForm'
+    return 'leaveForm';
 }
 
-
 async function getCoordinatorQuery(user: IUser) {
+    let allApplications;
 
-    const allApplications = await LeaveForm.find()
-        .populate(
-            {
+    const populatedUser = await Coordinator.findById(user.refId);
+
+    if (populatedUser && isCoordinator(populatedUser)) {
+        allApplications = await LeaveForm.find()
+            .populate({
                 path: 'user',
                 populate: {
                     path: 'refId',
                     select: "enrollmentNo branch programe",
-                    match: { programe: { $in: user.refId?.branches } },
+                    match: { programe: { $in: populatedUser.branches } },
                 },
                 select: "fullName profileImage refId _id"
-            }
-        )
-        .where("status.coordinator").equals(STATUS.Pending);
+            })
+            .where("status.coordinator").equals(STATUS.Pending);
+    } else {
+        // Handle the case where user.refId is not a coordinator
+    }
 
     return allApplications;
-
 }
-
-
-
-
-async function getStudentDetailsById(user: IUser, userId: any) {
-
-    try {
-
-        if (user.role === "Student") {
-
-            return NextResponse.json({
-
-                message: "this is invalid request ",
-                data: null,
-                error: null
-            })
-        }
-
-        const userDetails = await User.findById(userId).select('-password').populate("refId")
-
-        // if(!userDetails){
-
-        //     return NextResponse.json({
-
-        //         message:"this is invalid user id ",
-        //         data:null,
-        //         error:null
-
-        //     },{
-
-        //         status:400
-        //     })
-        // }
-
-
-        return userDetails;
-
-
-    } catch (error: any) {
-
-        console.log(error.message);
-
-    }
-}
-
-
 
 async function getWardenQuery(user: IUser) {
+    const populatedUser = await Warden.findById(user.refId);
 
-    const allApplications = await LeaveForm.find({})
-        .populate(
-            {
+    if (populatedUser && isWarden(populatedUser)) {
+        const allApplications = await LeaveForm.find({})
+            .populate({
                 path: 'user',
                 populate: {
                     path: 'refId',
                     select: "enrollmentNo branch hostel programe",
-                    match: { hostel: { $eq: user.refId.hostel } },
+                    match: { hostel: { $eq: populatedUser.hostel } },
                 },
                 select: "fullName profileImage refId _id"
-            }
-        )
-        .where({
-            $and: [
-                { "status.coordinator": STATUS.Accepted },
-                { "status.hostelWarden": STATUS.Pending }
-            ]
-        });
-
-
-    return allApplications;
-
+            })
+            .where({
+                $and: [
+                    { "status.coordinator": STATUS.Accepted },
+                    { "status.hostelWarden": STATUS.Pending }
+                ]
+            });
+        return allApplications;
+    } else {
+        return null;
+    }
 }
 
-
-
-
 async function getPrincipalQuery(user: IUser) {
-    console.log("princ: ", user)
-
-    const allApplications = await LeaveForm.find({
-        'user.refId.college': { $eq: "CCSIT" }
-    })
+    const allApplications = await LeaveForm.find({ 'user.refId.college': "CCSIT" })
         .populate('user')
         .populate('user.refId')
         .exec();
-
     return allApplications;
 }
 
-
-
-
 async function getApplicationsByRole(user: IUser) {
-
     switch (user.role) {
         case ROLE.Coordinator:
-            return await getCoordinatorQuery(user)
-
+            return await getCoordinatorQuery(user);
         case ROLE.Principal:
-            return await getPrincipalQuery(user)
-
+            return await getPrincipalQuery(user);
         case ROLE.Warden:
-            return await getWardenQuery(user)
-
+            return await getWardenQuery(user);
         case ROLE.Admin:
-            return await getAdminQuery(user)
-
+            return await getAdminQuery(user);
         case ROLE.Student:
-            return await getStudentQuery(user)
+            return await getStudentQuery(user);
         default:
             return [];
     }
 }
 
-
-
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
-
     try {
-
-        await dbConnection();
-
         await middleware(req);
         const userId = req.user;
+        const user = await User.findById(userId).select("_id role refId");
 
-        const user = await User
-            .findById(userId)
-            .select("_id role refId")
-            .populate("refId", "-qrCode")
-            .exec();
-
-        console.log("user: ", user)
-
-        // don't need this one
         if (!user) {
-            return NextResponse
-                .json(
-                    {
-                        message: "User not found",
-                        error: "User not found",
-                        data: null,
-                        success: false,
-                    }, {
-                    status: 404
-                });
+            return NextResponse.json({
+                message: "User not found",
+                error: "User not found",
+                data: null,
+                success: false,
+            }, {
+                status: 404
+            });
         }
-
 
         const allForms = await getApplicationsByRole(user);
 
-        return NextResponse
-            .json(
-                {
-                    message: "Fetch all leave form successfully",
-                    error: null,
-                    data: allForms,
-                    success: true,
-                }, {
-                status: 200
-            });
-
+        return NextResponse.json({
+            message: "Fetch all leave forms successfully",
+            error: null,
+            data: allForms,
+            success: true,
+        }, {
+            status: 200
+        });
     } catch (error: any) {
-
-        return NextResponse
-            .json(
-                {
-                    message: "Server failed to fetch all form, try again later",
-                    error: error.message,
-                    data: null,
-                    success: false,
-                },
-                {
-                    status: 500
-                }
-            );
+        return NextResponse.json({
+            message: "Server failed to fetch all forms, try again later",
+            error: error.message,
+            data: null,
+            success: false,
+        }, {
+            status: 500
+        });
     }
-}
-
-
-
-
-
-
+};
 
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
-
         await middleware(req);
-
         const body = await req.json();
         const { formId, result } = body;
         const userId = req.user;
-
-        // fetch student by form
-        const form = await LeaveForm
-            .findById(formId)
-            .populate("user", "refId")
-            .exec();
-
-        // get current user
+        const form = await LeaveForm.findById(formId);
         const user = await User.findById(userId).populate("refId", "_id");
 
         if (!form || !user) {
-            return NextResponse
-                .json(
-                    {
-                        message: "Form or user not found",
-                        error: "Form not found",
-                        data: null,
-                        success: false,
-                    }, {
-                    status: 404
-                });
+            return NextResponse.json({
+                message: "Form or user not found",
+                error: "Form not found",
+                data: null,
+                success: false,
+            }, {
+                status: 404
+            });
         }
 
-        // if other who is not authorize
         if (user.role !== ROLE.Coordinator && user.role !== ROLE.Warden) {
-            return NextResponse
-                .json(
-                    {
-                        message: "User role is not authorize",
-                        error: "User role is not authorize",
-                        data: null,
-                        success: false,
-                    }, {
-                    status: 401
-                });
+            return NextResponse.json({
+                message: "User role is not authorized",
+                error: "User role is not authorized",
+                data: null,
+                success: false,
+            }, {
+                status: 401
+            });
         }
 
-        // if coordinator
         if (user.role === ROLE.Coordinator) {
-
             form.status.coordinator = result ? STATUS.Accepted : STATUS.Rejected;
-
         }
 
-        // if hostel warden
         if (user.role === ROLE.Warden) {
-            // if result is true then set status and create qr code and put into user db
             if (result) {
-                // set status
                 form.status.hostelWarden = STATUS.Accepted;
-
                 const uuid = uuidv4();
-
-                // create qr code
-                const qrCodeString: string = `${formId}TMUHOSTEL${uuid}`;
-
-                const updatedStudent = await Student.findByIdAndUpdate(
-                    form.user.refId,
+                const qrCodeString = `${formId}-${uuid}`;
+                await Student.findByIdAndUpdate(
+                    user.refId._id,
                     { $set: { "qrCode.qrString": qrCodeString } },
                     { new: true }
                 );
-
             } else {
-                // if not then set status
                 form.status.hostelWarden = STATUS.Rejected;
-
             }
         }
 
         await form.save();
 
-        return NextResponse
-            .json(
-                {
-                    message: "Leave form update successfully",
-                    error: null,
-                    data: null,
-                    success: true,
-                }, {
-                status: 200
-            });
-
+        return NextResponse.json({
+            message: "Leave form updated successfully",
+            error: null,
+            data: null,
+            success: true,
+        }, {
+            status: 200
+        });
     } catch (error: any) {
-        return NextResponse
-            .json(
-                {
-                    message: "Server failed to update form, try again later",
-                    error: error.message,
-                    data: null,
-                    success: false,
-                },
-                {
-                    status: 500
-                }
-            );
+        return NextResponse.json({
+            message: "Server failed to update form, try again later",
+            error: error.message,
+            data: null,
+            success: false,
+        }, {
+            status: 500
+        });
     }
-}
-
-
-
+};
 
 export async function POST(req: CustomNextRequest, res: NextResponse) {
-
     try {
-        // initializing body
         const body = await req.json();
-
         await middleware(req);
-
-
         const userId = req.user;
 
-        // validation by parsing
-        try {
-            leaveFormSchema.safeParse(body);
-        } catch (err) {
-            return NextResponse.json(
-                {
-                    message: "Validation error in parsing data",
-                    error: err,
-                    data: null,
-                    success: false,
-                }, {
-                status: 400
-            }
-            );
+        const userExist = await User.findById(userId);
+
+        if (!userExist) {
+            return NextResponse.json({
+                message: "User does not exist",
+                success: false,
+                error: "User does not exist",
+                data: null
+            }, {
+                status: 404
+            });
         }
 
-        // getting data by destructuring
-        const {
+        const { dateFrom, dateTo, reasonForLeave, addressDuringLeave } = body;
+
+        const leaveForm = await LeaveForm.create({
+            user: userId,
             dateFrom,
             dateTo,
             reasonForLeave,
             addressDuringLeave
-        } = body;
+        });
 
-        // check if user exist or not
-        const userExist = await User.findById(userId);
-
-        if (!userExist) {
-            return NextResponse.json(
-                {
-                    message: "user does not exist",
-                    success: false,
-                    error: "user does not exist",
-                    data: null
-                },
-                {
-                    status: 404
-                }
-            );
-        }
-
-        // create entry in db 
-        const leaveForm = await LeaveForm.create(
-            {
-                user: userId,
-                dateFrom: dateFrom,
-                dateTo: dateTo,
-                reasonForLeave,
-                addressDuringLeave
-            }
-        );
-
-        // return success response
-        return NextResponse.json(
-            {
-                message: "leave form creation successfull",
-                success: true,
-                error: null,
-                data: leaveForm
-            }, {
+        return NextResponse.json({
+            message: "Leave form created successfully",
+            success: true,
+            error: null,
+            data: leaveForm
+        }, {
             status: 200
-        }
-        );
-    }
-
-    // catch block 
-    catch (err: any) {
-        return NextResponse.json(
-            {
-                message: "problem in leave form creation controller",
-                success: false,
-                error: err.message,
-                data: null
-            },
-            {
-                status: 400
-            }
-        );
+        });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: "Problem in leave form creation controller",
+            success: false,
+            error: error.message,
+            data: null
+        }, {
+            status: 400
+        });
     }
 }
 
-
-
-
-
 export async function PUT(req: CustomNextRequest, res: NextResponse) {
-
     try {
-        // verify gateKeeper is valid or not
         await middleware(req);
-
         const loggedInUserId = req.user;
-
         const loggedInUser = await User.findById(loggedInUserId);
 
         if (!loggedInUser || loggedInUser.role !== ROLE.Gatekeeper) {
@@ -477,7 +296,6 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
             });
         }
 
-        // fetch data from body
         const body = await req.json();
         const { qrCodeString } = body;
 
@@ -492,114 +310,56 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
             });
         }
 
-        // split the data
-        const formId = qrCodeString.split("TMUHOSTEL").at(0);
-        const randomUuid = qrCodeString.split("TMUHOSTEL").at(1);
+        const formId = qrCodeString.split("-")[0];
+        const userId = qrCodeString.split("-")[1];
 
+        const studentInfo = await Student.findById(userId);
+        const formInfo = await LeaveForm.findById(formId);
 
-        // Find the user and leave-form using the QR string
-        const formInfo = await LeaveForm
-            .findById(formId)
-            .populate("user", "refId")
-            .exec();
-
-        const studentInfo = await Student.findById(formInfo.user.refId);
-
-        console.log("stdeubnt: ", studentInfo)
-
-        if (studentInfo.qrCode.qrString.split("TMUHOSTEL").at(-1) !== randomUuid) {
-
+        if (!studentInfo || !formInfo || !studentInfo.qrCode.qrString) {
             return NextResponse.json({
-
-                message: "Qr code is not valid",
-                error: null,
-                data: null,
-                success: false,
-
-            }, {
-                status: 401,
-            });
-        }
-
-        // Check if the user and leaveform exists
-        if (!studentInfo || !formInfo) {
-
-            return NextResponse.json({
-
                 message: "User or leave-form not found",
                 error: null,
                 data: null,
                 success: false,
-
             }, {
-                status: 404,
+                status: 404
             });
         }
 
-        // if qrcode string not found
-        if (!studentInfo.qrCode.qrString) {
-
-            return NextResponse.json({
-                message: "Qr String not found",
-                error: null,
-                data: null,
-                success: false,
-
-            }, {
-                status: 404,
-            });
-        }
-
-        // if user not scanned the qrcode till now  ------>> that means he/she try to out
         if (!studentInfo.qrCode.status) {
-
             const todaysDate = new Date();
-
-            // if form date is not equal to today's date 
             if (!compareDates(formInfo.dateFrom, todaysDate)) {
-                return NextResponse.json(
-                    {
-                        message: "You can't go today, Date doesn't matched",
-                        error: null,
-                        data: null,
-                        success: false,
-                    }, {
+                return NextResponse.json({
+                    message: "You can't go today, Date doesn't match",
+                    error: null,
+                    data: null,
+                    success: false,
+                }, {
                     status: 401
                 });
             }
-
-            // Set the status of the student as "out"
             studentInfo.qrCode.status = true;
             formInfo.leavingTime = Date.now();
-
-            // TODO: Send Mail to thier parents
-
         } else {
-            // if user already scanned qrcode  --> that means he/she try to in
-
-            // Make QR code setting as default
             studentInfo.qrCode.status = false;
             studentInfo.qrCode.qrString = "";
-            // Update leave form data
             formInfo.leavingTime = Date.now();
-            // TODO: Send mail to their parents
         }
 
-        // Save the updated information
         await studentInfo.save();
         await formInfo.save();
 
-        // Respond with success message
-        return NextResponse.json(
-            {
-                message: studentInfo.qrCode.status ? "QR Scanned for Out successfully" : "QR Scanned for In successfully",
-                error: null,
-                data: null,
-                success: true,
-            }, {
+        const message = studentInfo.qrCode.status ? "QR Scanned for Out successfully" : "QR Scanned for In successfully";
+
+        return NextResponse.json({
+            message,
+            error: null,
+            data: null,
+            success: true,
+        }, {
             status: 200
         });
-
     } catch (error: any) {
         console.log(error.message);
         return NextResponse.json({
@@ -608,12 +368,7 @@ export async function PUT(req: CustomNextRequest, res: NextResponse) {
             data: null,
             success: false,
         }, {
-            status: 500,
+            status: 500
         });
     }
 }
-
-
-
-
-

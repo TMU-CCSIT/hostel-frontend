@@ -155,4 +155,4 @@ const Leave = () => {
   );
 };
 
-export default Leave;
+export default Leave;

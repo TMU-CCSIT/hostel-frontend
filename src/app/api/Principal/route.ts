@@ -406,7 +406,9 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
                 });
 
             default:
+
                 // Handle unknown action
+                
                 return NextResponse.json(
                     {
                         message: `Unsupported action: ${action}`,

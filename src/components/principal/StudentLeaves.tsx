@@ -45,7 +45,9 @@ const StudentLeaves = () => {
 
         console.log(data);
 
-        // const response = await axios.get(`/api/Principal?action=getStudentOnLeave&dateFrom=${data.dateFrom[0] as Date}&dateTo=${data.dateTo[0]}&status=Accepted`)
+        const response = await axios.get(`/api/Principal?action=getStudentOnLeave&dateFrom=${data.dateFrom[0] as Date}&dateTo=${data.dateTo[0]}&status=Accepted`)
+
+        console.log("res k data",response.data);
 
         // const response = await axios.get(`/api/Principal?action=fetchCoordinatorDetails&programe=Bachelor of Tecnology&branch=Artificial Intelligence`)
 
@@ -79,7 +81,9 @@ const StudentLeaves = () => {
             </div>
             
             <div onClick={handleClick}>
+
                 <CTCButton text={'Search'}></CTCButton>
+
             </div>
         </div>
 
@@ -131,3 +135,7 @@ const StudentLeaves = () => {
 }
 
 export default StudentLeaves
+
+
+
+

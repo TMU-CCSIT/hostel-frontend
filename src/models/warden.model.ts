@@ -1,22 +1,18 @@
-
-import mongoose, { Document } from 'mongoose';
+import mongoose, { Document, Model } from 'mongoose';
 
 import { IUser } from '@/models/user.model';
 
 import { HOSTEL } from '@/constants/constant';
 
-
 export interface IWarden extends Document {
-
     hostel: string;
-
 }
 
 const wardenSchema = new mongoose.Schema(
     {
         hostel: {
             type: String,
-            reduired: true
+            required: true // Corrected 'required' spelling
         },
     },
     {
@@ -24,9 +20,7 @@ const wardenSchema = new mongoose.Schema(
     }
 );
 
+// Use the existing model if it exists to prevent OverwriteModelError
+const Warden: Model<IWarden> = mongoose.models.Warden || mongoose.model<IWarden>('Warden', wardenSchema);
 
-const Warden = mongoose.model('Warden', wardenSchema) || mongoose.models.Warden<IWarden>;
 export default Warden;
-
-
-

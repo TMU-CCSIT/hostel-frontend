@@ -99,7 +99,7 @@ const Application = ({ userInfo }: any) => {
 
               userInfo.status['coordinator'] === "Accepted" ? <abbr title="Accepeted bg coordinator ">
 
-                <div className="flex justify-center items-center rounded-full bg-blue-500 p-1">
+                <div className="flex justify-center items-center rounded-full bg-green-500 p-1">
 
                   <TiTick className="text-white text-2xl" />
 
@@ -119,7 +119,7 @@ const Application = ({ userInfo }: any) => {
 
                 : <abbr title="Rejected from coordinator ">
 
-                  <div className="flex justify-center items-center p-1">
+                  <div className="flex justify-center items-center rounded-full bg-red-500 p-1">
 
                     <FaTimes className="text-white text-2xl" />
 
@@ -134,7 +134,7 @@ const Application = ({ userInfo }: any) => {
 
               userInfo.status['hostelWarden'] === "Accepted" ? <abbr title="Accepted by hostel warden ">
 
-                <div className="flex justify-center items-center p-1">
+                <div className="flex justify-center items-center rounded-full bg-green-500 p-1">
 
                   <TiTick className="text-white text-2xl" />
 
