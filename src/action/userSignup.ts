@@ -5,16 +5,10 @@ import { dbConnection } from "@/config/dbConfig";
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
-
-
 import User from "@/models/user.model";
-import { ROLE } from "@/constants/constant";
-
 import { sendMail } from "@/helper/sendMail";
-
-import { sendVerificationEmail } from "@/helper/resendMail";
-
 import mongoose from "mongoose";
+
 
 
 // Establish database connection
@@ -33,15 +27,13 @@ const userSchema = z.object({
 });
 
 // Function to create user and set session
-export async function createUserAndSetSession(user: any, session: any, roleId: string) {
+export async function createUserAndSetSession(user: any, session: any, roleId: any) {
 
     try {
 
         // Validate request body
 
         try {
-
-            console.log("role id is", roleId);
 
             userSchema.parse(user);
 
@@ -84,7 +76,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
 
         // Create a new user
-        const newUser = await User.create({
+        const newUser: any = await User.create({
             fullName,
             email,
             contactNo,
@@ -116,6 +108,39 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
 
     }
 }
+
+
+export async function fetchUserDetails(userId: string) {
+
+    try {
+
+        if (!userId) {
+            throw new Error("User id is not provided");
+        }
+
+
+        const userDetails = await User.findById(userId)
+
+        if (!userDetails) {
+
+            throw new Error("User not found");
+        }
+
+        return userDetails;
+
+
+    } catch (error: any) {
+
+
+        console.log(error.message);
+
+        throw new Error("some error occurred while fetching user details")
+
+    }
+}
+
+
+
 
 
 
