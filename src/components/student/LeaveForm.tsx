@@ -5,8 +5,9 @@ import React, { useState } from "react";
 import InputField from "@/components/common/InputField";
 import CTCButton from "@/components/common/CTCButton";
 import TextArea from "@/components/common/TextArea";
-import toast from "react-hot-toast";
 import axios from "axios";
+
+import toast from "react-hot-toast";
 
 // interface
 interface FormData {
@@ -39,7 +40,9 @@ const Leave = () => {
   };
 
   async function submitHandler(e: any) {
+
     try {
+
       e.preventDefault();
 
       // validation for date
@@ -48,14 +51,21 @@ const Leave = () => {
       const dateFrom = new Date(data.dateFrom);
 
       if (dateFrom < tomorrow || data.dateFrom > data.dateTo) {
+
         toast.dismiss("Please enter a valid date!");
+
         return;
+
       }
 
       // send data to backer server
+
       const res = await axios.post("/api/leave-form", data);
 
+      toast.success("leave form create done !")
+
       // reinitialize the state
+
       setData({
         dateFrom: new Date(),
         dateTo: new Date(),
@@ -63,7 +73,6 @@ const Leave = () => {
         addressDuringLeave: "",
       });
 
-      toast.success("Leave Form created!");
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");

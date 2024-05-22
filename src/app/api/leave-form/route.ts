@@ -55,7 +55,7 @@ async function getCoordinatorQuery(user: IUser) {
                 path: 'user',
                 populate: {
                     path: 'refId',
-                    select: "enrollmentNo branch programe",
+                    // select: "enrollmentNo branch programe",
                     match: { programe: { $in: populatedUser.branches } },
                 },
                 select: "fullName profileImage refId _id"
@@ -69,15 +69,16 @@ async function getCoordinatorQuery(user: IUser) {
 }
 
 async function getWardenQuery(user: IUser) {
+
     const populatedUser = await Warden.findById(user.refId);
 
     if (populatedUser && isWarden(populatedUser)) {
+
         const allApplications = await LeaveForm.find({})
             .populate({
                 path: 'user',
                 populate: {
                     path: 'refId',
-                    select: "enrollmentNo branch hostel programe",
                     match: { hostel: { $eq: populatedUser.hostel } },
                 },
                 select: "fullName profileImage refId _id"
@@ -88,11 +89,17 @@ async function getWardenQuery(user: IUser) {
                     { "status.hostelWarden": STATUS.Pending }
                 ]
             });
+
+            console.log("All warden application ",allApplications);
+
         return allApplications;
+        
     } else {
         return null;
     }
 }
+
+
 
 async function getPrincipalQuery(user: IUser) {
     const allApplications = await LeaveForm.find({ 'user.refId.college': "CCSIT" })
