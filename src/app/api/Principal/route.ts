@@ -281,7 +281,6 @@ async function searchStudentByText(text: any) {
 
         console.log("text is ", text);
 
-
         // Search in User schema
 
         const excludedRoles = ['Admin', 'Principal', 'Gatekeeper', 'Warden'];

@@ -1,7 +1,7 @@
 
-import { resend } from "@/config/resendConfig";
+// import { resend } from "@/config/resendConfig";
 
-import VerificationEmail from "@/helper/emails/verificationEmail";
+// import VerificationEmail from "../../emails/verificationEmail";
 
 import User from "@/models/user.model";
 
@@ -27,34 +27,34 @@ export async function sendVerificationEmail(
 
         const randomUUID: string = uuidv4();
 
-        console.log("actual hash token value ", randomUUID);
+        console.log("actual hash token value ",randomUUID);
 
-        const updateUser = await User.findByIdAndUpdate(userId, {
+        const updateUser = await User.findByIdAndUpdate(userId,{
 
-            token: randomUUID,
-            tokenExpiry: Date.now() + 3600000
+            token:randomUUID,
+            tokenExpiry:Date.now() + 3600000
 
-        }, { new: true })
-
-
-        console.log("update user ", updateUser);
+        },{new:true})
 
 
-        await resend.emails.send({
+        console.log("update user ",updateUser);
 
-            from: 'Acme <onboarding@resend.dev>',
-            to: email,
-            subject: `${emailType === "reset" ? "Reset Password" : " User Verification"}  Email Sent Successfully `,
-            react: VerificationEmail({ username, verificationLink: `http://localhost:3000/auth/verifyEmail/token=${randomUUID}` }),
 
-        });
+        // await resend.emails.send({
+
+        //     from: 'Acme <onboarding@resend.dev>',
+        //     to: email,
+        //     subject: `${emailType === "reset" ? "Reset Password":" User Verification"}  Email Sent Successfully `,
+        //     react: VerificationEmail({username,verificationLink:`http://localhost:3000/auth/verifyEmail/token=${randomUUID}`}),
+
+        // });
 
 
         return {
 
             success: true,
             message: "sucessfully send the email ",
-
+            
 
         }
 

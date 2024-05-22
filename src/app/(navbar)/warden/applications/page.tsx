@@ -104,11 +104,13 @@ const ApplicationPage = () => {
                 studentData?.map((leaveForm: any) => (
 
                   <div onClick={() => {
-
+                    
                     setClick(true);
                     setIndividualUserData(leaveForm);
 
-                  }}>
+                  }}
+                    key = {leaveForm.id}
+                  >
 
                     <LeaveApprovalCard
                       removeHandler={removeHandler}
