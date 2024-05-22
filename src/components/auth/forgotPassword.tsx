@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 
 import { useRouter } from "next/navigation";
 
-export default function forgotPassword({ token }: any) {
+export default function ForgotPassword({ token }: any) {
 
     const router = useRouter();
 

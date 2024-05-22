@@ -3,11 +3,11 @@
 
 import React from "react";
 
-import ForgotPassword from "@/components/auth/forgotPassword";
+import ForgotPasswordComponent from "@/components/auth/forgotPassword";
 
 import { useRouter } from "next/navigation";
 
-export default function forgotPassword({ params }: { params: { token: string } }) {
+export default function ForgotPassword({ params }: { params: { token: string } }) {
 
 
     const router = useRouter();
@@ -18,7 +18,7 @@ export default function forgotPassword({ params }: { params: { token: string } }
 
     return (
 
-        <ForgotPassword token ={actualToken}></ForgotPassword>
+        <ForgotPasswordComponent token ={actualToken}></ForgotPasswordComponent>
 
         // <h1>Forgot Password</h1>
 

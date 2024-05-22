@@ -33,15 +33,13 @@ const userSchema = z.object({
 });
 
 // Function to create user and set session
-export async function createUserAndSetSession(user: any, session: any, roleId: string) {
+export async function createUserAndSetSession(user: any, session: any, roleId: any) {
 
     try {
 
         // Validate request body
 
         try {
-
-            console.log("role id is", roleId);
 
             userSchema.parse(user);
 
@@ -84,7 +82,7 @@ export async function createUserAndSetSession(user: any, session: any, roleId: s
         const imageUrl = `https://ui-avatars.com/api/?name=${fullName}`;
 
         // Create a new user
-        const newUser = await User.create({
+        const newUser: any = await User.create({
             fullName,
             email,
             contactNo,

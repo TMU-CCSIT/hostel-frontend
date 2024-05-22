@@ -2,20 +2,13 @@ import { z } from "zod";
 import Principal from "@/models/principal.model";
 import { NextResponse } from "next/server";
 import { createUserAndSetSession } from "@/action/userSignup";
-
-export const COLLEGES: Record<string, string> = {
-
-  ccsit: "CCSIT",
-
-
-};
+import { COLLEGES } from "@/constants/constant";
 
 const principalSchema = z.object({
 
   college: z.string(),
 
 });
-
 
 
 async function principalSignUp(principal: any) {
@@ -28,32 +21,21 @@ async function principalSignUp(principal: any) {
 
     const { college } = principal;
 
-    // Check if the college exists
-
-    if (!COLLEGES[college]) {
-
-      throw new Error("College not found");
-    }
-
     // Create a new principal in the database
     const newUser = await Principal.create({
-
       college,
-
     });
 
     // Successfully return the response
     return newUser;
 
   } catch (error: any) {
-    
+
     console.log(error.message);
     throw new Error("Some error occurred while creating a principal");
 
   }
 }
-
-
 
 export async function POST(req: Request, res: Response) {
 
@@ -66,20 +48,11 @@ export async function POST(req: Request, res: Response) {
     // Validate the request body using Zod schema
     principalSchema.parse(principal);
 
-    // Check if the college exists
-    const { college } = principal;
-
-    if (!COLLEGES[college]) {
-
-      throw new Error("College not found");
-
-    }
-
     // Create a new principal in the database
     const newPrincipal = await principalSignUp(principal);
 
     // Create a new user and set the session
-    const newUser = await createUserAndSetSession(newPrincipal, "djd", newPrincipal._id);
+    const newUser = await createUserAndSetSession(user, "djd", newPrincipal._id);
 
     return NextResponse.json({
       message: "Principal sign up successfully",
@@ -90,6 +63,7 @@ export async function POST(req: Request, res: Response) {
     }, {
       status: 200,
     });
+
   } catch (error: any) {
     console.log(error.message);
 
