@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 const Page = () => {
+  
   const [data, setData] = useState<null | []>(null);
 
   async function fetchAllPendingLeaves() {
@@ -35,7 +36,7 @@ const Page = () => {
           <div className="w-full mt-5 flex-col flex gap-5">
             {data &&
               data?.map((leaveForm: any) => (
-                <Applications key={leaveForm._id} userInfo={leaveForm} />
+                <Applications key={leaveForm._id} userInfo={leaveForm} isStudent ={true}/>
               ))}
           </div>
         </div>

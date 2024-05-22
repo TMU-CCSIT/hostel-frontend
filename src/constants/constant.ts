@@ -1,6 +1,5 @@
 export const COLLEGES = { "College Of Computing Sciences And IT": "ccsit" };
 
-
 export const BTech = [
     "Artificial Intelligence",
     "Computer Science",

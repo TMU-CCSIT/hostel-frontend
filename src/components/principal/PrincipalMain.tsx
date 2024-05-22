@@ -21,7 +21,9 @@ const PrincipalMain = () => {
   };
 
   const handleContentChange = (content: any) =>{
+
     setShowContent(content);
+    
   }
 
   return (
