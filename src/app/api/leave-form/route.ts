@@ -25,19 +25,24 @@ const leaveFormSchema = z.object({
 });
 
 
-// Define the type guard function
+// It will check user is valid coordinator or not || Validation
 function isCoordinator(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is ICoordinator {
     return (refId as ICoordinator).branches !== undefined;
 }
 
+// It will check user is valid principal or not || Validation
+function isPrincipal(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is ICoordinator {
+    return (refId as IPrincipal).college !== undefined;
+}
 
-// Define the type guard function
+
+// It will check user is valid warden or not || Validation
 function isWarden(refId: IStudent | IWarden | ICoordinator | IPrincipal): refId is IWarden {
     return (refId as IWarden).hostel !== undefined;
 }
 
 
-
+// For student
 async function getStudentQuery(user: IUser) {
 
     const allApplications = await LeaveForm
@@ -56,12 +61,13 @@ async function getStudentQuery(user: IUser) {
 }
 
 
-
+// For admin
 async function getAdminQuery(user: IUser) {
     return 'leaveForm'
 }
 
 
+// For coordinator
 async function getCoordinatorQuery(user: IUser) {
     let allApplications;
 
@@ -90,6 +96,7 @@ async function getCoordinatorQuery(user: IUser) {
 }
 
 
+// For warden
 async function getWardenQuery(user: IUser) {
     const populatedUser = await Warden.findById(user.refId)
 
@@ -121,6 +128,7 @@ async function getWardenQuery(user: IUser) {
     }
 }
 
+// For principal
 async function getPrincipalQuery(user: IUser) {
     console.log("princ: ", user)
 
@@ -135,6 +143,7 @@ async function getPrincipalQuery(user: IUser) {
 }
 
 
+// Fetch leaves by their role
 async function getApplicationsByRole(user: IUser) {
 
     switch (user.role) {
@@ -158,7 +167,7 @@ async function getApplicationsByRole(user: IUser) {
 }
 
 
-
+// To Get leave-Form
 export const GET = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -202,7 +211,7 @@ export const GET = async (req: CustomNextRequest, res: NextResponse) => {
 }
 
 
-
+// To update status of leaveform by college & hostel
 export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     try {
 
@@ -305,7 +314,7 @@ export const PATCH = async (req: CustomNextRequest, res: NextResponse) => {
     }
 }
 
-
+// To create new leave form in database
 export async function POST(req: CustomNextRequest, res: NextResponse) {
 
     try {
@@ -400,7 +409,7 @@ export async function POST(req: CustomNextRequest, res: NextResponse) {
     }
 }
 
-
+//  To In/Out functionality
 export async function PUT(req: CustomNextRequest, res: NextResponse) {
 
     try {
