@@ -51,19 +51,14 @@ const LeaveApprovalCard = ({ userInfo, removeHandler }: any) => {
 
             {/* username | rollno */}
             <div className="flex flex-col justify-start items-start">
-              <Link href={`/profile/${userInfo.user?._id}`}>
+            
                 <span className="hover:underline hover:text-[red] transition-all duration-300 ease-in-out">
                   {userInfo?.user?.fullName || "Name"}
                 </span>
-              </Link>
               <span>{userInfo.user?.enrollmentNo || "Enrollment no."}</span>
             </div>
           </div>
 
-          {/* course */}
-          <div>
-            <span>{userInfo.user?.course || "course"} </span>
-          </div>
         </div>
 
         {/* leave details */}
@@ -73,13 +68,13 @@ const LeaveApprovalCard = ({ userInfo, removeHandler }: any) => {
             <div>
               <span>
                 {" "}
-                {dateIntoReadableFormat(userInfo.dateFrom) || "24/03"}
+                {dateIntoReadableFormat(userInfo?.dateFrom) || "24/03"}
               </span>
             </div>
 
             {/* date-to */}
             <div>
-              <span> {dateIntoReadableFormat(userInfo.dateTo) || "24/03"}</span>
+              <span> {dateIntoReadableFormat(userInfo?.dateTo) || "24/03"}</span>
             </div>
           </div>
 

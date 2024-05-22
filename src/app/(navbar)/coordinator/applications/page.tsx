@@ -12,7 +12,10 @@ import StudentInfo from "@/components/student/StudentInfo";
 const ApplicationPage = () => {
 
   const [data, setData] = useState<null | []>(null);
+
   const [loading, setLoading] = useState(false);
+
+  const [individualUserData, setIndividualUserData] = useState<any>(null);
 
   const [click, setClick] = useState(false);
 
@@ -25,7 +28,7 @@ const ApplicationPage = () => {
       setData(res?.data?.data);
     } catch (error) {
       toast.error("Something went wrong, try again later");
-      console.log("Error when try to fetch coordinator applications");
+      console.log("Error when try to fetch warden applications");
       setData(null);
       router.push("/something-went-wrong");
     } finally {
@@ -40,30 +43,15 @@ const ApplicationPage = () => {
     setData(newData);
   }
 
-  async function fetchStudentData(userId: string) {
-
-    try {
-
-      const response = await axios.get("/api/student") // 
-
-
-    } catch (error: any) {
-
-      console.log(error.message);
-
-    }
-  }
-
   useEffect(() => {
 
     fetchAllPendingLeaves();
-    
+
   }, []);
 
   return (
     <>
       {loading && <Loading />}
-
       <div className="min-h-screen w-full bg-[#ffffff] flex flex-col gap-5 justify-start items-center">
         <div className="w-11/12 mt-5 mb-10 flex-col flex gap-2">
           <div>
@@ -75,41 +63,59 @@ const ApplicationPage = () => {
             {data &&
               (data.length > 0 ? (
                 data?.map((leaveForm: any) => (
-                  <LeaveApprovalCard
-                    removeHandler={removeHandler}
-                    key={leaveForm._id}
-                    userInfo={leaveForm}
-                  />
+
+                  <div onClick={() => {
+
+                    setClick(true);
+                    setIndividualUserData(leaveForm);
+
+                  }}>
+
+                    <LeaveApprovalCard
+                      removeHandler={removeHandler}
+                      key={leaveForm._id}
+                      userInfo={leaveForm}
+                    />
+
+                  </div>
                 ))
               ) : (
                 <NotFound />
               ))}
           </div>
 
-          <div>
+          {click && individualUserData && (
 
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
 
-            {
+              <StudentInfo
 
+                dateFrom={individualUserData?.dateFrom}
+                dateTo={individualUserData?.dateTo}
+                email={individualUserData?.user?.email}
+                contactNo={individualUserData?.user?.contactNo}
+                reasonForLeave={individualUserData?.reasonForLeave}
+                addressDuringLeave={individualUserData?.addressDuringLeave}
+                name={individualUserData?.user?.fullName}
+                userImage={individualUserData?.user?.profileImage}
+                enrollmentNo={individualUserData?.user?.refId?.enrollmentNo}
+                Branch={individualUserData?.user?.refId?.branch}
+                College={individualUserData?.user?.refId?.college}
+                Hostel={individualUserData?.user?.refId?.hostel}
+                ParentNo={individualUserData?.user?.refId?.parentContactNo}
+                parentName={individualUserData?.user?.refId?.parentName}
+                setClick={setClick}
 
-              <div className={`fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-75 ${click ? 'block' : 'hidden'}`}>
+              />
 
-                <StudentInfo name="Adarsh jain " enrollmentNo="enrollmentNo" Branch="branch" College="college" Hostel="boys" ParentNo="dlkjd" parentName="jnd" setClick={setClick} />
-                
-              </div>
-
-            }
-
-          </div>
+            </div>
+          )}
 
 
         </div>
       </div>
-
     </>
   );
 };
 
 export default ApplicationPage;
-
-

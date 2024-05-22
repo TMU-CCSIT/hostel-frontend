@@ -61,11 +61,13 @@ export async function middleware(req: CustomNextRequest) {
             return NextResponse.redirect(new URL('/unauthorized', req.url));
         }
     }
+
     return NextResponse.next();
 
 }
 
 function checkPermission(role: ROLE, path: string): boolean {
+    
     switch (role) {
 
         case "Student":

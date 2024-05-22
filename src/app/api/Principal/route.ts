@@ -11,13 +11,15 @@ import { ROLE } from "@/constants/constant";
 
 import mongoose from "mongoose";
 
-import LeaveForm,{IForm} from "@/models/form.model";
+import LeaveForm, { IForm } from "@/models/form.model";
 
 import { NextApiRequest } from "next";
 
-import {IUser} from "@/models/user.model";
+import { IUser } from "@/models/user.model";
 
 import { Document, Model, PopulatedDoc } from 'mongoose';
+
+import { principalDD } from "@/constants/buttonConst";
 
 
 
@@ -64,8 +66,8 @@ async function fetchIndividualDetails(refId: any) {
 
         }).select("-password -isVerified -token -tokenExpiry").populate({
 
-            path:"refId",
-            select:"-qrCode"
+            path: "refId",
+            select: "-qrCode"
 
         }).exec();
 
@@ -141,11 +143,11 @@ async function fetchStudentDetails(programe: any, branch: any) {
 
             fetchIndividualDetails(student._id)
 
-          );
-      
-          const individualDetails = await Promise.all(individualDetailsPromises);
-      
-          return individualDetails;
+        );
+
+        const individualDetails = await Promise.all(individualDetailsPromises);
+
+        return individualDetails;
 
 
     } catch (error: any) {
@@ -170,13 +172,23 @@ interface IQuery {
 
 
 
-async function getStudentOnLeave(dateFrom: Date, dateTo: Date, status?: string): Promise<PopulatedDoc<IForm & Document, IUser>[]> {
+
+async function getStudentOnLeave(dateFrom: any, dateTo: any, status?: string, text?: string): Promise<any[]> {
+
+
+    // 1. fetch the data on the basis of the given date 
+
+    // 2. 
+
     try {
-        const query: IQuery = {
+
+
+        const query: any = {
             dateFrom: { $lte: dateTo },
             dateTo: { $gte: dateFrom }
         };
 
+        // Apply status filter if provided
         if (status) {
             query.$or = [
                 { 'status.coordinator': status },
@@ -184,27 +196,79 @@ async function getStudentOnLeave(dateFrom: Date, dateTo: Date, status?: string):
             ];
         }
 
-        const studentInfo = await LeaveForm.find(query).select("-status").populate({
+        // Fetch leave forms based on the query
+        let studentInfo = await LeaveForm.find(query)
+            .select("") // Exclude 'status' field
+            .populate({
                 path: 'user',
-                select: '-password -isVerified -token -tokenExpiry',
+                select: '-password -isVerified -token -tokenExpiry', // Exclude sensitive user fields
                 populate: {
                     path: 'refId',
-                    select:"-qrCode"
+                    // select: 'enrollmentNo fingerNo branch roomNo hostel' // Include fields for text search
                 }
+            }).sort({
+
+                dateFrom: -1
             })
             .exec();
 
-        return studentInfo;
+        console.log("all leave form info ", studentInfo);
+
+
+        const excludedRoles = ['Admin', 'Principal', 'Gatekeeper', 'Warden'];
+
+        // If no text filter is provided, return the filtered list by role
+
+        if (!text) {
+
+            return studentInfo.filter((data: any) => !excludedRoles.includes(data?.user?.role));
+
+        }
+
+        // Initialize newStudentInfo as an array
+
+        let newStudentInfo: any[] = [];
+
+        // Convert text to lowercase for case-insensitive comparison
+
+        const searchText = text.toLowerCase();
+
+        studentInfo.forEach((data: any) => {
+
+            if (!excludedRoles.includes(data?.user?.role)) {
+
+                if ((
+
+                    data?.user?.fullName.toLowerCase().includes(searchText) ||
+                    data?.user?.email.toLowerCase().includes(searchText) ||
+                    data?.user?.contactNo.toLowerCase().includes(searchText) ||
+                    data?.user?.refId?.enrollmentNo.toLowerCase().includes(searchText) ||
+                    data?.user?.refId?.fingerNo.toLowerCase().includes(searchText) ||
+                    data?.user?.refId?.branch.toLowerCase().includes(searchText) ||
+                    data?.user?.refId?.roomNo.toLowerCase().includes(searchText) ||
+                    data?.user?.refId?.hostel.toLowerCase().includes(searchText)) &&
+                    !excludedRoles.includes(data?.user?.role)
+
+                ) {
+
+                    newStudentInfo.push(data);
+
+                }
+            }
+        });
+
+        console.log("student info", newStudentInfo);
+
+        // successfully return the response;
+        return newStudentInfo;
 
     } catch (error: any) {
-        
+
+        console.error(`Failed to retrieve students on leave: ${error.message}`);
         throw new Error(`Failed to retrieve students on leave: ${error.message}`);
+
     }
 }
-
-
-
-
 
 
 
@@ -215,26 +279,32 @@ async function searchStudentByText(text: any) {
 
     try {
 
-        console.log("text is ",text);
+        console.log("text is ", text);
 
 
         // Search in User schema
 
+        const excludedRoles = ['Admin', 'Principal', 'Gatekeeper', 'Warden'];
+
         let userDetails;
 
         userDetails = await User.find({
-
             $or: [
-
                 { fullName: { $regex: text, $options: 'i' } },
                 { email: { $regex: text, $options: 'i' } },
-                { contactNo: { $regex: text, $options: 'i' } },
+                { contactNo: { $regex: text, $options: 'i' } }
                 // Add more fields if needed
             ],
-        }).populate("refId").exec();
+            role: { $nin: excludedRoles } // Exclude admin and principal
+
+        }).populate("refId").sort({ fullName: 1 }).exec();
+
+
+        console.log("user details ", userDetails);
 
         if (userDetails.length === 0) {
 
+            console.log("hellow ");
 
             // Search in Student schema
 
@@ -256,6 +326,7 @@ async function searchStudentByText(text: any) {
                 ],
             });
 
+            console.log("1");
 
 
             // Convert the studentDetails array to an array of IndividualDetails
@@ -283,6 +354,116 @@ async function searchStudentByText(text: any) {
 
 
 
+
+async function getCoordinatorHistory() {
+    try {
+        // Fetch leave forms with status either "Accepted" or "Rejected" by the coordinator
+        let studentInfo = await LeaveForm.find({
+            'status.coordinator': {
+                $in: ["Accepted", "Rejected"]
+            }
+        })
+        .populate({
+            path: 'user',
+            select: '-password -isVerified -token -tokenExpiry', // Exclude sensitive user fields
+            populate: {
+                path: 'refId',
+                // select: 'enrollmentNo fingerNo branch roomNo hostel' // Include fields for text search
+            }
+        })
+        .sort({
+            dateFrom: -1
+        })
+        .exec();
+
+        console.log("Coordinator history:", studentInfo);
+
+        // Return the fetched data
+        return studentInfo; 
+
+    } catch (error: any) {
+        console.error(`Error while getting coordinator history: ${error.message}`);
+        throw new Error('Error occurred while getting coordinator history');
+    }
+}
+
+
+
+
+async function gethostelWardenHistory() {
+    try {
+        // Fetch leave forms with status either "Accepted" or "Rejected" by the coordinator
+        let studentInfo = await LeaveForm.find({
+            'status.hostelWarden': {
+                $in: ["Accepted", "Rejected"]
+            }
+        })
+        .populate({
+            path: 'user',
+            select: '-password -isVerified -token -tokenExpiry', // Exclude sensitive user fields
+            populate: {
+                path: 'refId',
+                // select: 'enrollmentNo fingerNo branch roomNo hostel' // Include fields for text search
+            }
+        })
+        .sort({
+
+            dateFrom: -1
+        })
+        .exec();
+
+        console.log("warden  history:", studentInfo);
+
+        // Return the fetched data
+
+        return studentInfo; 
+
+    } catch (error: any) {
+
+        console.error(`Error while getting coordinator history: ${error.message}`);
+        
+        throw new Error('error occur while getting hostelWarden history');
+    }
+}
+
+
+
+
+async function getPrincipalHistory() {
+    try {
+        // Fetch leave forms with status either "Accepted" or "Rejected" by the coordinator
+        let studentInfo = await LeaveForm.find({
+            'status.hostelWarden': {
+                $in: ["Accepted", "Rejected"]
+            }
+        })
+        .populate({
+            path: 'user',
+            select: '-password -isVerified -token -tokenExpiry', // Exclude sensitive user fields
+            populate: {
+                path: 'refId',
+                // select: 'enrollmentNo fingerNo branch roomNo hostel' // Include fields for text search
+            }
+        })
+        .sort({
+
+            dateFrom: -1
+        })
+        .exec();
+
+        console.log("warden  history:", studentInfo);
+
+        // Return the fetched data
+
+        return studentInfo; 
+
+    } catch (error: any) {
+
+        console.error(`Error while getting coordinator history: ${error.message}`);
+        
+        throw new Error('error occur while getting hostelWarden history');
+    }
+}
 
 
 
@@ -314,7 +495,7 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
 
         // const {action, dateFrom,dateTo} = req.URLSearchParams;
 
-        console.log(action, dateFrom, dateTo,programe , text , branch , status );
+        console.log(action, dateFrom, dateTo, programe, text, branch, status);
 
 
         if (!userId) {
@@ -394,7 +575,7 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
 
                 // Get students on leave within a date range and optional status
 
-                const studentsOnLeave = await getStudentOnLeave(dateFrom, dateTo, status);
+                const studentsOnLeave = await getStudentOnLeave(dateFrom, dateTo, status, text);
 
                 return NextResponse.json({
 
@@ -405,8 +586,53 @@ export async function GET(req: CustomNextRequest, res: NextResponse) {
 
                 });
 
+            case "getCoordinatorHistory":
+
+                // Fetch coordinator details based on program and branch
+
+                const coordinatorHistoryData = await getCoordinatorHistory();
+
+                return NextResponse.json({
+
+                    message: "Coordinator history fetched successfully",
+                    error: "",
+                    data: coordinatorHistoryData,
+                    success: true
+
+                });
+
+            case "gethostelWardenHistory":
+
+                const getHostelWardenHistoryData = await gethostelWardenHistory();
+
+                return NextResponse.json({
+
+                    message: "Coordinator history fetched successfully",
+                    error: "",
+                    data: getHostelWardenHistoryData,
+                    success: true
+
+                });
+
+            
+            case "getPrincipalHistory" :
+
+                const principalHistoryData = await getPrincipalHistory();
+
+                return NextResponse.json({
+
+                    message: "Coordinator history fetched successfully",
+                    error: "",
+                    data: principalHistoryData,
+                    success: true
+
+                });
+
+
             default:
+
                 // Handle unknown action
+
                 return NextResponse.json(
                     {
                         message: `Unsupported action: ${action}`,

@@ -5,7 +5,12 @@ export const principalSidebar = [
 ]
 
 export const principalDD = [
-    " By Name",
-    " By Date",
-    " By Density"
+    "Accepted",
+    "Rejected",
+    "Pending",
+    "By Date",
 ] 
+
+
+
+

@@ -4,19 +4,19 @@ import { FaEye } from "react-icons/fa";
 import { IoEyeOffSharp } from "react-icons/io5";
 
 interface InputFieldProps {
-  label?: string;
+  label: string;
   type: string;
   placeholder?: string;
-  value?: any;
+  value: any;
   name: any;
   min?: number;
   required: Boolean;
   readOnly?: any;
-  onChange?: (value: any) => void;
+  onChange: (value: any) => void;
 }
 
 const InputField = (props: InputFieldProps) => {
-  const [show, setShow] = useState(props.type === "password" ? true : false);
+  const [show, setShow] = useState(props.type === "password" ? false : true);
 
   const handlePasswordToggle = () => {
     setShow(!show);
@@ -48,9 +48,9 @@ const InputField = (props: InputFieldProps) => {
             onClick={handlePasswordToggle}
           >
             {show === true ? (
-              <IoEyeOffSharp size={24}></IoEyeOffSharp>
-            ) : (
               <FaEye size={24}></FaEye>
+            ) : (
+              <IoEyeOffSharp size={24}></IoEyeOffSharp>
             )}
           </button>
         )}
@@ -59,4 +59,4 @@ const InputField = (props: InputFieldProps) => {
   );
 };
 
-export default InputField;
+export default InputField;
