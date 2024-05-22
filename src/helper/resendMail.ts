@@ -1,7 +1,7 @@
 
-import { resend } from "@/config/resendConfig";
+// import { resend } from "@/config/resendConfig";
 
-import VerificationEmail from "../../emails/verificationEmail";
+// import VerificationEmail from "../../emails/verificationEmail";
 
 import User from "@/models/user.model";
 
@@ -40,14 +40,14 @@ export async function sendVerificationEmail(
         console.log("update user ",updateUser);
 
 
-        await resend.emails.send({
+        // await resend.emails.send({
 
-            from: 'Acme <onboarding@resend.dev>',
-            to: email,
-            subject: `${emailType === "reset" ? "Reset Password":" User Verification"}  Email Sent Successfully `,
-            react: VerificationEmail({username,verificationLink:`http://localhost:3000/auth/verifyEmail/token=${randomUUID}`}),
+        //     from: 'Acme <onboarding@resend.dev>',
+        //     to: email,
+        //     subject: `${emailType === "reset" ? "Reset Password":" User Verification"}  Email Sent Successfully `,
+        //     react: VerificationEmail({username,verificationLink:`http://localhost:3000/auth/verifyEmail/token=${randomUUID}`}),
 
-        });
+        // });
 
 
         return {

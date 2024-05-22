@@ -68,7 +68,10 @@ const HistoryPage = () => {
                 setClick(true);
                 setIndividualUserData(user);
 
-              }}>
+              }}
+              
+                key = {user._id}
+              >
 
                 <Application userInfo={user} isStudent={false} key={user._id || user.id} />
 

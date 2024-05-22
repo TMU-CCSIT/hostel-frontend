@@ -26,6 +26,7 @@ export const MCA = [
 ]
 
 export const PROGRAME = {
+    
     "Bachelor of Tecnology": BTech,
     "bachelor of Computer Applications": BCA,
     "Master of Technology": MTech,
