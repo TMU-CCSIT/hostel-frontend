@@ -40,7 +40,7 @@ const coordinatorSchema = new mongoose.Schema(
     }
 );
 
-const Coordinator = mongoose.models.Coordinator<ICoordinator> || mongoose.model('Coordinator', coordinatorSchema);
+const Coordinator = mongoose.models.Coordinator || mongoose.model<ICoordinator>('Coordinator', coordinatorSchema);
 
 export default Coordinator;
 

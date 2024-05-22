@@ -5,16 +5,10 @@ import { dbConnection } from "@/config/dbConfig";
 import { isEmailAlreadyExist } from "@/helper/isEmailExists";
 import bcrypt from "bcrypt";
 import { NextRequest, NextResponse } from "next/server";
-
-
 import User from "@/models/user.model";
-import { ROLE } from "@/constants/constant";
-
 import { sendMail } from "@/helper/sendMail";
-
-import { sendVerificationEmail } from "@/helper/resendMail";
-
 import mongoose from "mongoose";
+
 
 
 // Establish database connection
@@ -114,6 +108,39 @@ export async function createUserAndSetSession(user: any, session: any, roleId: a
 
     }
 }
+
+
+export async function fetchUserDetails(userId: string) {
+
+    try {
+
+        if (!userId) {
+            throw new Error("User id is not provided");
+        }
+
+
+        const userDetails = await User.findById(userId)
+
+        if (!userDetails) {
+
+            throw new Error("User not found");
+        }
+
+        return userDetails;
+
+
+    } catch (error: any) {
+
+
+        console.log(error.message);
+
+        throw new Error("some error occurred while fetching user details")
+
+    }
+}
+
+
+
 
 
 

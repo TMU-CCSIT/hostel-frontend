@@ -2,8 +2,8 @@ import mongoose, { Document, ObjectId } from 'mongoose';
 import { ROLE } from '@/constants/constant';
 import { IStudent } from './student.model';
 import { IWarden } from './warden.model';
-import { ICoordinator } from './coordinator.model';
 import { IPrincipal } from './principal.model';
+import Coordinator, { ICoordinator } from './coordinator.model'; // Import Coordinator interface
 
 export interface IUser extends Document {
     fullName: string;
@@ -70,6 +70,8 @@ const userSchema = new mongoose.Schema(
         timestamps: true
     }
 );
+
+
 
 
 export const User = mongoose.models.User || mongoose.model('User', userSchema);

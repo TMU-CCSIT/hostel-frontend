@@ -90,10 +90,10 @@ async function getWardenQuery(user: IUser) {
                 ]
             });
 
-            console.log("All warden application ",allApplications);
+        console.log("All warden application ", allApplications);
 
         return allApplications;
-        
+
     } else {
         return null;
     }

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 
 const StudentPage = () => {
   const router = useRouter();
+
   return (
     <>
       <div className="min-h-screen w-full bg-[#fff] flex justify-center items-center">
